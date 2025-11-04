@@ -84,8 +84,8 @@ export default function Home() {
                   <span className="text-gray-700">Interactive documentation website</span>
                 </li>
               </ul>
-              <div className="text-3xl font-bold mb-2">~$350 <span className="text-lg font-normal text-gray-500">$MIND</span></div>
-              <p className="text-sm text-gray-500 mb-4">One-time extraction, lifetime value</p>
+              <div className="text-3xl font-bold mb-2">~$350</div>
+              <p className="text-sm text-gray-500 mb-4">One-time extraction, 6-8 hours</p>
               <a href="#contact" className="block w-full text-center bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700">
                 Book Evidence Sprint
               </a>
