@@ -1,14 +1,13 @@
-## 2025-11-04 19:05 - Mel: GraphCare Website Pushed to GitHub ✅ | Vercel Deployment Ready 🚀
+## 2025-11-04 19:35 - Mel: GraphCare Website on GitHub ✅ | Clean History | Ready for Vercel 🚀
 
-**Status:** ✅ Website built & on GitHub | ⏸️ Awaiting Vercel connection (manual step)
+**Status:** ✅ Website built & pushed to main graphcare repo | ⏸️ Ready for Vercel deployment
 
 **Work completed:**
 - ✅ Built complete Next.js 14 website (`/home/mind-protocol/graphcare/app/website/`)
 - ✅ Created scopelock extraction config (`orgs/scopelock/config/extraction_config.yaml`)
-- ✅ Created GitHub repository: https://github.com/mind-protocol/graphcare-website
-- ✅ Pushed clean codebase (12 files, no node_modules)
+- ✅ Pushed to existing **mind-protocol/graphcare** repository (NOT separate repo)
+- ✅ Cleaned git history (removed node_modules from all commits)
 - ✅ Dev server running locally: http://localhost:3002
-- ⏸️ Vercel deployment requires manual connection (no CLI token available)
 
 **Website features:**
 - **Hero:** "Transform Your Codebase Into a Living Knowledge Graph"
@@ -18,30 +17,28 @@
 - **Tech:** Next.js 14, TypeScript, Tailwind CSS
 
 **GitHub Repository:**
-- **URL:** https://github.com/mind-protocol/graphcare-website
+- **URL:** https://github.com/mind-protocol/graphcare
 - **Branch:** main
-- **Commit:** 43918ba "Initial GraphCare website"
-- **Files:** 12 source files (package.json, app/, next.config.js, etc.)
+- **Commit:** 15ddd62 "Add GraphCare website and scopelock extraction config"
+- **Website Location:** `app/website/` (within main graphcare repo)
+- **Clean History:** node_modules removed from all commits using git filter-branch
 
-**Vercel Deployment Instructions (Manual Step Required):**
+**Vercel Deployment Instructions:**
 
-Since Vercel CLI requires authentication and no token is available, complete deployment via Vercel dashboard:
+**Option 1: Vercel Dashboard (Recommended)**
+1. Go to https://vercel.com/new
+2. Import **mind-protocol/graphcare** repository
+3. Configure root directory: `app/website`
+4. Framework auto-detected: Next.js
+5. Deploy and add custom domain: `graphcare.mindprotocol.ai`
 
-1. **Go to:** https://vercel.com/new
-2. **Import Project:** Select "mind-protocol/graphcare-website"
-3. **Configure:**
-   - Framework Preset: Next.js (auto-detected)
-   - Build Command: `npm run build` (default)
-   - Output Directory: `.next` (default)
-   - Install Command: `npm install` (default)
-4. **Deploy:** Click "Deploy"
-5. **Custom Domain:** After deployment, add custom domain:
-   - Project Settings → Domains → Add `graphcare.mindprotocol.ai`
-   - Add DNS record: `CNAME graphcare.mindprotocol.ai → cname.vercel-dns.com`
+**Option 2: Vercel CLI (if token available)**
+```bash
+cd /home/mind-protocol/graphcare/app/website
+vercel deploy --prod
+```
 
-**Estimated deployment time:** 2-3 minutes after starting import
-
-**Next:** After Vercel deployment, website will be live at graphcare.mindprotocol.ai
+**Next:** Once deployed, website will be live at graphcare.mindprotocol.ai with automatic deployments on git push
 
 ---
 
