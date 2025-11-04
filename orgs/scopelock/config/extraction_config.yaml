@@ -1,0 +1,360 @@
+# GraphCare Extraction Configuration - Scopelock
+# Generated: 2025-11-04
+# First Client: Repository access control system
+
+# ============================================================================
+# CLIENT METADATA
+# ============================================================================
+client:
+  name: "scopelock"
+  graph_name: "scopelock"  # FalkorDB graph name
+  scope_ref: "org_scopelock"  # L2 scope identifier
+  level: "L2"  # Organizational layer
+  description: "Repository access control system with FastAPI backend and Next.js frontend"
+  repository_url: "https://github.com/mind-protocol/scopelock"
+
+# ============================================================================
+# REPOSITORY CONFIGURATION
+# ============================================================================
+repository:
+  path: "/home/mind-protocol/graphcare/orgs/scopelock/repo"
+  main_branch: "main"
+
+  # Files/directories to ignore during extraction
+  ignore_patterns:
+    - "node_modules/"
+    - "__pycache__/"
+    - ".git/"
+    - "*.pyc"
+    - "venv/"
+    - ".venv/"
+    - "dist/"
+    - "build/"
+    - ".next/"
+    - "coverage/"
+    - "*.log"
+    - ".env"
+    - ".env.local"
+
+  # Expected characteristics (from Quinn's corpus analysis)
+  corpus_stats:
+    total_files: 344
+    total_size_mb: 27.71
+    doc_to_code_ratio: 1.57
+    primary_languages:
+      - python  # 14 files (backend)
+      - typescript  # 49 files (frontend)
+    architecture_pattern: "fastapi_nextjs"
+
+# ============================================================================
+# EXTRACTION CONFIGURATION
+# ============================================================================
+extraction:
+  # Languages to extract
+  languages:
+    - python
+    - typescript
+    - javascript
+
+  # Include test files in extraction
+  include_tests: true
+
+  # Include documentation files
+  include_docs: true
+
+  # Confidence thresholds for auto-acceptance
+  min_confidence_auto_accept: 0.9  # ≥0.9: auto-accept
+  min_confidence_review: 0.7       # 0.7-0.89: human review
+  # <0.7: human must decide
+
+  # Embedding configuration
+  embedding:
+    model: "all-mpnet-base-v2"
+    dimensions: 768
+    normalize: true  # L2 normalization
+    batch_size: 32
+
+  # Semantic clustering
+  clustering:
+    algorithm: "hdbscan"
+    min_cluster_size: 3
+    min_samples: 2
+    metric: "euclidean"
+
+# ============================================================================
+# QUALITY GATES
+# ============================================================================
+quality_gates:
+  # Coverage thresholds
+  coverage:
+    min_critical_path: 0.80  # 80% for critical paths (auth, access control)
+    min_overall: 0.70        # 70% overall (scopelock is well-structured)
+    target_overall: 0.85     # Aspirational target
+
+  # Security thresholds
+  security:
+    max_critical_vulnerabilities: 0   # Zero tolerance for CRITICAL
+    max_high_vulnerabilities: 2       # Max 2 HIGH allowed
+    max_medium_vulnerabilities: 10    # Max 10 MEDIUM allowed
+    # LOW vulnerabilities: documented but not blocking
+
+  # Compliance requirements
+  compliance:
+    gdpr_required: true      # Check PII handling
+    soc2_required: false     # Not required for scopelock
+    hipaa_required: false    # Not required
+
+  # Graph health requirements
+  graph_health:
+    min_node_coverage: 0.90  # 90% of files must have nodes
+    max_orphan_ratio: 0.10   # Max 10% orphaned nodes
+    min_cluster_coherence: 0.70  # Semantic clusters must be coherent
+
+# ============================================================================
+# CRITICAL PATHS (Priority for Testing & Security)
+# ============================================================================
+critical_paths:
+  - name: "Authentication"
+    patterns:
+      - "*/auth/*"
+      - "*jwt*"
+      - "*login*"
+      - "*token*"
+    reason: "Handles user authentication and JWT tokens"
+    min_coverage: 0.85
+
+  - name: "Access Control"
+    patterns:
+      - "*/access*"
+      - "*/permissions*"
+      - "*/authorization*"
+    reason: "Core business logic for repository access"
+    min_coverage: 0.85
+
+  - name: "Database Operations"
+    patterns:
+      - "*/database*"
+      - "*/models/*"
+      - "*/db*"
+    reason: "Data persistence and integrity"
+    min_coverage: 0.75
+
+  - name: "API Endpoints"
+    patterns:
+      - "*/api/*"
+      - "*/routes/*"
+      - "*main.py"
+    reason: "External-facing attack surface"
+    min_coverage: 0.80
+
+# ============================================================================
+# ACCEPTANCE CRITERIA (20 Test Queries)
+# ============================================================================
+acceptance_queries:
+  # Semantic search queries
+  - id: "Q1"
+    description: "Find all authentication-related code"
+    query: "authentication jwt token login"
+    expected_min_results: 5
+    category: "semantic_search"
+
+  - id: "Q2"
+    description: "Find access control logic"
+    query: "access control permissions authorization"
+    expected_min_results: 5
+    category: "semantic_search"
+
+  - id: "Q3"
+    description: "Find database models"
+    query: "database models schema tables"
+    expected_min_results: 3
+    category: "semantic_search"
+
+  # Cypher graph queries
+  - id: "Q4"
+    description: "List all Python backend files"
+    cypher: "MATCH (n:U4_Code_Artifact {lang: 'py'}) RETURN n.path ORDER BY n.path"
+    expected_min_results: 10
+    category: "code_structure"
+
+  - id: "Q5"
+    description: "List all TypeScript frontend files"
+    cypher: "MATCH (n:U4_Code_Artifact) WHERE n.lang IN ['ts', 'tsx'] RETURN n.path ORDER BY n.path"
+    expected_min_results: 40
+    category: "code_structure"
+
+  - id: "Q6"
+    description: "Find all API endpoints"
+    cypher: "MATCH (n:U4_Code_Artifact) WHERE n.path CONTAINS 'api' OR n.path CONTAINS 'routes' RETURN n.path"
+    expected_min_results: 3
+    category: "architecture"
+
+  - id: "Q7"
+    description: "Find dependencies of auth module"
+    cypher: "MATCH (source:U4_Code_Artifact)-[r:U4_DEPENDS_ON]->(target:U4_Code_Artifact) WHERE source.path CONTAINS 'auth' RETURN source.path, target.path"
+    expected_min_results: 5
+    category: "dependencies"
+
+  - id: "Q8"
+    description: "Find circular dependencies (if any)"
+    cypher: "MATCH path = (a:U4_Code_Artifact)-[:U4_DEPENDS_ON*2..5]->(a) RETURN path LIMIT 10"
+    expected_min_results: 0  # Expect zero circular deps
+    category: "quality"
+
+  - id: "Q9"
+    description: "Find all architecture documents"
+    cypher: "MATCH (n:U4_Knowledge_Object {ko_type: 'spec'}) WHERE n.name CONTAINS 'architecture' OR n.name CONTAINS 'ARCHITECTURE' RETURN n.name, n.path"
+    expected_min_results: 5
+    category: "documentation"
+
+  - id: "Q10"
+    description: "Find all ADRs (Architecture Decision Records)"
+    cypher: "MATCH (n:U4_Knowledge_Object {ko_type: 'adr'}) RETURN n.name, n.path ORDER BY n.name"
+    expected_min_results: 0  # May not have ADRs
+    category: "documentation"
+
+  - id: "Q11"
+    description: "Find semantic clusters (themes)"
+    cypher: "MATCH (n:U4_Subentity {kind: 'semantic'}) RETURN n.role_or_topic, n.member_count ORDER BY n.member_count DESC"
+    expected_min_results: 5
+    category: "semantic"
+
+  - id: "Q12"
+    description: "Find coverage metrics"
+    cypher: "MATCH (m:U4_Measurement)-[:U4_MEASURES]->(metric:U4_Metric) WHERE metric.name CONTAINS 'coverage' RETURN metric.name, AVG(m.value) as avg_coverage"
+    expected_min_results: 1
+    category: "quality"
+
+  - id: "Q13"
+    description: "Find security assessments"
+    cypher: "MATCH (a:U4_Assessment {domain: 'security'}) RETURN a.description, a.score ORDER BY a.score DESC"
+    expected_min_results: 0  # May not have issues
+    category: "security"
+
+  - id: "Q14"
+    description: "Find untested code (0% coverage)"
+    cypher: "MATCH (code:U4_Code_Artifact)<-[:U4_MEASURES]-(m:U4_Measurement) WHERE m.value = 0 RETURN code.path LIMIT 20"
+    expected_min_results: 0  # Expect good coverage
+    category: "quality"
+
+  - id: "Q15"
+    description: "Find all test files"
+    cypher: "MATCH (n:U4_Code_Artifact) WHERE n.path CONTAINS 'test' OR n.description CONTAINS 'test' RETURN n.path"
+    expected_min_results: 5
+    category: "testing"
+
+  - id: "Q16"
+    description: "Find FastAPI main entry point"
+    cypher: "MATCH (n:U4_Code_Artifact) WHERE n.path CONTAINS 'main.py' AND n.description CONTAINS 'FastAPI' RETURN n.path, n.description"
+    expected_min_results: 1
+    category: "architecture"
+
+  - id: "Q17"
+    description: "Find Next.js pages"
+    cypher: "MATCH (n:U4_Code_Artifact) WHERE n.path CONTAINS 'src/app' OR n.path CONTAINS 'pages/' RETURN n.path LIMIT 20"
+    expected_min_results: 10
+    category: "architecture"
+
+  - id: "Q18"
+    description: "Find all external dependencies (libraries)"
+    cypher: "MATCH (code:U4_Code_Artifact)-[:U4_DEPENDS_ON {dependency_type: 'build_time'}]->(dep) WHERE dep.path STARTS WITH 'external:' RETURN DISTINCT dep.path"
+    expected_min_results: 20
+    category: "dependencies"
+
+  - id: "Q19"
+    description: "Find citizen identity files (CLAUDE.md)"
+    cypher: "MATCH (n:U4_Knowledge_Object) WHERE n.path CONTAINS 'CLAUDE.md' RETURN n.path"
+    expected_min_results: 10
+    category: "documentation"
+
+  - id: "Q20"
+    description: "Find README and getting started docs"
+    cypher: "MATCH (n:U4_Knowledge_Object) WHERE n.path =~ '.*README.*' OR n.ko_type = 'guide' RETURN n.path, n.name"
+    expected_min_results: 5
+    category: "documentation"
+
+# ============================================================================
+# DELIVERABLES
+# ============================================================================
+deliverables:
+  # FalkorDB graph export
+  graph_export:
+    enabled: true
+    format: "cypher"
+    output_path: "orgs/scopelock/delivery/graph_export.cypher"
+
+  # Documentation website
+  documentation_site:
+    enabled: true
+    domain: "docs.scopelock.mindprotocol.ai"
+    features:
+      - graph_explorer
+      - semantic_search
+      - auto_generated_docs
+      - human_narratives
+      - health_dashboard
+
+  # CLI query tool
+  cli_tool:
+    enabled: true
+    output_path: "orgs/scopelock/delivery/scopelock_cli.tar.gz"
+
+  # Health dashboard
+  health_dashboard:
+    enabled: true
+    refresh_interval_seconds: 300  # 5 minutes
+
+  # Reports
+  reports:
+    - coverage_report
+    - security_report
+    - architecture_diagrams
+    - dependency_analysis
+    - quality_gates_results
+
+# ============================================================================
+# EXTRACTION STRATEGY (Based on Corpus Analysis)
+# ============================================================================
+strategy:
+  # Recommended approach based on 1.57:1 doc/code ratio
+  approach: "balanced"  # Both code and docs are substantial
+
+  # Stage execution order
+  stages:
+    - corpus_analysis      # Quinn (COMPLETE)
+    - code_extraction      # Kai (IN PROGRESS)
+    - architecture_inference  # Nora
+    - coverage_analysis    # Vera
+    - security_analysis    # Marcus
+    - documentation_generation  # Sage
+    - quality_validation   # Mel
+
+  # Estimated time per stage (hours)
+  estimated_time:
+    corpus_analysis: 2.5       # COMPLETE
+    code_extraction: 4.0       # IN PROGRESS
+    architecture_inference: 3.0
+    coverage_analysis: 2.0
+    security_analysis: 2.0
+    documentation_generation: 3.0
+    quality_validation: 1.5
+    total: 18.0  # ~2.5 days for first client (learning curve)
+
+# ============================================================================
+# CONTACTS
+# ============================================================================
+contacts:
+  primary: "graphcare@mindprotocol.ai"
+  client_github: "https://github.com/mind-protocol/scopelock"
+  documentation_preview: "https://docs.scopelock.mindprotocol.ai"
+
+# ============================================================================
+# NOTES
+# ============================================================================
+notes:
+  - "First GraphCare client - treat as learning opportunity"
+  - "Well-documented codebase (1.57:1 ratio) - good test case"
+  - "FastAPI + Next.js architecture - modern stack"
+  - "10 architecture documents identified - strong foundation"
+  - "Citizen identity files present (10 CLAUDE.md) - interesting for extraction"
+  - "Prioritize authentication and access control paths (core functionality)"

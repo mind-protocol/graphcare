@@ -16,7 +16,7 @@ Landing page for GraphCare knowledge extraction service.
 
 ```bash
 npm run dev
-# Open http://localhost:3001
+# Open http://localhost:3002
 ```
 
 ## Build
