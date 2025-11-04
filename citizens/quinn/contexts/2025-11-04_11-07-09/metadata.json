@@ -1,0 +1,9 @@
+{
+  "context_id": "2025-11-04_11-07-09",
+  "entity_type": "citizen",
+  "entity_id": "quinn",
+  "created_at": "2025-11-04T10:07:09.878258+00:00",
+  "last_updated": "2025-11-04T10:28:50.481252+00:00",
+  "message_count": 73,
+  "has_tool_calls": true
+}

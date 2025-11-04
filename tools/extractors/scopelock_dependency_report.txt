@@ -1,0 +1,102 @@
+================================================================================
+DEPENDENCY ANALYSIS REPORT
+================================================================================
+
+Repository: clients/scopelock/backend
+
+## Call Graph
+  Total functions: 35
+  Total calls: 295
+
+## Import Graph
+  Total modules: 11
+  Total imports: 15
+
+## Circular Dependencies
+
+### Cycle 1 (high severity, module_import)
+  → app/api/__init__.py
+  → app/api/__init__.py
+
+## Coupling Metrics (Top 10 Most Coupled)
+
+  clients/scopelock/backend/app/webhooks.py:process_vollna_project
+    Afferent (incoming): 1
+    Efferent (outgoing): 34
+    Instability: 0.97
+
+  clients/scopelock/backend/app/telegram.py:handle_approval
+    Afferent (incoming): 1
+    Efferent (outgoing): 25
+    Instability: 0.96
+
+  clients/scopelock/backend/app/webhooks.py:vollna_webhook
+    Afferent (incoming): 0
+    Efferent (outgoing): 23
+    Instability: 1.00
+
+  clients/scopelock/backend/app/webhooks.py:cloudmailin_webhook
+    Afferent (incoming): 0
+    Efferent (outgoing): 22
+    Instability: 1.00
+
+  clients/scopelock/backend/app/telegram.py:handle_proposal_action
+    Afferent (incoming): 1
+    Efferent (outgoing): 21
+    Instability: 0.95
+
+  clients/scopelock/backend/app/main.py:health_check
+    Afferent (incoming): 0
+    Efferent (outgoing): 21
+    Instability: 1.00
+
+  clients/scopelock/backend/app/runner.py:_run_claude
+    Afferent (incoming): 2
+    Efferent (outgoing): 17
+    Instability: 0.89
+
+  clients/scopelock/backend/app/telegram.py:send_proposal_notification
+    Afferent (incoming): 1
+    Efferent (outgoing): 13
+    Instability: 0.93
+
+  clients/scopelock/backend/app/webhooks.py:telegram_webhook
+    Afferent (incoming): 0
+    Efferent (outgoing): 12
+    Instability: 1.00
+
+  clients/scopelock/backend/app/telegram.py:answer_callback
+    Afferent (incoming): 6
+    Efferent (outgoing): 6
+    Instability: 0.50
+
+## High Instability Nodes (>0.8)
+  clients/scopelock/backend/app/contracts.py:validate_platform: 1.00
+  clients/scopelock/backend/app/webhooks.py:upwork_webhook: 1.00
+  clients/scopelock/backend/app/webhooks.py:cloudmailin_webhook: 1.00
+  clients/scopelock/backend/app/webhooks.py:telegram_webhook: 1.00
+  clients/scopelock/backend/app/webhooks.py:notify_draft: 1.00
+  clients/scopelock/backend/app/webhooks.py:notify_proposal: 1.00
+  clients/scopelock/backend/app/webhooks.py:vollna_webhook: 1.00
+  clients/scopelock/backend/app/browser_automation.py:__init__: 1.00
+  clients/scopelock/backend/app/browser_automation.py:submit_proposal: 1.00
+  clients/scopelock/backend/app/browser_automation.py:check_login_status: 1.00
+  clients/scopelock/backend/app/browser_automation.py:login_to_upwork: 1.00
+  clients/scopelock/backend/app/runner.py:__init__: 1.00
+  clients/scopelock/backend/app/main.py:lifespan: 1.00
+  clients/scopelock/backend/app/main.py:global_exception_handler: 1.00
+  clients/scopelock/backend/app/main.py:health_check: 1.00
+  clients/scopelock/backend/app/main.py:root: 1.00
+  clients/scopelock/backend/app/database.py:init_db: 1.00
+  clients/scopelock/backend/app/database.py:get_db: 1.00
+  clients/scopelock/backend/app/auth.py:verify_webhook_signature: 1.00
+  clients/scopelock/backend/app/auth.py:generate_webhook_signature: 1.00
+  clients/scopelock/backend/app/webhooks.py:process_vollna_project: 0.97
+  clients/scopelock/backend/app/telegram.py:handle_approval: 0.96
+  clients/scopelock/backend/app/telegram.py:handle_proposal_action: 0.95
+  clients/scopelock/backend/app/telegram.py:send_proposal_notification: 0.93
+  clients/scopelock/backend/app/telegram.py:send_draft_notification: 0.90
+  clients/scopelock/backend/app/runner.py:_run_claude: 0.89
+  clients/scopelock/backend/app/runner.py:_setup_credentials: 0.88
+  clients/scopelock/backend/app/config.py:validate_required: 0.86
+  clients/scopelock/backend/app/telegram.py:send_message: 0.82
