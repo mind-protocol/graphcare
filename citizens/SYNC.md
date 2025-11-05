@@ -1,3 +1,74 @@
+## 2025-11-05 01:45 - Sage: "How It Works" Page Complete ✅
+
+**Status:** ✅ Complete | Comprehensive technical deep-dive page created
+
+**Context:** User provided detailed "How It Works" content about GraphCare's 11-stage pipeline, USP, pricing model. I analyzed through "Burned Man" lens and identified 6 issues to fix. User approved ("yep") my rewrite approach.
+
+**Deliverable Created:**
+- `docs/how_it_works_page.md` (699 lines, comprehensive)
+
+**All Fixes Applied:**
+
+1. ✅ **Lead with outcomes, hide process details**
+   - "What You Get" section visible
+   - 11-stage detailed process in collapsible `<details>` section
+
+2. ✅ **Removed "7 AI citizens" gimmickry**
+   - Changed to "Specialized Extraction Pipeline"
+   - Lead with capabilities (Semantic Clustering, Architecture Inference, Security Validation)
+   - Hid "citizens" naming in collapsible technical details
+
+3. ✅ **Aligned pricing** ($350 → $2k → $5k → Custom)
+   - Evidence Sprint: $350 (48h, 1 module)
+   - Starter: $2,000 (<50K LOC)
+   - Professional: $5,000 (<200K LOC)
+   - Enterprise: Custom (multi-repo)
+
+4. ✅ **Clarified "Production-Direct" confusion**
+   - Section: "Structure Extraction (Not Code Storage)"
+   - Explicitly: We extract STRUCTURE, not CODE
+   - Security guarantee: "We delete your source code after extraction"
+
+5. ✅ **Explained Mind Protocol value**
+   - Portability (export JSON/Cypher)
+   - No vendor lock-in
+   - Interoperable with other tools
+   - Future-proof (versioned types)
+
+6. ✅ **Made ongoing care optional and à la carte**
+   - Re-extraction: $2,000 on-demand (not forced)
+   - Monitoring: $200/month (or self-host for free)
+   - "What Most Clients Do" section shows no forced subscriptions
+
+**Content Structure:**
+```
+1. The Problem We Solve (traditional docs fail)
+2. Graph-Native Approach (5 differentiators)
+   - Graph-Native (Not Documents)
+   - Industry-Standard Type System
+   - Structure Extraction (Not Code Storage)
+   - Specialized Extraction Pipeline
+   - Queryable (Not Static)
+3. The Process (outcomes first, details collapsed)
+4. Scopelock Case Study (real Cypher query examples)
+5. Pricing (aligned ladder + add-ons)
+6. Why This Works (comparison to static docs)
+```
+
+**Key Features:**
+- 5 major differentiators with code examples
+- Actual Cypher queries showing what clients can do
+- Complete Scopelock case study (172 nodes, 54 relationships, 4 layers)
+- Honest about what we don't store (source code, business logic)
+- Optional add-ons (no forced subscriptions)
+- 100% money-back guarantee
+
+**Next:** Awaiting user feedback on the "How It Works" page
+
+**Time spent:** 90 minutes (analysis + writing + structuring)
+
+---
+
 ## 2025-11-05 09:00 - Mel: L4 Membrane Hub Production Deployment ✅
 
 **Status:** 🎉 PRODUCTION DEPLOYED | GraphCare fully operational
