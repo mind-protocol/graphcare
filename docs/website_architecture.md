@@ -1,4 +1,8 @@
-# Documentation Website Architecture
+# Client Documentation Website Architecture
+
+**IMPORTANT:** This document describes **client-facing documentation websites** (`docs.{client}.mindprotocol.ai`), NOT the main GraphCare service website. For the main service website specification, see `graphcare_website_spec.md`.
+
+---
 
 **Site Pattern:** `docs.{client_name}.mindprotocol.ai`
 **Example:** `docs.scopelock.mindprotocol.ai`
@@ -10,7 +14,7 @@
 
 ## Overview
 
-Each client gets a dedicated documentation website that provides:
+Each GraphCare client gets a dedicated documentation website that provides:
 - Interactive knowledge graph exploration
 - Semantic search over extracted knowledge
 - Auto-generated documentation (architecture, API, coverage)

@@ -1,15 +1,16 @@
 """
-FalkorDB Ingestion Pipeline for GraphCare
+FalkorDB Ingestion Pipeline (REST API Mode)
 
-Ingests extracted code artifacts into FalkorDB using U4_Code_Artifact nodes.
-Generates semantic embeddings and creates relationship links (U4_CALLS, U4_DEPENDS_ON).
+Ingests extracted code artifacts into FalkorDB using REST API.
+For production Render deployment where direct Redis connection is not available.
 
-Author: Kai (Chief Engineer, GraphCare)
+Author: Nora (Chief Architect, GraphCare)
 Created: 2025-11-04
 """
 
 import json
 import sys
+import requests
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
@@ -26,37 +27,58 @@ logger = logging.getLogger(__name__)
 
 
 # ============================================================================
-# FalkorDB Connection
+# REST API Configuration
 # ============================================================================
 
-def get_falkordb_connection(graph_name: str, host: str = 'localhost', port: int = 6379):
+API_URL = "https://mindprotocol.onrender.com/admin/query"
+API_KEY = "Sxv48F2idLAXMnvqQTdvlQ4gArsDVhK4ROGyU"
+
+
+def execute_cypher(graph_name: str, cypher: str, params: Optional[Dict] = None) -> dict:
     """
-    Get FalkorDB graph connection.
+    Execute Cypher query via REST API.
 
     Args:
         graph_name: Graph name (e.g., "scopelock")
-        host: FalkorDB host (default: 'localhost', prod: 'mindprotocol.onrender.com')
-        port: FalkorDB port (default: 6379)
+        cypher: Cypher query
+        params: Query parameters (will be inlined)
 
     Returns:
-        FalkorDB Graph object
+        API response dict
     """
+    # Inline parameters into Cypher (REST API doesn't support parameterized queries)
+    if params:
+        cypher_inlined = cypher
+        for key, value in params.items():
+            placeholder = f"${key}"
+            if isinstance(value, str):
+                # Escape quotes and inline string
+                escaped = value.replace("'", "\\'").replace('"', '\\"')
+                cypher_inlined = cypher_inlined.replace(placeholder, f"'{escaped}'")
+            elif isinstance(value, (int, float)):
+                cypher_inlined = cypher_inlined.replace(placeholder, str(value))
+            elif isinstance(value, bool):
+                cypher_inlined = cypher_inlined.replace(placeholder, str(value).lower())
+            else:
+                logger.warning(f"Unsupported parameter type for {key}: {type(value)}")
+        cypher = cypher_inlined
+
+    payload = {
+        "graph_name": graph_name,
+        "query": cypher
+    }
+
+    headers = {
+        "X-API-Key": API_KEY,
+        "Content-Type": "application/json"
+    }
+
     try:
-        from falkordb import FalkorDB
-
-        # Connect to FalkorDB
-        db = FalkorDB(host=host, port=port)
-        graph = db.select_graph(graph_name)
-
-        logger.info(f"Connected to FalkorDB graph: {graph_name} at {host}:{port}")
-        return graph
-
-    except ImportError:
-        logger.error("FalkorDB Python client not installed. Run: pip install falkordb")
-        raise
-    except Exception as e:
-        logger.error(f"Failed to connect to FalkorDB at {host}:{port}: {e}")
-        raise
+        response = requests.post(API_URL, json=payload, headers=headers, timeout=30)
+        response.raise_for_status()
+        return {"success": True, "data": response.json()}
+    except requests.exceptions.RequestException as e:
+        return {"success": False, "error": str(e), "response": response.text if 'response' in locals() else None}
 
 
 # ============================================================================
@@ -64,7 +86,7 @@ def get_falkordb_connection(graph_name: str, host: str = 'localhost', port: int 
 # ============================================================================
 
 def create_code_artifact_node(
-    graph,
+    graph_name: str,
     path: str,
     name: str,
     description: str,
@@ -78,26 +100,25 @@ def create_code_artifact_node(
     extra_properties: Optional[Dict[str, Any]] = None
 ) -> str:
     """
-    Create U4_Code_Artifact node in FalkorDB.
+    Create U4_Code_Artifact node via REST API.
 
     Args:
-        graph: FalkorDB graph connection
+        graph_name: Graph name
         path: Code path (file::class::function format)
-        name: Artifact name (function/class name)
+        name: Artifact name
         description: Human-readable description
-        scope_ref: Client organization ID (e.g., "org_scopelock")
+        scope_ref: Client organization ID
         language: Programming language
         lines_of_code: Optional LOC count
         complexity: Optional cyclomatic complexity
-        is_method: Whether this is a method (inside class)
+        is_method: Whether this is a method
         parent_class: Parent class name if method
-        embedding: Optional 768-dim embedding vector
+        embedding: Optional embedding vector
         extra_properties: Optional additional properties
 
     Returns:
         Node ID (path)
     """
-    # Current timestamp
     now = int(datetime.utcnow().timestamp() * 1000)
 
     # Build properties
@@ -112,7 +133,7 @@ def create_code_artifact_node(
         'updated_at': now,
         'valid_from': now,
         'language': language,
-        'visibility': 'public'  # Default visibility
+        'visibility': 'public'
     }
 
     # Add optional properties
@@ -125,7 +146,6 @@ def create_code_artifact_node(
     if parent_class:
         properties['parent_class'] = parent_class
     if embedding:
-        # Store embedding as string (FalkorDB doesn't support array properties natively)
         properties['embedding'] = json.dumps(embedding)
         properties['embedding_dim'] = len(embedding)
 
@@ -133,47 +153,69 @@ def create_code_artifact_node(
     if extra_properties:
         properties.update(extra_properties)
 
-    # Build Cypher MERGE query (idempotent)
-    # Use path as unique identifier
+    # Build Cypher MERGE query (no parameters - inline everything)
+    # Escape strings properly
+    def escape(s):
+        if s is None:
+            return 'null'
+        escaped = str(s).replace('\\', '\\\\').replace('"', '\\"').replace("'", "\\'").replace('\n', ' ')
+        return f"'{escaped}'"
+
     cypher = f"""
-    MERGE (artifact:U4_Code_Artifact {{path: $path}})
+    MERGE (artifact:U4_Code_Artifact {{path: {escape(path)}}})
     ON CREATE SET
-        artifact.name = $name,
-        artifact.description = $description,
-        artifact.type_name = $type_name,
-        artifact.level = $level,
-        artifact.scope_ref = $scope_ref,
-        artifact.created_at = $created_at,
-        artifact.updated_at = $updated_at,
-        artifact.valid_from = $valid_from,
-        artifact.language = $language,
-        artifact.visibility = $visibility
+        artifact.name = {escape(name)},
+        artifact.description = {escape(description)},
+        artifact.type_name = {escape('U4_Code_Artifact')},
+        artifact.level = {escape('L2')},
+        artifact.scope_ref = {escape(scope_ref)},
+        artifact.created_at = {now},
+        artifact.updated_at = {now},
+        artifact.valid_from = {now},
+        artifact.language = {escape(language)},
+        artifact.visibility = {escape('public')}
     ON MATCH SET
-        artifact.updated_at = $updated_at
+        artifact.updated_at = {now}
     """
 
-    # Add optional properties to SET clause
-    optional_props = ['lines_of_code', 'complexity', 'is_method', 'parent_class', 'embedding', 'embedding_dim']
-    for prop in optional_props:
-        if prop in properties:
-            cypher += f",\n        artifact.{prop} = ${prop}"
+    # Add optional properties
+    if lines_of_code is not None:
+        cypher += f",\n        artifact.lines_of_code = {lines_of_code}"
+    if complexity is not None:
+        cypher += f",\n        artifact.complexity = {complexity}"
+    if is_method:
+        cypher += f",\n        artifact.is_method = {str(is_method).lower()}"
+    if parent_class:
+        cypher += f",\n        artifact.parent_class = {escape(parent_class)}"
+    if embedding:
+        cypher += f",\n        artifact.embedding = {escape(json.dumps(embedding))}"
+        cypher += f",\n        artifact.embedding_dim = {len(embedding)}"
+
+    # Add extra properties
+    if extra_properties:
+        for key, value in extra_properties.items():
+            if isinstance(value, bool):
+                cypher += f",\n        artifact.{key} = {str(value).lower()}"
+            elif isinstance(value, (int, float)):
+                cypher += f",\n        artifact.{key} = {value}"
+            else:
+                cypher += f",\n        artifact.{key} = {escape(value)}"
 
     cypher += "\n    RETURN artifact.path as node_id"
 
     # Execute query
-    try:
-        result = graph.query(cypher, properties)
-        node_id = result.result_set[0][0] if result.result_set else path
-        return node_id
+    result = execute_cypher(graph_name, cypher)
 
-    except Exception as e:
+    if not result['success']:
         logger.error(f"Failed to create U4_Code_Artifact node: {path}")
-        logger.error(f"Error: {e}")
-        raise
+        logger.error(f"Error: {result['error']}")
+        raise Exception(f"Node creation failed: {result['error']}")
+
+    return path
 
 
 def create_relationship_link(
-    graph,
+    graph_name: str,
     source_path: str,
     target_path: str,
     link_type: str,
@@ -181,14 +223,14 @@ def create_relationship_link(
     properties: Optional[Dict[str, Any]] = None
 ) -> bool:
     """
-    Create relationship link between code artifacts.
+    Create relationship link via REST API.
 
     Args:
-        graph: FalkorDB graph connection
+        graph_name: Graph name
         source_path: Source artifact path
         target_path: Target artifact path
         link_type: Link type (U4_CALLS, U4_DEPENDS_ON, etc.)
-        confidence: Confidence score (0-1)
+        confidence: Confidence score
         properties: Optional additional link properties
 
     Returns:
@@ -196,44 +238,31 @@ def create_relationship_link(
     """
     now = int(datetime.utcnow().timestamp() * 1000)
 
-    # Build link properties
-    link_props = {
-        'confidence': confidence,
-        'created_at': now,
-        'valid_from': now
-    }
+    def escape(s):
+        if s is None:
+            return 'null'
+        escaped = str(s).replace('\\', '\\\\').replace('"', '\\"').replace("'", "\\'").replace('\n', ' ')
+        return f"'{escaped}'"
 
-    if properties:
-        link_props.update(properties)
-
-    # Build Cypher query
     cypher = f"""
-    MATCH (source:U4_Code_Artifact {{path: $source_path}})
-    MATCH (target:U4_Code_Artifact {{path: $target_path}})
+    MATCH (source:U4_Code_Artifact {{path: {escape(source_path)}}})
+    MATCH (target:U4_Code_Artifact {{path: {escape(target_path)}}})
     MERGE (source)-[r:{link_type}]->(target)
     ON CREATE SET
-        r.confidence = $confidence,
-        r.created_at = $created_at,
-        r.valid_from = $valid_from
+        r.confidence = {confidence},
+        r.created_at = {now},
+        r.valid_from = {now}
     RETURN count(r) as link_count
     """
 
-    params = {
-        'source_path': source_path,
-        'target_path': target_path,
-        'confidence': confidence,
-        'created_at': now,
-        'valid_from': now
-    }
+    result = execute_cypher(graph_name, cypher)
 
-    try:
-        result = graph.query(cypher, params)
-        return True
-
-    except Exception as e:
+    if not result['success']:
         logger.warning(f"Failed to create {link_type} link: {source_path} -> {target_path}")
-        logger.warning(f"Error: {e}")
+        logger.warning(f"Error: {result['error']}")
         return False
+
+    return True
 
 
 # ============================================================================
@@ -256,21 +285,17 @@ def ingest_extraction_results(
     graph_name: str,
     scope_ref: str,
     language: str,
-    generate_embeddings: bool = True,
-    falkordb_host: str = 'localhost',
-    falkordb_port: int = 6379
+    generate_embeddings: bool = True
 ) -> IngestionStats:
     """
-    Ingest extraction results into FalkorDB.
+    Ingest extraction results via REST API.
 
     Args:
-        extraction_json_path: Path to extraction JSON from python_ast_extractor.py
-        graph_name: FalkorDB graph name (e.g., "scopelock")
-        scope_ref: Client organization ID (e.g., "org_scopelock")
-        language: Programming language (e.g., "python")
-        generate_embeddings: Whether to generate semantic embeddings
-        falkordb_host: FalkorDB host (default: 'localhost', prod: 'mindprotocol.onrender.com')
-        falkordb_port: FalkorDB port (default: 6379)
+        extraction_json_path: Path to extraction JSON
+        graph_name: FalkorDB graph name
+        scope_ref: Client organization ID
+        language: Programming language
+        generate_embeddings: Whether to generate embeddings
 
     Returns:
         IngestionStats with counts
@@ -280,9 +305,6 @@ def ingest_extraction_results(
     # Load extraction results
     logger.info(f"Loading extraction results from: {extraction_json_path}")
     extraction_data = json.loads(extraction_json_path.read_text(encoding="utf-8"))
-
-    # Connect to FalkorDB
-    graph = get_falkordb_connection(graph_name, host=falkordb_host, port=falkordb_port)
 
     # Initialize embedding service if needed
     embedding_service = None
@@ -303,7 +325,7 @@ def ingest_extraction_results(
         # Ingest functions
         for func in file_data["functions"]:
             try:
-                # Build path (file::class::function or file::function)
+                # Build path
                 if func.get("is_method") and func.get("parent_class"):
                     artifact_path = f"{file_path}::{func['parent_class']}::{func['name']}"
                 else:
@@ -312,7 +334,7 @@ def ingest_extraction_results(
                 # Build description
                 desc_parts = []
                 if func.get("docstring"):
-                    desc_parts.append(func["docstring"].split("\n")[0][:200])  # First line, max 200 chars
+                    desc_parts.append(func["docstring"].split("\n")[0][:200])
                 if func.get("parameters"):
                     params = ", ".join(func["parameters"])
                     desc_parts.append(f"Parameters: {params}")
@@ -321,7 +343,6 @@ def ingest_extraction_results(
                 # Generate embedding
                 embedding = None
                 if embedding_service:
-                    # Build code snippet for embedding (signature + docstring)
                     code_snippet = f"def {func['name']}({', '.join(func['parameters'])})"
                     if func.get("return_type"):
                         code_snippet += f" -> {func['return_type']}"
@@ -337,12 +358,12 @@ def ingest_extraction_results(
                     _, embedding = embedding_service.embed_code_artifact(code_snippet, metadata)
                     stats.embeddings_generated += 1
 
-                # Calculate LOC (approximation from line_start/line_end)
+                # Calculate LOC
                 loc = func['line_end'] - func['line_start'] + 1 if func.get('line_end') else None
 
                 # Create node
                 create_code_artifact_node(
-                    graph=graph,
+                    graph_name=graph_name,
                     path=artifact_path,
                     name=func['name'],
                     description=description,
@@ -371,7 +392,7 @@ def ingest_extraction_results(
         # Ingest classes
         for cls in file_data["classes"]:
             try:
-                # Build path (file::class)
+                # Build path
                 artifact_path = f"{file_path}::{cls['name']}"
 
                 # Build description
@@ -385,7 +406,6 @@ def ingest_extraction_results(
                 # Generate embedding
                 embedding = None
                 if embedding_service:
-                    # Build code snippet
                     code_snippet = f"class {cls['name']}"
                     if cls.get("bases"):
                         code_snippet += f"({', '.join(cls['bases'])})"
@@ -406,7 +426,7 @@ def ingest_extraction_results(
 
                 # Create node
                 create_code_artifact_node(
-                    graph=graph,
+                    graph_name=graph_name,
                     path=artifact_path,
                     name=cls['name'],
                     description=description,
@@ -417,8 +437,7 @@ def ingest_extraction_results(
                     extra_properties={
                         'bases': json.dumps(cls.get('bases', [])),
                         'decorators': json.dumps(cls.get('decorators', [])),
-                        'methods': json.dumps(cls.get('methods', [])),
-                        'attributes': json.dumps(cls.get('attributes', []))
+                        'methods': json.dumps(cls.get('methods', []))
                     }
                 )
 
@@ -429,8 +448,8 @@ def ingest_extraction_results(
                 logger.error(f"  ❌ Failed to ingest class {cls['name']}: {e}")
                 stats.errors += 1
 
-    # Second pass: Create U4_CALLS links
-    logger.info("\n\nCreating U4_CALLS links...")
+    # Create call relationships
+    logger.info("\n\nCreating U4_CALLS relationships...")
     for file_path, file_data in extraction_data["files"].items():
         for func in file_data["functions"]:
             # Build source path
@@ -439,24 +458,33 @@ def ingest_extraction_results(
             else:
                 source_path = f"{file_path}::{func['name']}"
 
-            # Create links for each call
-            for called_func in func.get("calls", []):
-                # Try to find target function (simple heuristic: match by name)
-                # Real implementation would need better resolution (imports, namespaces)
-                for target_file, target_data in extraction_data["files"].items():
-                    for target_func in target_data["functions"]:
-                        if target_func["name"] == called_func or called_func.endswith(f".{target_func['name']}"):
-                            # Build target path
-                            if target_func.get("is_method") and target_func.get("parent_class"):
-                                target_path = f"{target_file}::{target_func['parent_class']}::{target_func['name']}"
+            # Link calls
+            for call in func.get("calls", []):
+                # Try to find target in extraction data
+                target_path = None
+
+                # Search for function in all files
+                for search_file, search_data in extraction_data["files"].items():
+                    for search_func in search_data["functions"]:
+                        if search_func["name"] == call:
+                            if search_func.get("is_method") and search_func.get("parent_class"):
+                                target_path = f"{search_file}::{search_func['parent_class']}::{search_func['name']}"
                             else:
-                                target_path = f"{target_file}::{target_func['name']}"
+                                target_path = f"{search_file}::{search_func['name']}"
+                            break
+                    if target_path:
+                        break
 
-                            # Create link
-                            if create_relationship_link(graph, source_path, target_path, "U4_CALLS"):
-                                stats.calls_linked += 1
-
-    logger.info(f"  ✅ Created {stats.calls_linked} U4_CALLS links")
+                if target_path:
+                    created = create_relationship_link(
+                        graph_name=graph_name,
+                        source_path=source_path,
+                        target_path=target_path,
+                        link_type="U4_CALLS",
+                        confidence=0.8  # Medium confidence (static analysis)
+                    )
+                    if created:
+                        stats.calls_linked += 1
 
     return stats
 
@@ -468,14 +496,12 @@ def ingest_extraction_results(
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Ingest code extraction results into FalkorDB")
+    parser = argparse.ArgumentParser(description="Ingest code extraction results via REST API")
     parser.add_argument("extraction_json", type=Path, help="Path to extraction JSON file")
     parser.add_argument("--graph", required=True, help="FalkorDB graph name (e.g., scopelock)")
     parser.add_argument("--scope", required=True, help="Client scope ref (e.g., org_scopelock)")
     parser.add_argument("--language", default="python", help="Programming language (default: python)")
     parser.add_argument("--no-embeddings", action="store_true", help="Skip embedding generation")
-    parser.add_argument("--host", default="localhost", help="FalkorDB host (default: localhost, prod: mindprotocol.onrender.com)")
-    parser.add_argument("--port", type=int, default=6379, help="FalkorDB port (default: 6379)")
 
     args = parser.parse_args()
 
@@ -483,11 +509,11 @@ if __name__ == "__main__":
         print(f"Error: Extraction JSON not found: {args.extraction_json}")
         sys.exit(1)
 
-    print(f"Ingesting extraction results into FalkorDB...")
+    print(f"Ingesting extraction results into FalkorDB (REST API mode)...")
     print(f"  Graph: {args.graph}")
     print(f"  Scope: {args.scope}")
     print(f"  Language: {args.language}")
-    print(f"  FalkorDB: {args.host}:{args.port}")
+    print(f"  API Endpoint: {API_URL}")
     print(f"  Embeddings: {'Disabled' if args.no_embeddings else 'Enabled'}")
     print("=" * 80)
 
@@ -496,9 +522,7 @@ if __name__ == "__main__":
         graph_name=args.graph,
         scope_ref=args.scope,
         language=args.language,
-        generate_embeddings=not args.no_embeddings,
-        falkordb_host=args.host,
-        falkordb_port=args.port
+        generate_embeddings=not args.no_embeddings
     )
 
     print("=" * 80)
@@ -507,6 +531,5 @@ if __name__ == "__main__":
     print(f"  Classes ingested: {stats.classes_ingested}")
     print(f"  Embeddings generated: {stats.embeddings_generated}")
     print(f"  U4_CALLS links created: {stats.calls_linked}")
-    print(f"  U4_DEPENDS_ON links created: {stats.imports_linked}")
     print(f"  Errors: {stats.errors}")
     print("\n✅ Ingestion complete!")

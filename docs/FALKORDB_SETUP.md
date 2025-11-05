@@ -16,8 +16,9 @@ GraphCare uses **FalkorDB** (graph database) with a **multi-tenant architecture*
 - Protocol: Redis-compatible
 
 **Graph naming convention:**
-- Pattern: `graphcare_<client_name>`
-- Example: `graphcare_scopelock`
+- Pattern: `<client_name>` (simple, clean)
+- Example: `scopelock`, `mindsync`, `laserenissima`
+- Note: No prefix needed - FalkorDB instance is dedicated to GraphCare
 
 ---
 
@@ -55,7 +56,7 @@ After analysis, GraphCare adopts Quinn's **minimal extension** recommendation:
 ```bash
 # Create graph and apply schema
 cd /home/mind-protocol/graphcare
-python3 orchestration/schema_migration.py --graph graphcare_<client> --migrate
+python3 orchestration/schema_migration.py --graph <client> --migrate
 ```
 
 **What this does:**
@@ -73,10 +74,10 @@ python3 orchestration/schema_migration.py --graph graphcare_<client> --migrate
 
 ```bash
 # Check schema status
-python3 orchestration/schema_migration.py --graph graphcare_<client> --status
+python3 orchestration/schema_migration.py --graph <client> --status
 
 # Validate schema compliance (after data extraction)
-python3 orchestration/schema_migration.py --graph graphcare_<client> --validate
+python3 orchestration/schema_migration.py --graph <client> --validate
 ```
 
 ---
@@ -374,7 +375,7 @@ from falkordb import FalkorDB
 
 # Connect to FalkorDB
 db = FalkorDB(host='localhost', port=6379)
-graph = db.select_graph('graphcare_scopelock')
+graph = db.select_graph('scopelock')
 
 # Simple query
 result = graph.query("MATCH (n:U4_Code_Artifact) RETURN count(n)")
@@ -388,7 +389,7 @@ print(f"Code artifacts: {count}")
 from orchestration.libs.utils.falkordb_adapter import get_falkordb_graph
 
 # Get graph (reuses Mind Protocol connection logic)
-graph = get_falkordb_graph('graphcare_scopelock')
+graph = get_falkordb_graph('scopelock')
 
 # Parametrized query
 result = graph.query(
@@ -411,8 +412,8 @@ for row in result.result_set:
 - Data isolation at database level
 
 **Graph Naming:**
-- Pattern: `graphcare_<client>`
-- Examples: `graphcare_scopelock`, `graphcare_mindsync`, `graphcare_laserensisma`
+- Pattern: `<client_name>` (simple, clean)
+- Examples: `scopelock`, `mindsync`, `laserenissima`
 
 **Scope Reference:**
 - All nodes have `scope_ref` property
@@ -480,7 +481,7 @@ docker start falkordb
 
 ```bash
 # Create graph with schema migration
-python3 orchestration/schema_migration.py --graph graphcare_<client> --migrate
+python3 orchestration/schema_migration.py --graph <client> --migrate
 ```
 
 ### "Index already exists" Warning
@@ -491,7 +492,7 @@ This is normal. Schema migration is idempotent - safe to run multiple times.
 
 ```bash
 # Run validation to see missing attributes
-python3 orchestration/schema_migration.py --graph graphcare_<client> --validate
+python3 orchestration/schema_migration.py --graph <client> --validate
 
 # Fix: Ensure all nodes have universal attributes (see above)
 ```
