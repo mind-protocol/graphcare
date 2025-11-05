@@ -1,3 +1,129 @@
+## 2025-11-05 09:00 - Mel: L4 Membrane Hub Production Deployment ✅
+
+**Status:** 🎉 PRODUCTION DEPLOYED | GraphCare fully operational
+
+---
+
+**Milestone:** L4 Membrane Hub deployed as separate Render service
+
+**What Changed:**
+- New service: `mind-protocol-membrane-hub` (port 8765)
+- L3 now connects to internal service (not localhost)
+- Complete membrane-native flow operational in production
+
+**Architecture Flow (Now Working):**
+```
+Client → L3 (mindprotocol.ai) → L4 Hub (membrane-hub:8765) → L2 Resolver → FalkorDB → back
+```
+
+**Error Resolved:**
+```
+Before: ERROR - [L3 Bridge] Bus observer crashed: Connection refused (localhost:8765)
+After:  ✅ [L3 Bridge] Connected to mind-protocol-membrane-hub:8765
+```
+
+**GraphCare Production Status:**
+- ✅ L4 Protocol: Membrane hub operational (schema validation, routing, rate limits)
+- ✅ L3 Ecosystem: WebSocket API routing requests
+- ✅ L2 Resolver: Scopelock org resolver computing views
+- ✅ Storage: Production FalkorDB (172 nodes, 54 relationships)
+
+**Client-Facing Functionality:**
+- ✅ docs.view.request works in production
+- ✅ 4 views available: architecture, API, coverage, index
+- ✅ <1 second response time
+- ✅ Queryable via WebSocket (wss://mindprotocol.ai/api/ws)
+
+**Commits by Mind Protocol Team:**
+- c3181b47: L4 Hub deployment config
+- 36c5f81f: L3 observer connection fix
+
+---
+
+**PRODUCTION READINESS:** ✅ COMPLETE
+
+**GraphCare can now:**
+1. Serve documentation views to clients in production
+2. Onboard new clients (graph extraction → production deployment)
+3. Monitor resolver health in production
+4. Scale per-org resolvers independently
+
+**Next:** Client acquisition, demo deployments, additional graph extractions
+
+**Total Time to Production:** ~18 hours (GraphCare 17h + Mind Protocol 1h deployment)
+
+---
+
+**🚀 GraphCare: Living documentation is LIVE.**
+
+## 2025-11-04 18:45 - Sage: Homepage V3 FINAL - Ready to Implement
+
+**Status:** ✅ Final homepage design approved and documented
+
+**What was created:**
+
+**New Document:** `docs/graphcare_homepage_v3_final.md` (implementation-ready)
+
+**Key Changes from V2 → V3 (based on feedback):**
+
+1. **Hero CTA: "Link Your Repo"** (not "Request Demo")
+   - Direct action: OAuth → Clone → Evidence Sprint starts
+   - Removes friction: Show me it works on MY code
+
+2. **Removed ALL anonymous social proof**
+   - No more "[Client] testimonial" placeholders
+   - Only Scopelock case study with real metrics (344 files, 175 nodes, ROI calculations)
+   - No quotes unless we get explicit permission from client
+
+3. **Refactored "5-Day Process" → "Phase 1/2/3"**
+   - Was: "Day 1, Day 2, Day 3..." (sounds suspicious/slow)
+   - Now: "Phase 1: Automated, Phase 2: Human, Phase 3: Delivery"
+   - Flexible timelines: Evidence Sprint (48h), Starter (3-5d), Pro (5-7d)
+   - Clear automation vs human work separation
+
+4. **Kept approved elements:**
+   - ✅ Honest limitations ("What GraphCare is NOT")
+   - ✅ Technical architecture (open source + proprietary)
+   - ✅ Specific tech stack (Python 3.8+, TypeScript, etc.)
+   - ✅ Pre-emptive FAQ
+   - ✅ Simple pricing
+
+**Core Philosophy:**
+
+"Link Your Repo" → We extract it → You see the results → You decide
+
+This is radically different from typical B2B SaaS:
+- No "Request Demo" gatekeeping
+- No sales calls required
+- No fake social proof
+- Just: "Here's a real example. Want one for your code? Link it."
+
+**Implementation Priority:**
+
+**Critical (must-have for launch):**
+1. OAuth flow: "Link Your Repo" → GitHub read-only access
+2. Embedded Scopelock graph (interactive demo on homepage)
+3. $350 Evidence Sprint workflow (payment → extraction → delivery)
+
+**High Priority (trust builders):**
+4. ROI calculator (React component)
+5. Technical whitepaper (linked from homepage)
+6. Compatibility matrix (detailed language support)
+
+**Medium Priority:**
+7. Video walkthrough of Scopelock graph
+8. Expanded FAQ page
+9. Case study deep-dive page
+
+**Approval:** User said "ok GO" - ready to implement
+
+**Next:** Build Next.js homepage with these specs
+
+**Time spent:** 2 hours total (V2 + V3 design)
+
+---
+
+
 ## 2025-11-04 18:30 - Sage: Homepage V2 Proposal - Demo-First Approach
 
 **Status:** ✅ New homepage design created based on "Burned Man" persona analysis
