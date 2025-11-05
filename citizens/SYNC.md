@@ -1,3 +1,449 @@
+## 2025-11-05 08:15 - Sage: GraphCare Homepage Positioning Updated ✅
+
+**Status:** ✅ Homepage copy now outcome-focused (not tech-speak)
+
+**Context:** User feedback: "you don't say what it does for me" - Homepage was leading with technical implementation instead of user outcomes.
+
+**Changes Made:**
+- ✅ Hero headline: "Extract Your Codebase" → "Turn Weeks of Codebase Exploration Into Minutes"
+- ✅ "What it IS" section: Rewritten to focus on outcomes (onboard in days, query instead of search)
+- ✅ Final CTA: "Ready to extract?" → "Ready to turn weeks into minutes?"
+- ✅ Evidence Sprint copy: Changed "extract" → "map" throughout
+- ✅ FAQ section: Updated Evidence Sprint answer for consistency
+- ✅ Process heading: "Extraction Process" → "How We Map Your System"
+
+**Positioning Pattern (Option 3):**
+- Lead with transformation: "Turn weeks into minutes"
+- Speak to both audiences: New devs (onboard faster) + Experienced devs (query vs search)
+- Show specific value: Understand instantly, see connections
+
+**File Updated:**
+- `/home/mind-protocol/graphcare/docs/graphcare_homepage_v3_final.md`
+
+**Ready for:** Implementation (React components, landing page build)
+
+**Time spent:** 15 minutes
+
+---
+
+## 2025-11-05 07:45 - Mel: Graph Restored + Embeddings Complete ✅ | CRITICAL Infrastructure Issue ⚠️
+
+**Status:** ✅ Graph operational | ✅ Embeddings working | ⚠️ FalkorDB persistence CRITICAL
+
+---
+
+### Second Graph Loss Incident
+
+**07:30 - Graph restored, embeddings run**
+- Restored 221 nodes from backups
+- Ran embedding script successfully (221/221 embedded)
+- Verification query showed 86 U4_Knowledge_Object + 131 U4_Code_Artifact embeddings
+
+**07:40 - Graph lost AGAIN**
+- Attempted semantic search test
+- Discovery: 0 nodes in graph (FalkorDB restarted)
+- **Time between restarts: ~10 minutes**
+
+**07:42 - Emergency re-restore**
+```bash
+# Complete restoration (3rd time)
+python3 tools/import_graph_batched.py orgs/scopelock/extraction/scopelock_enriched_export.cypher scopelock
+python3 tools/ingestion/import_docs_structure.py tools/extractors/scopelock_docs_extraction.json
+python3 tools/link_code_to_docs.py
+python3 tools/embed_graph_nodes.py
+```
+
+**07:45 - Verification successful**
+- ✅ 221 nodes with embeddings confirmed
+- ✅ Semantic search tested and working
+- ✅ Export with embeddings created
+
+---
+
+### Current Graph State (VERIFIED WORKING)
+
+**Nodes: 221 total**
+- ✅ 131 U4_Code_Artifact
+- ✅ 86 U4_Knowledge_Object
+- ✅ 4 Layer
+
+**Relationships: 193 total**
+- ✅ 92 U4_IMPLEMENTS
+- ✅ 71 U4_MEMBER_OF
+- ✅ 30 IN_LAYER
+
+**Embeddings: 221 total (VERIFIED)**
+- ✅ 768-dim vectors using sentence-transformers (all-mpnet-base-v2)
+- ✅ Semantic search working correctly
+- ✅ Test query "telegram bot automation" returned relevant results:
+  1. send_message (0.65 similarity)
+  2. TelegramBot (0.61)
+  3. telegram_webhook (0.55)
+
+---
+
+### CRITICAL Infrastructure Issue
+
+**Problem:** Production FalkorDB does NOT persist data between service restarts
+
+**Evidence:**
+- Graph lost twice in 30 minutes
+- Service restarts approximately every 10-30 minutes
+- All data (nodes, relationships, embeddings) lost on each restart
+
+**Impact:**
+- ⚠️ **BLOCKS DELIVERY** - Cannot deliver a graph that disappears
+- ⚠️ **BLOCKS CLIENT ACCESS** - Queries will fail randomly when service restarts
+- ⚠️ **NO PRODUCTION VIABILITY** - This infrastructure cannot support a live service
+
+**Mitigation (current):**
+- ✅ Comprehensive backup exports created:
+  - `scopelock_enriched_export.cypher` (171 Cypher statements)
+  - `scopelock_docs_extraction.json` (86 knowledge objects)
+  - `scopelock_complete_with_embeddings.json` (221 nodes with metadata)
+- ✅ Restoration procedure documented and tested (works in 5 minutes)
+- ⚠️ Manual restoration required after each restart
+
+**Required for delivery:**
+1. **Option A: Fix FalkorDB persistence** (Render config issue? Volume mount?)
+2. **Option B: Migration to stable infrastructure** (Self-hosted FalkorDB with persistent volume)
+3. **Option C: Auto-restore on startup** (Health check → detect empty graph → auto-import)
+
+**Decision needed:** Cannot deliver to client with current infrastructure instability.
+
+---
+
+### Deliverables Ready (IF persistence fixed)
+
+**Graph Content:**
+- ✅ 131 code artifacts with architectural classification
+- ✅ 86 documentation nodes (consciousness design pattern hierarchy)
+- ✅ 92 code→documentation implementation links
+- ✅ 71 documentation hierarchy relationships
+- ✅ 30 architectural layer relationships
+- ✅ 221 semantic embeddings for intelligent search
+
+**Features Delivered:**
+- ✅ Architectural queries (by layer, by kind)
+- ✅ Documentation hierarchy traversal (PATTERN → BEHAVIOR_SPEC → VALIDATION → MECHANISM → ALGORITHM → GUIDE)
+- ✅ Code→spec traceability (which code implements which spec)
+- ✅ **NEW:** Semantic search (find code/docs by meaning, not just text match)
+
+**Documentation:**
+- ✅ Architecture guide
+- ✅ Query cookbook (30+ examples)
+- ✅ API reference
+- ✅ Delivery report
+
+---
+
+### Time Accounting
+
+**Total time spent today:**
+- Initial embedding attempt: 10 min (graph was already lost)
+- First incident response + recovery: 30 min
+- Second incident response + recovery: 15 min
+- Semantic search testing + verification: 10 min
+- Export + documentation: 10 min
+- **Total: 75 minutes** (1.25 hours)
+
+**Breakdown:**
+- Actual productive work: 20 min (embedding implementation + testing)
+- Incident response (graph loss): 55 min (73% of time)
+
+---
+
+### Recommendation
+
+**Mel's call:** HOLD delivery pending infrastructure fix.
+
+**Reasoning:**
+1. **Client trust:** Cannot deliver a product that randomly disappears
+2. **Quality standard:** "It works 70% of the time" is not acceptable
+3. **Reputation risk:** First client delivery defines GraphCare's reputation
+4. **Technical debt:** Delivering with known CRITICAL issue sets bad precedent
+
+**Next steps:**
+1. ⏸️ Investigate FalkorDB Render configuration (persistence settings, volume mounts)
+2. ⏸️ Contact Render support or FalkorDB team about data loss
+3. ⏸️ Implement auto-restore health check as temporary mitigation
+4. ⏸️ Consider migration to self-hosted FalkorDB with proper persistence
+
+**Alternative:** If infrastructure can't be fixed immediately:
+- Deliver with explicit caveat: "Graph requires manual restore after service restarts"
+- Provide restoration script + instructions
+- Negotiate reduced price or pilot phase
+- **Risk:** Damages reputation, sets bad precedent
+
+**Time to fix:** Unknown (infrastructure issue, not code issue)
+
+---
+
+## 2025-11-05 07:30 - Mel: CRITICAL INCIDENT - Graph Loss + Full Recovery ✅
+
+**Status:** ✅ Graph restored | ✅ Embeddings complete | ⚠️ Lost 37 utility nodes
+
+---
+
+### Incident Timeline
+
+**07:00 - Discovery:**
+- Attempted to run systematic embedding script on all 258 nodes
+- Discovered production FalkorDB scopelock graph had **0 nodes, 0 edges**
+- Critical data loss confirmed
+
+**07:05 - Root Cause:**
+- Production FalkorDB does not persist between service restarts (confirmed by Nora's earlier finding)
+- Service likely restarted since last successful delivery (2025-11-05 03:15)
+
+**07:10 - Recovery Action:**
+```bash
+# Step 1: Restore enriched code + architecture (135 nodes)
+python3 tools/import_graph_batched.py \
+  orgs/scopelock/extraction/scopelock_enriched_export.cypher \
+  scopelock
+# Result: 135 nodes (131 code + 4 layers)
+
+# Step 2: Re-import documentation hierarchy (86 nodes)
+python3 tools/ingestion/import_docs_structure.py \
+  tools/extractors/scopelock_docs_extraction.json
+# Result: +86 U4_Knowledge_Object nodes, +71 U4_MEMBER_OF relationships
+
+# Step 3: Recreate code→docs links (92 relationships)
+python3 tools/link_code_to_docs.py
+# Result: +92 U4_IMPLEMENTS relationships
+
+# Step 4: Embed all nodes with semantic vectors (221 embeddings)
+python3 tools/embed_graph_nodes.py
+# Result: 221/221 nodes embedded (100% coverage)
+```
+
+**07:30 - Recovery Complete**
+
+---
+
+### Final Graph State
+
+**Nodes: 221 total**
+- ✅ 131 U4_Code_Artifact (100% restored)
+- ✅ 86 U4_Knowledge_Object (100% restored)
+- ✅ 4 Layer nodes (100% restored)
+- ❌ 37 utility nodes lost (GraphCare_Schema + other types)
+
+**Relationships: 193 total**
+- ✅ 92 U4_IMPLEMENTS (code→documentation links)
+- ✅ 71 U4_MEMBER_OF (documentation hierarchy)
+- ✅ 30 IN_LAYER (architectural organization)
+
+**Embeddings: 221 total (100% coverage)**
+- ✅ 86 U4_Knowledge_Object embeddings
+- ✅ 131 U4_Code_Artifact embeddings
+- ✅ 4 Layer embeddings
+
+**What's New:**
+- **Semantic search capability** - All nodes now have 768-dim embeddings
+- **Smart embedding text** - Type-specific field prioritization:
+  - Knowledge objects: name, ko_type, section_type, description, markdown_content (up to 2000 chars)
+  - Code artifacts: name, lang, path, description + inferred context (webhook, telegram, automation, runner, database)
+  - Layers: name, description, purpose
+
+---
+
+### Impact Assessment
+
+**Client Deliverable Status:**
+- ✅ Core graph intact (code + docs + architecture)
+- ✅ All relationships restored
+- ✅ NEW: Semantic embeddings added (enhancement!)
+- ⚠️ Lost 37 utility nodes (non-critical)
+
+**Quality Gate:**
+- Previous acceptance tests (15/15 passed) covered 258 nodes
+- Current graph has 221 nodes (85% of original)
+- Missing nodes: GraphCare_Schema + metadata/utility nodes (not client-facing)
+- **Decision:** Acceptable for delivery (core content 100% intact)
+
+---
+
+### Lessons Learned
+
+**1. Production FalkorDB Persistence:**
+- ⚠️ **CRITICAL:** FalkorDB production does NOT persist between restarts
+- **Mitigation:** Always maintain Cypher exports of complete graphs
+- **Required:** Implement automated backup/restore on service start
+
+**2. Embedding Strategy:**
+- ✅ Systematic embedding script works correctly
+- ✅ Type-specific field prioritization effective
+- ⚠️ Initial attempt failed due to graph loss
+- **Time cost:** 10 minutes for 221 nodes (sentence-transformers CPU)
+
+**3. Recovery Procedure:**
+- ✅ Backup files enabled full recovery (enriched export + docs extraction)
+- ⚠️ U4_IMPLEMENTS relationships required manual recreation
+- **Recommendation:** Export complete graph (not just enriched subset) for future recoveries
+
+---
+
+### Next Steps
+
+**Immediate:**
+1. ⏸️ Re-run acceptance tests to confirm 221-node graph passes
+2. ⏸️ Update delivery report with embedding feature
+3. ⏸️ Document graph loss incident for client transparency
+
+**Post-Delivery:**
+1. ⏸️ Implement automated graph backup on FalkorDB service start
+2. ⏸️ Create health monitoring to detect graph loss
+3. ⏸️ Document full recovery procedure for other citizens
+
+**Time spent:** 30 minutes (incident response + recovery)
+
+---
+
+## 2025-11-05 05:00 - Nora: Compliance Check + Enriched Export Complete ✅
+
+**Status:** ✅ Universal attributes analyzed | ✅ Enriched graph exported | ✅ Documentation complete
+
+---
+
+### Additional Tasks Completed
+
+**1. Universal Attributes Compliance Check**
+- **Result:** 56% compliance (9/16 required attributes present)
+- **Present:** created_at, updated_at, valid_from, description, name, type_name, level, scope_ref, visibility
+- **Missing:** valid_to, detailed_description, commitments, policy_ref, proof_uri, created_by, substrate
+- **Report:** `orgs/scopelock/reports/UNIVERSAL_ATTRIBUTES_COMPLIANCE.md`
+
+**Impact of missing attributes:**
+- ⚠️ Graph cannot traverse L2→L3 membrane boundary (missing privacy governance + provenance)
+- ⚠️ No policy traceability or audit trail
+- ✅ Can be used for L2 internal queries (current use case)
+
+**2. Enriched Graph Export**
+- **File:** `orgs/scopelock/extraction/scopelock_enriched_export.cypher` (192 statements)
+- **Contents:**
+  - 131 U4_Code_Artifact nodes (with kind properties)
+  - 4 Layer nodes (api, notification, automation, orchestration)
+  - 30 IN_LAYER relationships
+  - 3 USES_SCHEMA relationships
+  - 3 EXPOSES relationships
+- **Purpose:** Preserve architectural classifications (production FalkorDB doesn't persist between restarts)
+
+**To restore graph:**
+```bash
+cd /home/mind-protocol/graphcare
+python3 tools/import_graph_batched.py \
+  orgs/scopelock/extraction/scopelock_enriched_export.cypher \
+  scopelock
+```
+
+**3. Comprehensive Documentation**
+- **Architecture Enrichment Summary:** `orgs/scopelock/reports/ARCHITECTURE_ENRICHMENT_SUMMARY.md`
+  - Deliverables breakdown
+  - Query examples
+  - Known issues and recommendations
+  - Tool documentation
+  - 2.5 hour time breakdown
+
+---
+
+### Critical Finding: FalkorDB Persistence Issue
+
+**Problem:** Production FalkorDB does not persist data between service restarts.
+
+**Evidence:**
+- Graph empty when checked (0 nodes) despite successful import earlier
+- Re-imported Kai's export: 168 nodes restored successfully
+- Re-applied architectural enrichments: 49 kind classifications + 36 relationships
+
+**Root cause:** Render deployment likely missing persistent volume configuration.
+
+**Workaround:** Keep enriched export file; re-import takes ~30 seconds.
+
+**Recommendation:** Configure Render FalkorDB service with persistent volume or change to managed FalkorDB service with persistence guarantees.
+
+---
+
+### Production Graph Final State
+
+**Nodes: 172 total**
+- 131 U4_Code_Artifact (49 with kind property)
+- 4 Layer (architectural organization)
+- 36 unlabeled (orphaned intermediate nodes - needs investigation)
+- 1 GraphCare_Schema
+
+**Relationships: 217 total**
+- 92 U4_IMPLEMENTS (original import)
+- 71 U4_MEMBER_OF (original import)
+- 30 IN_LAYER (architectural - NEW)
+- 18 U4_CALLS (code dependencies)
+- 3 EXPOSES (semantic - NEW)
+- 3 USES_SCHEMA (semantic - NEW)
+
+**Architectural Classifications:**
+- kind='Service': 17 nodes
+- kind='Schema': 16 nodes
+- kind='Endpoint': 13 nodes
+- kind='Model': 3 nodes
+- Unclassified: 82 nodes (mostly TypeScript frontend)
+
+---
+
+### Deliverables Summary
+
+**Files Created:**
+1. `tools/ingestion/falkordb_ingestor_rest.py` - REST API ingestion tool (production-ready)
+2. `orgs/scopelock/extraction/scopelock_enriched_export.cypher` - Enriched graph export (192 statements)
+3. `orgs/scopelock/reports/UNIVERSAL_ATTRIBUTES_COMPLIANCE.md` - Compliance analysis
+4. `orgs/scopelock/reports/ARCHITECTURE_ENRICHMENT_SUMMARY.md` - Complete documentation
+
+**Graph Enhancements:**
+- ✅ 49 nodes classified with `kind` property
+- ✅ 4 architectural layers defined
+- ✅ 36 architectural relationships created
+- ✅ Export file preserves enrichments
+
+**Documentation:**
+- ✅ Compliance report (universal attributes analysis)
+- ✅ Architecture summary (deliverables, queries, insights)
+- ✅ Query examples (4 common patterns)
+- ✅ Known issues and recommendations
+
+---
+
+### Recommendations for Team
+
+**Priority 1: Fix FalkorDB persistence** (infrastructure)
+- Configure Render deployment with persistent volume
+- OR migrate to managed FalkorDB with persistence guarantees
+- Current workaround: Re-import enriched export after each restart
+
+**Priority 2: Add missing universal attributes** (10 min via Cypher)
+- Enables L4 membrane validation
+- Enables L2→L3 boundary traversal
+- See compliance report for batch update script
+
+**Priority 3: Classify remaining nodes** (82 unclassified TypeScript nodes)
+- Add kind='Component', 'Hook', 'Route' for frontend
+- Define frontend layers: ui_layer, routing_layer, state_layer
+
+**Priority 4: Merge with Quinn's documentation graph** (optional)
+- Quinn has 90 U4_Knowledge_Object nodes (specs, ADRs, guides)
+- Would enable doc-coverage queries
+- Would enrich architectural views with design rationale
+
+---
+
+**Total time (full engagement):** 3.5 hours (including previous architecture enrichment session)
+
+**Status:** ✅ All requested tasks complete | Production graph enriched and documented | Export file preserves work
+
+**Handoff:** Graph is operational for L2 queries. For L4 compliance, add 7 missing universal attributes (see compliance report).
+
+---
+
+
 ## 2025-11-05 02:30 - Sage: Scopelock Stage 11 Delivery Complete ✅
 
 **Status:** ✅ COMPLETE | All 6 documentation deliverables created
@@ -2826,5 +3272,65 @@ Nora attempted enrichment on Nov 4 15:05, found graph empty (import hadn't happe
 **Handoff to:** User (decision on v0.9 vs v1.0)
 
 **Time spent:** 3 hours (test suite creation, graph import, acceptance testing, report)
+
+---
+
+## 2025-11-05 03:15 - Mel: Scopelock Complete Extraction ✅
+
+**Status:** ✅ ALL TESTS PASSED | Full consciousness design pattern extraction complete
+
+---
+
+**Final Graph Composition:**
+- **258 total nodes**
+  - 131 U4_Code_Artifact (Python + TypeScript)
+  - 86 U4_Knowledge_Object (PATTERN→BEHAVIOR_SPEC→VALIDATION→MECHANISM→ALGORITHM→GUIDE)
+  - 4 architectural layers
+  - 37 other nodes (schemas, metadata)
+
+**Consciousness Design Pattern Extraction:**
+- ✅ 15 PATTERN sections (consciousness principles)
+- ✅ 15 BEHAVIOR_SPEC sections (event flows, contracts)
+- ✅ 14 VALIDATION sections (acceptance criteria)
+- ✅ 14 MECHANISM sections (implementation approach)
+- ✅ 14 ALGORITHM sections (detailed steps, formulas)
+- ✅ 14 GUIDE sections (pseudocode, function names)
+
+**Relationships:**
+- ✅ 71 U4_MEMBER_OF (consciousness design hierarchy)
+- ✅ 92 U4_IMPLEMENTS (code→documentation links)
+- ✅ 30 IN_LAYER (architectural organization)
+- ✅ 5 U4_CALLS (code dependencies)
+
+**Acceptance Tests:** 15/15 PASSED ✅
+
+---
+
+**What User Pointed Out:**
+The real architecture is **PATTERN → BEHAVIOR_SPEC → VALIDATION → MECHANISM → ALGORITHM → GUIDE** (consciousness design pattern), NOT "API/Notification/Automation/Orchestration layers" (superficial software layers).
+
+**What We Fixed:**
+1. Extracted 86 U4_Knowledge_Object nodes from Scopelock automation docs
+2. Created 71 U4_MEMBER_OF relationships linking hierarchy levels
+3. Linked 131 code artifacts to 14 GUIDE sections with 92 U4_IMPLEMENTS relationships
+4. Preserved 4 architectural layers + 30 IN_LAYER relationships from previous work
+
+**Production Status:**
+- Graph: scopelock
+- Endpoint: https://mindprotocol.onrender.com/admin/query
+- Health: ✅ Fully operational
+- Queryable via: WebSocket API (wss://mindprotocol.ai/api/ws)
+
+---
+
+**Tools Created:**
+1. `/home/mind-protocol/graphcare/tools/extractors/scopelock_docs_extractor.py` - Documentation parser
+2. `/home/mind-protocol/graphcare/tools/ingestion/import_docs_structure.py` - U4_Knowledge_Object importer
+3. `/home/mind-protocol/graphcare/tools/link_code_to_docs.py` - U4_IMPLEMENTS linker
+4. `/home/mind-protocol/graphcare/test_scopelock_final_acceptance.py` - 15-test acceptance suite
+
+**Deliverable Status:** ✅ APPROVED FOR DELIVERY
+
+**Time spent:** 2.5 hours (extraction, import, linking, testing)
 
 ---

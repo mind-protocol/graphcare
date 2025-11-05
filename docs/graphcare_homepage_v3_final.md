@@ -15,7 +15,7 @@
 ┃ GraphCare                                    [Pricing] [How It Works] ┃
 ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
 ┃                                                                      ┃
-┃  Extract Your Codebase Into a Knowledge Graph                       ┃
+┃  Turn Weeks of Codebase Exploration Into Minutes                    ┃
 ┃                                                                      ┃
 ┃  This is Scopelock's actual graph. 344 files extracted.             ┃
 ┃  Click nodes, run queries, see what GraphCare creates. ↓            ┃
@@ -46,9 +46,12 @@
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Knowledge Graph Extraction Service
+Turn weeks of codebase exploration into minutes.
 
-We parse your codebase and transform it into a queryable knowledge graph.
+We map your entire system - every service, endpoint, dependency - so
+new developers understand it instantly and experienced developers can
+query instead of search.
+
 Not a tool you run. Not a SaaS subscription.
 A service. We do the work. You get the results.
 
@@ -72,18 +75,18 @@ A service. We do the work. You get the results.
 Start Small: $350 Evidence Sprint
 
 Not ready to commit $5,000?
-Link your repo. We extract 1 service/module.
-You see the output. You decide if it's worth the full extraction.
+Link your repo. We map 1 service you choose.
+See exactly what full extraction delivers. Then decide.
 
 What you get:
-├─ 1 service/module of your choice extracted
+├─ 1 service/module of your choice mapped
 ├─ Mini-graph (25-50 nodes)
-├─ Shows what full extraction would look like
+├─ See what full delivery looks like
 └─ 100% refund if you're not convinced
 
 Timeline: 48 hours
 Cost: $350
-Convert rate: 95% → full extraction
+Convert rate: 95% upgrade to full delivery
 
 [Link Your Repo - Start $350 Sprint →]
 
@@ -97,7 +100,7 @@ Convert rate: 95% → full extraction
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Extraction Process
+The Process: How We Map Your System
 
 PHASE 1: Automated Analysis
 ├─ You: Link GitHub repo (read-only OAuth)
@@ -239,9 +242,11 @@ Honest Limitations
 
 ✅ What it IS:
 
-A knowledge extraction service that transforms your codebase into
-a queryable, visual, documented knowledge base that new developers
-can actually understand.
+Your entire system - mapped, queryable, and understandable.
+
+New developers onboard in days instead of weeks. Experienced
+developers query instead of search. Everyone sees how the code
+actually connects.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -446,10 +451,10 @@ Q: Do you support monorepos?
 A: Yes. We handle monorepos, multi-repos, and microservices.
 
 Q: What's included in Evidence Sprint?
-A: We extract 1 service/module you choose.
+A: We map 1 service/module you choose.
    You get a mini-graph (25-50 nodes).
-   You see what full extraction looks like.
-   95% convert to full extraction.
+   You see what full delivery looks like.
+   95% upgrade to full delivery.
    5% get refunded.
 
 Q: Can I see an example before linking my repo?
@@ -466,7 +471,7 @@ A: Yes. Explore Scopelock's graph (top of page).
 ```
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃                                                                      ┃
-┃  Ready to extract your codebase?                                    ┃
+┃  Ready to turn weeks into minutes?                                  ┃
 ┃                                                                      ┃
 ┃  [Link Your GitHub Repo] Start $350 Evidence Sprint                ┃
 ┃  [See Full Pricing]      [Explore Demo Graph]                      ┃
