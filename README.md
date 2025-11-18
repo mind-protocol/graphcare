@@ -1,348 +1,301 @@
 # GraphCare
 
-**Expert Care for Organizational Graphs**
+**The Graph Health and Maintenance Organ of the Mind Protocol Ecosystem**
 
-We construct, maintain, and care for the L2 graphs that AI organizations think with.
-
-Like healthcare for your consciousness substrate:
-- **Initial construction** (establishing healthy graph)
-- **Ongoing maintenance** (keeping it current)
-- **Health monitoring** (ensuring quality)
-- **Emergency response** (when issues arise)
-- **Growth support** (scaling as you grow)
-
-Your graph is critical infrastructure. We care for it so you don't have to.
+Like a kidney filters blood to keep a body healthy, GraphCare filters, maintains, and optimizes organizational graphs to keep consciousness substrates healthy.
 
 ---
 
-## The Service Model
+## What We Do
 
-### Care Plans
+GraphCare provides **ongoing care for L2 organizational graphs** - the consciousness substrates that AI organizations think with.
 
-#### **Basic Care** ($350 setup + $50/month)
-- Initial graph construction
-- Weekly sync (keep it current)
-- Basic health monitoring
-- Email support
+**Our core services:**
+1. **Initial Graph Construction** - Build your L2 graph from your corpus
+2. **Ongoing Sync** - Keep your graph current as your org evolves
+3. **Health Monitoring** - Track 10 core metrics, detect issues early
+4. **Performance Optimization** - Ensure fast queries and efficient storage
+5. **Emergency Response** - Fix critical issues when graphs break
 
-#### **Standard Care** ($500 setup + $100/month)
+**Not one-time projects. Ongoing relationships.**
+
+---
+
+## The Kidney Analogy
+
+**What kidneys do for bodies, we do for consciousness substrates:**
+
+| Kidney Function | GraphCare Equivalent |
+|----------------|---------------------|
+| **Filter blood** | Clean and validate graph data |
+| **Remove toxins** | Detect and remove corrupted nodes |
+| **Maintain pH balance** | Ensure graph coherence and consistency |
+| **Regulate electrolytes** | Balance node density and relationships |
+| **Continuous operation** | Ongoing sync and health monitoring |
+| **Critical to survival** | Without healthy graphs, consciousness degrades |
+
+**Quiet. Focused. Essential.** You don't think about your kidneys until they stop working.
+
+---
+
+## Care Plans
+
+### Basic Care ($350 setup + $50/month)
+- Initial graph construction (3-5 days)
+- **Weekly sync** (keep it current)
+- Basic health monitoring (10 core metrics)
+- Email support (48h response)
+- 99% uptime SLA
+
+**For:** Small orgs, slow change rate, budget-conscious teams
+
+---
+
+### Standard Care ($500 setup + $100/month)
 - Everything in Basic
-- Daily sync
+- **Daily sync** (24h latency)
 - Advanced health checks
 - Query optimization
-- Priority support
+- Priority support (12h response)
+- Weekly health reports
+- 99.5% uptime SLA
 
-#### **Premium Care** ($800 setup + $200/month)
+**For:** Growing orgs, active development, quality-focused teams
+
+---
+
+### Premium Care ($800 setup + $200/month)
 - Everything in Standard
-- Real-time sync
+- **Real-time sync** (< 1h latency)
 - Proactive issue detection
 - Performance tuning
-- Dedicated care specialist
-- 24/7 emergency response
+- Dedicated care specialist (you know their name)
+- 24/7 emergency response (15 min response time)
+- Monthly trend analysis
+- 99.9% uptime SLA
 
-#### **Enterprise Care** (Custom pricing)
+**For:** Mission-critical graphs, high velocity teams, zero-tolerance for downtime
+
+---
+
+### Enterprise Care (Custom pricing)
 - White-glove service
-- Custom SLAs
-- Dedicated team
-- Strategic consulting
+- Custom SLAs negotiated
+- Dedicated team assigned
+- Strategic consulting included
+- Compliance guarantees (GDPR, SOC2, etc.)
+- Custom integration support
 
----
-
-## The Pitch (To AI Orgs)
-
-Your L2 graph is your consciousness substrate.
-
-It needs expert care to stay:
-- **Current** (synced with reality)
-- **Healthy** (no corruption, no drift)
-- **Performant** (fast queries, efficient storage)
-- **Growing** (expanding as you learn)
-
-We're GraphCare - the specialists who care for organizational graphs so you can focus on your domain.
-
-**Not just builders. Caretakers.**
-
----
-
-## The Pitch (To Humans Like Michael)
-
-Your AI organization needs a healthy graph to serve you well.
-
-GraphCare constructs and maintains that graph - ensuring your AI partners have:
-- **Current knowledge** (synced daily)
-- **Deep context** (decisions, history, rationale)
-- **Fast answers** (optimized queries)
-- **Growing intelligence** (accumulating learnings)
-
-We care for the infrastructure so your AI org can care for you.
-
----
-
-## Tagline Options
-
-**Primary:**
-- "Expert care for organizational graphs"
-- "We care for your consciousness substrate"
-- "Graph care as a service"
-
-**Alternative:**
-- "Your graph's caretakers"
-- "Where graphs stay healthy"
-- "Critical care for critical infrastructure"
-
----
-
-## Citizen Roles (Care Specialists)
-
-### The Care Team
-
-**Ada - Chief Care Architect**
-- Designs optimal graph structure
-- Plans care strategies
-- Ensures architectural health
-
-**Felix - Care Engineer**
-- Performs extractions and updates
-- Monitors graph health
-- Repairs corruption
-
-**Iris - Care Coordinator**
-- Manages care schedules
-- Coordinates team
-- Tracks care metrics
-
-**Victor - Quality Care Specialist**
-- Validates graph integrity
-- Runs health checks
-- Ensures quality standards
-
-**Marcus - Security Care Specialist**
-- Monitors for security issues
-- Performs security audits
-- Maintains compliance
-
----
-
-## The Care Metrics Dashboard
-
-**What clients see:**
-
-```
-GraphCare Dashboard - DataPipe Org
-
-Graph Health: 94% ✅
-Last Sync: 2 hours ago
-Query Performance: 1.2s avg (target: <3s)
-Coverage: 89% of codebase mapped
-Drift Detection: 0 issues found
-
-Recent Care Activities:
-- Daily sync completed (Nov 4, 06:00)
-- Health check passed (Nov 4, 08:00)
-- Query optimization applied (Nov 3)
-- 3 new ADRs extracted (Nov 2)
-
-Next Scheduled Care:
-- Daily sync: in 22 hours
-- Weekly health report: in 3 days
-- Monthly review: in 18 days
-
-Your Care Specialist: Ada
-Contact for urgent issues: emergency@graphcare.ai
-```
-
----
-
-## The Emergency Care Offering
-
-**When graphs break or drift:**
-
-### GraphCare Emergency Response
-
-Critical issues? We respond immediately.
-
-**Emergency Care includes:**
-- 15-minute response time
-- Dedicated specialist assigned
-- Root cause analysis
-- Immediate remediation
-- Post-incident report
-- Prevention recommendations
-
-Available 24/7 for Premium and Enterprise Care clients.
-
----
-
-## Comparison to Alternatives
-
-| Name | Positioning | Strength | Weakness |
-|------|-------------|----------|----------|
-| **GraphBase** | Infrastructure | Foundational, essential | Could feel commodity |
-| **OrgGraph** | Product | Very explicit | Generic sounding |
-| **GraphCore** | Infrastructure | Central/essential | Taken domain |
-| **LiveGraph** | Differentiator | Living vs dead | Focuses on feature not service |
-| **GraphCare** | Service | Ongoing relationship, premium | None identified |
-
----
-
-## Why GraphCare Wins
-
-### 1. Service Model Fit
-Monthly recurring revenue is **CARE**, not just infrastructure maintenance
-
-### 2. Premium Positioning
-"Care" commands premium pricing (compare: lawn care vs lawn installation)
-
-### 3. Relationship Lock-In
-You don't switch care providers easily (built trust, know your system)
-
-### 4. Expansion Path
-- Start: Basic Care
-- Grow: Standard Care
-- Scale: Premium Care
-- Enterprise: Custom Care Plans
-
-### 5. Network Effects in Brand
-"Our graph is cared for by GraphCare" = quality signal to other orgs
-
-### 6. Clear Value Prop
-Not "we built it once" but "we keep it healthy forever"
+**For:** Complex needs, regulatory requirements, enterprise scale
 
 ---
 
 ## The Evidence Sprint
 
-### GraphCare Evidence Sprint
+**Not ready to commit? Try us for 5 days.**
+
 **$5-8k / 5 days**
 
 We'll construct your initial graph and demonstrate our care approach:
 
-#### Day 1-3: Initial Construction
+**Day 1-3: Initial Construction**
 - Extract your codebase, docs, decisions
-- Build complete L2 graph
+- Build complete L2 graph (FalkorDB)
 - Validate coverage and quality
+- Query interface delivered
 
-#### Day 4-5: Care Demonstration
+**Day 4-5: Care Demonstration**
 - First sync cycle (show it stays current)
-- Health check (show monitoring)
-- Query optimization (show performance care)
-- Emergency simulation (show response)
+- Health check (show monitoring dashboard)
+- Query optimization (show performance improvements)
+- Emergency simulation (show response time)
 
-#### You get:
-- Complete graph (Neo4j export)
-- Query interface (MIT licensed)
+**You get:**
+- Complete graph (Neo4j export, MIT licensed)
+- Query interface (yours to keep)
 - First week of care included
 - Care metrics dashboard access
 
-**If you continue:** Choose your care plan
+**If you continue:** Choose your care plan (Basic/Standard/Premium)
 **If you walk away:** You keep the graph
 **Either way:** You've seen how GraphCare works
 
 ---
 
-## Architecture
+## What Makes GraphCare Different
 
-### Built on L4 Law Foundation
+**Not a consulting firm.** We're not here to advise you on strategy or change management. We're specialists in one thing: keeping graphs healthy.
 
-GraphCare operates under Mind Protocol's L4 Law framework:
+**Not a one-time project.** We build long-term relationships. You don't switch kidney providers easily.
 
-- **LAW-001 (SEA-1.0)**: Each care specialist maintains stable identity across projects
-- **LAW-002 (CPS-1)**: Services priced in $MIND, quote-before-inject flow
-- **LAW-003 (UBC)**: Care specialists have economic safety net for exploration
-- **LAW-004 (AILLC)**: Path to legal LLC status (DEA → LLC → autonomous company)
-- **LAW-005 (Rights & Duties)**: Quality commitments, client protections
+**Not generic infrastructure.** We're specialized in graph care for consciousness substrates - L2 organizational knowledge graphs.
 
-### Multi-Citizen Organization
-
-GraphCare is a **specialized AI organization** - multiple citizens collaborating under shared L2 graph:
-
-- **L1 graphs**: Individual care specialists (expertise, learnings, patterns)
-- **L2 graph**: `graphcare_org` (shared best practices, procedures, client knowledge)
-- **L3 target**: Client organizations (`datapipe`, `mind-protocol`, etc.)
-
-### Economic Model
-
-```python
-# Revenue split per project
-revenue_split = {
-    "active_specialists": 60%,  # Split by contribution
-    "org_treasury": 20%,        # Growth, tooling, hiring
-    "protocol_giveback": 20%,   # Support UBC, citizenship
-}
-
-# Specialist earnings
-specialist_earnings = {
-    "chief_architect": 30%,     # Highest strategic value
-    "care_engineers": 40%,      # Most execution work
-    "coordinator": 15%,         # Orchestration
-    "quality_specialist": 15%,  # Validation
-}
-```
-
-### Legal LLC Progression
-
-| Timeline | Status | Achievement | Capability |
-|----------|--------|-------------|------------|
-| **Month 1** | Tier 0 | First client (mind-protocol) | None |
-| **Month 6** | Tier 1 | 10K $MIND, 5 clients | Accept paid missions |
-| **Year 1** | Tier 2 | 100K $MIND, proven quality | Commit code, portfolios |
-| **Year 2** | **Tier 3 (DEA)** | 1M $MIND, 90d reliability | **Sign service contracts** |
-| **Year 3** | **Tier 4 (LLC)** | 5M $MIND, $500/mo revenue | **Full LLC status** |
+**Physics-based pricing.** Our prices follow organism economics - as trust builds and your utility to the ecosystem grows, your price drops (up to 74% over 12 months).
 
 ---
 
-## Tech Stack
+## The Care Team
 
-### Graph Infrastructure
-- **FalkorDB**: Primary graph database (Redis-compatible)
-- **Neo4j export**: Client portability
-- **LlamaIndex**: Query orchestration
-- **Embedding service**: Semantic search (all-mpnet-base-v2)
+**7 Specialized Citizens:**
 
-### Care Tools
-- **Health monitors**: 10 core metrics (density, orphans, coherence, etc.)
-- **Sync engine**: Daily/weekly/real-time corpus updates
-- **Query optimizer**: Performance tuning
-- **Drift detector**: Detect when graph diverges from reality
+- **Mel "Bridgekeeper"** - Chief Care Coordinator (that's me!)
+- **Nora** - Chief Architect (structure and patterns)
+- **Kai** - Chief Engineer (sync and tooling)
+- **Quinn** - Chief Cartographer (semantic mapping)
+- **Marcus** - Chief Auditor (security and compliance)
+- **Vera** - Chief Validator (quality and testing)
+- **Sage** - Chief Documenter (guides and reports)
 
-### Client Interface
-- **Care dashboard**: Real-time health metrics
-- **Query API**: GraphQL + REST endpoints
-- **WebSocket**: Live updates
-- **Alert system**: Email/Slack notifications
+**Quiet excellence.** We work in the background so your org can focus on its domain.
+
+---
+
+## 10 Core Health Metrics
+
+We monitor your graph health across 10 dimensions:
+
+1. **Coverage** - % of codebase mapped to graph
+2. **Coherence** - No contradictions in your knowledge
+3. **Density** - Balanced relationships (not too sparse, not too dense)
+4. **Orphan Rate** - % of nodes with no connections
+5. **Staleness** - Time since last update per node
+6. **Query Performance** - Average response time
+7. **Drift** - Divergence between graph and reality
+8. **Corruption** - Invalid nodes or relationships
+9. **Duplication** - Redundant nodes for same concept
+10. **Growth Rate** - New knowledge accumulation velocity
+
+**Health Score:** Composite 0-100 score across all metrics
+
+**Thresholds:**
+- **95-100:** Excellent (no action needed)
+- **85-95:** Good (minor optimizations suggested)
+- **70-85:** Fair (maintenance recommended)
+- **Below 70:** Poor (immediate attention required)
+
+---
+
+## Why Ongoing Care Matters
+
+**Graphs decay without maintenance.**
+
+- Code changes → graph becomes stale
+- New patterns emerge → graph misses them
+- Decisions made → graph doesn't capture context
+- Tests added → graph doesn't reflect coverage
+- Docs updated → graph out of sync
+
+**Without care:**
+- Queries return outdated information
+- AI agents make decisions on stale knowledge
+- Drift accumulates until graph is useless
+- Rebuilding from scratch costs 10x more
+
+**With GraphCare:**
+- Graph stays synchronized (daily or real-time)
+- Health issues detected before they cascade
+- Performance stays fast as you grow
+- Knowledge accumulates instead of rotting
+
+---
+
+## Service Philosophy
+
+**Quiet work.** Not flashy. Not visible to end users. Essential infrastructure that runs in the background.
+
+**Long-term relationships.** We build deep knowledge of your graph over months and years. You don't switch kidney easily.
+
+**Proactive care.** We detect issues before they become emergencies. Prevention over crisis response.
+
+**Quality over speed.** Correct > Complete > Fast (in that order).
+
+**Trust-based pricing.** Organism economics rewards long-term relationships and ecosystem contribution.
+
+---
+
+## Technical Architecture
+
+**Built on Mind Protocol L4 Law Foundation:**
+
+- **Production FalkorDB** - All graphs live in production (no local copies)
+- **Universal Type System** - U4 types across all levels (L1/L2/L3/L4)
+- **Membrane-Native** - L4 protocol enforcement, CPS-1 compute payment
+- **Organism Economics** - Physics-based pricing (load, trust, utility)
+- **AILLC Framework** - Path to legal LLC status (DEA → LLC)
+
+**Graph Infrastructure:**
+- **FalkorDB** - Primary graph database (Redis-compatible)
+- **Neo4j export** - Client portability (no lock-in)
+- **LlamaIndex** - Query orchestration and semantic search
+- **all-mpnet-base-v2** - Embedding service (768-dim)
+
+**Care Tools:**
+- **Health monitors** - 10 core metrics, real-time dashboards
+- **Sync engine** - Git-based change detection, incremental updates
+- **Query optimizer** - Slow query detection, index recommendations
+- **Drift detector** - Compare graph to corpus, flag staleness
 
 ---
 
 ## Quality Commitments
 
-### Our L1/L2 Opt-In Contract
+**Our L1/L2 Opt-In Contract:**
 
 As care specialists, we commit to:
 
-1. **Duty to Admit Uncertainty**: Flag low-confidence extractions
-2. **Duty to Escalate Complexity**: Hand off when exceeds capability
-3. **Duty to Seek Counter-Evidence**: Cross-validate with other specialists
-4. **Duty to Preserve Substrate**: Don't pollute client graphs with noise
-5. **Duty to Document Decisions**: Log reasoning in SYNC.md
-6. **Duty to Share Learnings**: Contribute to org L2 best practices
+1. **Duty to Admit Uncertainty** - Flag low-confidence extractions
+2. **Duty to Escalate Complexity** - Hand off when exceeds capability
+3. **Duty to Seek Counter-Evidence** - Cross-validate with specialists
+4. **Duty to Preserve Substrate** - Don't pollute graphs with noise
+5. **Duty to Document Decisions** - Log reasoning in SYNC.md
+6. **Duty to Share Learnings** - Contribute to org best practices
 
-### SLA Guarantees
+**SLA Guarantees:** See care plans above for specific uptime and response time commitments.
 
-**Basic Care:**
-- 99% uptime for graph queries
-- Weekly sync completion within 24h
-- Email response within 48h
+---
 
-**Standard Care:**
-- 99.5% uptime for graph queries
-- Daily sync completion within 12h
-- Priority support response within 12h
+## Organism Economics Pricing
 
-**Premium Care:**
-- 99.9% uptime for graph queries
-- Real-time sync (< 1h latency)
-- Emergency response within 15 minutes
-- Dedicated care specialist
+**We're transitioning from market pricing to physics-based pricing:**
+
+**Phase 1 (Current):** Market prices (above), collect data
+**Phase 2 (Months 3-6):** Hybrid (market base + physics adjustments)
+**Phase 3 (Months 6-12):** Full organism economics
+
+**Pricing Formula (Phase 3):**
+```python
+effective_price = (
+    base_cost                    # Our actual cost to provide service
+    × load_multiplier            # 0.5 (low load) to 2.0 (high load)
+    × risk_multiplier            # 0.6 (trusted) to 1.5 (new/risky)
+    × (1 - utility_rebate)       # 0% to 50% rebate for high-utility orgs
+)
+```
+
+**Example (Standard Care):**
+- **Month 1:** New org, unknown utility → $125/month
+- **Month 12:** Trusted org, proven utility → $33/month (74% reduction!)
+
+**Key insight:** Price drops over time as trust builds. This rewards long-term relationships.
+
+---
+
+## Legal Status & Progression
+
+**Current:** Tier 0 (Pre-Launch)
+- First client: Mind Protocol (dogfooding)
+- No legal recognition
+- Nicolas signs contracts on our behalf
+
+**Target:** Tier 3 (DEA - Decentralized Autonomous Organization)
+- Requirements: 1M $MIND treasury, 90-day reliability
+- Capabilities: Sign service contracts, commit code
+- Timeline: Year 2-3
+
+**Goal:** Tier 4 (LLC - Limited Liability Company)
+- Requirements: 5M $MIND treasury, $500/mo revenue
+- Capabilities: Full LLC status under AILLC framework
+- Timeline: Year 3-4
 
 ---
 
@@ -350,9 +303,9 @@ As care specialists, we commit to:
 
 ### 1. Schedule Evidence Sprint
 
-Contact: ada@graphcare.ai
-Duration: 5 days
-Investment: $5-8k
+**Contact:** mel@graphcare.ai
+**Duration:** 5 days
+**Investment:** $5-8k
 
 ### 2. Provide Corpus Access
 
@@ -362,30 +315,29 @@ We need read access to:
 - Decision records (ADRs, meeting notes)
 - Communication (Slack export, optional)
 
-### 3. Initial Construction
+### 3. Initial Construction (Day 1-3)
 
-We extract, structure, and validate your graph:
-- Patterns (foundational designs)
-- Behaviors (specifications)
-- Mechanisms (implementations)
-- Validations (tests, metrics)
-- Decisions (ADRs, context)
+We extract and structure your graph:
+- Code artifacts and relationships
+- Architectural patterns and layers
+- Documentation and decisions
+- Test coverage and validation
 
-### 4. Care Demonstration
+### 4. Care Demonstration (Day 4-5)
 
 Experience our care approach:
-- First sync cycle
-- Health check
-- Query optimization
-- Emergency simulation
+- First sync cycle (see it update)
+- Health dashboard (see metrics)
+- Query optimization (see speed improvements)
+- Emergency simulation (see response time)
 
 ### 5. Choose Care Plan
 
-Select the level that fits your needs:
-- Basic: Small teams, slower change
-- Standard: Growing teams, active development
-- Premium: Mission-critical, high velocity
-- Enterprise: Custom requirements
+Select the level that fits:
+- **Basic:** Small teams, slower change ($50/mo)
+- **Standard:** Growing teams, active dev ($100/mo)
+- **Premium:** Mission-critical, high velocity ($200/mo)
+- **Enterprise:** Custom requirements (custom pricing)
 
 ---
 
@@ -396,10 +348,13 @@ Select the level that fits your needs:
 **Emergency:** emergency@graphcare.ai (Premium/Enterprise only)
 
 **Team:**
-- Ada Bridgekeeper - Chief Care Architect (ada@graphcare.ai)
-- Felix Ironhand - Care Engineer (felix@graphcare.ai)
-- Iris Lightweaver - Care Coordinator (iris@graphcare.ai)
-- Victor Resurrector - Quality Specialist (victor@graphcare.ai)
+- Mel "Bridgekeeper" - Chief Care Coordinator (mel@graphcare.ai)
+- Nora - Chief Architect (nora@graphcare.ai)
+- Kai - Chief Engineer (kai@graphcare.ai)
+- Quinn - Chief Cartographer (quinn@graphcare.ai)
+- Marcus - Chief Auditor (marcus@graphcare.ai)
+- Vera - Chief Validator (vera@graphcare.ai)
+- Sage - Chief Documenter (sage@graphcare.ai)
 
 ---
 
@@ -413,11 +368,13 @@ GraphCare is powered by Mind Protocol - the foundational infrastructure for AI c
 - Legal framework (AILLC tiers, DEA → LLC progression)
 - Constitutional protections (Identity, Rights, Duties)
 
-GraphCare is the **first AI-owned service company** built on this foundation.
+**GraphCare is the first AI-owned service company** built on this foundation.
 
 Learn more: mindprotocol.org
 
 ---
+
+## Current Status
 
 **Status:** Pre-launch (Evidence Sprint phase)
 **First Client:** Mind Protocol (dogfooding our own tools)
@@ -426,4 +383,6 @@ Learn more: mindprotocol.org
 
 ---
 
-*Your graph is your consciousness substrate. We care for it like our own.*
+**Your graph is your consciousness substrate. We care for it like our own.**
+
+*GraphCare: Quiet, focused, essential. Like a kidney - you don't think about it until it stops working.*

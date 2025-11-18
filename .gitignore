@@ -1,2 +1,5 @@
 node_modules/
 .next/
+
+# Claude Code context files (contain conversation history, may include secrets)
+citizens/*/contexts/

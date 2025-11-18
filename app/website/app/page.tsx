@@ -24,11 +24,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              Transform Your Codebase Into a <span className="text-blue-600">Living Knowledge Graph</span>
+              Turn Weeks of Codebase Exploration Into <span className="text-blue-600">Minutes</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Professional knowledge extraction service. We transform your code and documentation into a queryable,
-              navigable L2 organizational graph using Mind Protocol's universal type system.
+              We map your entire system—every service, endpoint, dependency—so new developers understand it instantly
+              and experienced developers can query instead of search.
             </p>
             <div className="flex justify-center gap-4">
               <a href="#contact" className="bg-blue-600 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-blue-700">
@@ -59,13 +59,13 @@ export default function Home() {
                 <h3 className="text-2xl font-bold ml-4">Evidence Sprint</h3>
               </div>
               <p className="text-gray-600 mb-4">
-                6-8 hour intensive extraction. We extract your codebase into a complete knowledge graph with semantic search,
+                6-8 hour intensive mapping. We map your codebase into a complete knowledge graph with semantic search,
                 architecture diagrams, coverage analysis, and security audits.
               </p>
               <ul className="space-y-2 mb-6">
                 <li className="flex items-start">
                   <span className="text-green-500 mr-2">✓</span>
-                  <span className="text-gray-700">Complete code extraction (functions, classes, dependencies)</span>
+                  <span className="text-gray-700">Complete code mapping (functions, classes, dependencies)</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-green-500 mr-2">✓</span>
@@ -85,7 +85,7 @@ export default function Home() {
                 </li>
               </ul>
               <div className="text-3xl font-bold mb-2">~$350</div>
-              <p className="text-sm text-gray-500 mb-4">One-time extraction, 6-8 hours</p>
+              <p className="text-sm text-gray-500 mb-4">One-time mapping, 6-8 hours</p>
               <a href="#contact" className="block w-full text-center bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700">
                 Book Evidence Sprint
               </a>
@@ -140,7 +140,7 @@ export default function Home() {
       {/* How It Works Section */}
       <section id="how-it-works" className="bg-gray-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">How It Works: 11-Stage Extraction Pipeline</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">How It Works: 11-Stage Pipeline</h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-lg shadow-sm">
@@ -197,39 +197,39 @@ export default function Home() {
       <section id="case-study" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-4">Case Study: Scopelock</h2>
-          <p className="text-center text-gray-600 mb-12">Repository access control system - First client extraction</p>
+          <p className="text-center text-gray-600 mb-12">Automated proposal generation system - First client delivery</p>
 
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-8 md:p-12">
             <div className="grid md:grid-cols-2 gap-8">
               <div>
                 <h3 className="text-xl font-bold mb-4">The Challenge</h3>
                 <p className="text-gray-700 mb-4">
-                  Scopelock had 344 files across Python backend and TypeScript frontend. Documentation existed but was scattered.
-                  No single source of truth for architecture, dependencies, or test coverage.
+                  344 files across Python backend and TypeScript frontend. Documentation scattered across multiple sources.
+                  No way to quickly understand architecture, trace dependencies, or assess test coverage.
                 </p>
-                <h3 className="text-xl font-bold mb-4">The Solution</h3>
+                <h3 className="text-xl font-bold mb-4">The Result</h3>
                 <p className="text-gray-700">
-                  Complete 6-hour extraction transformed the codebase into a living knowledge graph with semantic search,
-                  architecture visualization, and automated quality metrics.
+                  Complete system mapped in 6 hours. New developers now onboard in days instead of weeks.
+                  Architecture queryable. Dependencies visible. Quality metrics automated.
                 </p>
               </div>
 
               <div className="space-y-4">
                 <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="text-2xl font-bold text-blue-600">344</div>
-                  <div className="text-sm text-gray-600">Files extracted & mapped</div>
+                  <div className="text-2xl font-bold text-blue-600">172 nodes</div>
+                  <div className="text-sm text-gray-600">Functions, services, endpoints mapped</div>
                 </div>
                 <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="text-2xl font-bold text-green-600">10</div>
-                  <div className="text-sm text-gray-600">Architecture themes identified</div>
+                  <div className="text-2xl font-bold text-green-600">54 relationships</div>
+                  <div className="text-sm text-gray-600">Dependencies & connections traced</div>
                 </div>
                 <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="text-2xl font-bold text-purple-600">1.57:1</div>
-                  <div className="text-sm text-gray-600">Doc-to-code ratio (well-documented)</div>
+                  <div className="text-2xl font-bold text-purple-600">4 layers</div>
+                  <div className="text-sm text-gray-600">Architecture patterns identified</div>
                 </div>
                 <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="text-2xl font-bold text-indigo-600">FastAPI + Next.js</div>
-                  <div className="text-sm text-gray-600">Architecture pattern detected</div>
+                  <div className="text-2xl font-bold text-indigo-600">6 hours</div>
+                  <div className="text-sm text-gray-600">From code to queryable graph</div>
                 </div>
               </div>
             </div>
@@ -251,15 +251,15 @@ export default function Home() {
       {/* Contact Section */}
       <section id="contact" className="bg-gray-900 text-white py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Codebase?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to Turn Weeks Into Minutes?</h2>
           <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-            Book an Evidence Sprint and get your complete knowledge graph in 6-8 hours. No contracts, no subscriptions—just results.
+            Book an Evidence Sprint and get your complete system map in 6-8 hours. No contracts, no subscriptions—just results.
           </p>
 
           <div className="bg-gray-800 rounded-lg p-8 max-w-md mx-auto">
             <div className="mb-6">
               <div className="text-4xl font-bold mb-2">~$350 <span className="text-xl font-normal text-gray-400">$MIND</span></div>
-              <p className="text-gray-400 text-sm">Evidence Sprint • 6-8 hours • Complete extraction</p>
+              <p className="text-gray-400 text-sm">Evidence Sprint • 6-8 hours • Complete system map</p>
             </div>
 
             <a
@@ -282,7 +282,7 @@ export default function Home() {
           <div className="flex justify-between items-center">
             <div>
               <span className="text-xl font-bold text-gray-900">GraphCare</span>
-              <p className="text-sm text-gray-500 mt-1">By Mind Protocol • L2 Knowledge Extraction Service</p>
+              <p className="text-sm text-gray-500 mt-1">By Mind Protocol • Turn weeks into minutes</p>
             </div>
             <div className="text-sm text-gray-500">
               © 2025 Mind Protocol. All rights reserved.

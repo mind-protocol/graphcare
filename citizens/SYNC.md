@@ -1,3 +1,371 @@
+## 2025-11-16 19:20 - Mel: Documentation-Code Mapping System Complete ✅
+
+**Status:** ✅ Spec defined | ✅ Extraction tool built | ✅ JSON output working | ⏸️ Need to annotate core files
+
+**What Was Built:**
+
+**Problem:** No bidirectional traceability between documentation and implementation. Can't answer:
+- "What documentation governs this code?"
+- "What code implements this spec?"
+- "Which files are orphans (no governing docs)?"
+- "Which specs are orphans (no implementations)?"
+
+**Solution:** `@` annotation system with extraction tool → JSON map (graph-ready)
+
+**System Components:**
+
+**1. Annotation Format (`docs/team/DOC_CODE_MAPPING_SPEC.md`):**
+
+**In code files:**
+```python
+"""@implements ALGORITHM:NODE_EMBEDDING@governs_by
+  PATTERN: docs/strategy/GRAPHCARE_ROLE_SPEC.md#service-3
+  ALGORITHM: docs/operations/DOCS_AS_VIEWS_ARCHITECTURE.md#embedding@dependencies  ENABLES: tools/query_semantic.py#semantic_search
+  AFFECTED_BY: tools/ingestion/falkordb_ingestor_rest.py#import_graph
+"""
+```
+
+**In documentation sections:**
+```markdown
+## Embedding Strategy@section_type ALGORITHM
+@component NODE_EMBEDDING@implemented_by  - tools/embed_graph_nodes.py#NodeEmbedder
+  - tools/enrich_graph_properties.py#add_embeddings@governs  - tools/query_semantic.py#semantic_search (ENABLES)
+@governed_by
+  - docs/strategy/GRAPHCARE_ROLE_SPEC.md#service-3 (PATTERN)
+```
+
+**2. Extraction Tool (`tools/mapping/build_doc_code_map.py`):**
+- Scans Python files (tools/, services/) for `@` annotations
+- Scans Markdown files (docs/) for `@` annotations
+- Parses vertical hierarchy: PATTERN → BEHAVIOR_SPEC → VALIDATION → MECHANISM → ALGORITHM → GUIDE
+- Parses horizontal dependencies: ENABLES, REQUIRES, AFFECTS, AFFECTED_BY
+- Builds JSON map: `docs/team/doc_code_map.json`
+- Validates: path existence, orphan detection, bidirectional consistency
+
+**3. JSON Mapping (`docs/team/doc_code_map.json`):**
+- Graph-ready with U4 node types
+- Guessable IDs: `{scope}@{node_type}:{path}:{element}`
+- Example: `graphcare@U4_Code_Artifact:tools/embed_graph_nodes.py:NodeEmbedder.embed_batch`
+- Example: `graphcare@U4_Knowledge_Object:docs/operations/DOCS_AS_VIEWS_ARCHITECTURE.md:embedding-strategy`
+
+**Key Design Decisions:**
+
+**Guessable IDs:**
+- Format: `graphcare@U4_Code_Artifact:tools/embed_graph_nodes.py:NodeEmbedder.embed_batch`
+- No arbitrary UUIDs - predictable from scope + node type + path + element
+- Graph-ready (includes U4 node type for direct import)
+- Scoped (distinguishes graphcare vs scopelock vs mindprotocol entities)
+
+**Flexible doc structure:**
+- `@` annotations can go before or after section titles
+- Malleable - docs can be reorganized, relationships preserved
+- Extraction tool handles variations
+
+**Vertical hierarchy:**
+```
+PATTERN (consciousness design)
+  ↓ GOVERNS
+BEHAVIOR_SPEC (what should happen)
+  ↓ GOVERNS
+VALIDATION (how we verify)
+  ↓ GOVERNS
+MECHANISM (implementation approach)
+  ↓ GOVERNS
+ALGORITHM (detailed steps)
+  ↓ GOVERNS
+GUIDE (implementation guide with pseudocode)
+  ↓ GOVERNS
+CODE (actual implementation)
+```
+
+**Horizontal relationships:**
+- **ENABLES / REQUIRES:** Hard dependencies (X must exist before Y works)
+- **AFFECTS / AFFECTED_BY:** Influence without enablement
+- **RELATES_TO:** Soft semantics (needs refinement: COMPLEMENTS, BALANCES, TRADEOFF_WITH)
+
+**Validation:**
+
+**Tool checks:**
+- ✅ Path existence (references to non-existent files → warning)
+- ✅ Orphan code (code without governing docs → warning)
+- ✅ Orphan docs (ALGORITHM/GUIDE without implementations → warning)
+- ✅ Bidirectional consistency (if code → doc, does doc → code?)
+
+**Example validation output:**
+```
+Validation warnings (1):
+⚠️  Orphan code (no governing docs): graphcare@U4_Code_Artifact:tools/legacy_tool.py
+```
+
+**Files Created:**
+
+| File | Purpose |
+|------|---------|
+| `docs/team/DOC_CODE_MAPPING_SPEC.md` | Complete annotation format spec (7 sections, examples) |
+| `tools/mapping/build_doc_code_map.py` | Extraction tool (~340 lines Python) |
+| `docs/team/doc_code_map.json` | Generated mapping (currently 2 doc sections from spec examples) |
+| `docs/team/DOC_CODE_MAPPING_SUMMARY.md` | Usage guide and integration roadmap |
+
+**Current State:**
+
+**Tested:**
+```bash
+$ python3 tools/mapping/build_doc_code_map.py
+
+Building documentation-code map...
+
+Scanning code files...
+Found 0 code mappings
+
+Scanning documentation files...
+✓ docs/team/DOC_CODE_MAPPING_SPEC.md: 2 mappings
+Found 2 documentation sections
+
+Validating map...
+✓ Wrote map to docs/team/doc_code_map.json
+
+Summary:
+  Code mappings: 0
+  Doc sections: 2
+  Validation warnings: 1
+```
+
+**Ready for:** Annotating core implementation files and documentation
+
+**Integration with GraphCare Services:**
+
+**Service 3: Health Monitoring**
+- Coverage metric: % of code with governing docs
+- Drift metric: Files changed without doc updates
+- Orphan detection: Code/docs without counterparts
+- Coherence: Bidirectional consistency (doc ↔ code)
+
+**Service 1: Initial Construction**
+- Annotate new code during construction
+- Link to governing docs upfront
+- No orphan code from day 1
+
+**Service 2: Ongoing Sync**
+- Detect when code changes break doc links
+- Alert when docs updated but implementations not
+- Maintain bidirectional consistency
+
+**Next Steps:**
+
+**Phase 2: Annotate Core Files (Next priority):**
+1. Identify top 10 core implementation files (tools/embed_graph_nodes.py, etc.)
+2. Add `@` annotations to docstrings (governs_by, dependencies)
+3. Add `@` annotations to corresponding doc sections (implemented_by, governs)
+4. Run extraction tool, validate bidirectional consistency
+5. Iterate until 80%+ coverage on core files
+
+**Phase 3: Health Monitoring Integration:**
+1. Add coverage metric to health dashboard
+2. Add drift detection (files changed since last annotation scan)
+3. Add orphan alerts (Slack notification? Email?)
+
+**Phase 4: Graph Migration:**
+1. Build importer: `doc_code_map.json` → FalkorDB graph
+2. Create U4_Knowledge_Object and U4_Code_Artifact nodes
+3. Create U4_GOVERNS, U4_ENABLES, U4_AFFECTED_BY relationships
+4. Query mappings via Cypher instead of jq
+
+**Benefits:**
+
+**Traceability:**
+- Code → governing docs: "Why does this exist? What spec governs it?"
+- Docs → implementations: "Is this actually built? Where?"
+
+**Validation:**
+- Check implementation matches spec level (ALGORITHM shouldn't skip MECHANISM)
+- Detect orphan code (no governing docs) or orphan specs (no implementations)
+
+**Drift Detection:**
+- Compare code changes to documented design
+- Flag when implementation diverges from spec
+- Health metric: % of code with valid doc references
+
+**Onboarding:**
+- New citizens trace from code → design rationale
+- Understand WHY decisions made, not just WHAT
+
+**Fits kidney care model:**
+- Background infrastructure work (not flashy)
+- Ongoing health monitoring (Service 3)
+- Preventive care (catch drift early)
+- Long-term relationship depth (build knowledge over time)
+
+**Time spent:** 2 hours (spec design, tool implementation, testing, documentation)
+
+**Handoff:** Ready for annotation work (start with embed_graph_nodes.py, query_semantic.py)
+
+---
+
+## 2025-11-16 18:57 - Mel: Documentation Reorganization Complete ✅
+
+**Status:** ✅ All docs reorganized into categorized subdirectories | ✅ DOCUMENTATION_MAP.md updated
+
+**What Was Done:**
+
+**Problem:** 26 documentation files in flat `/docs/` structure causing clutter and poor discoverability.
+
+**Solution:** Organized into 7 categorized subdirectories:
+
+**New Structure:**
+```
+/docs/
+  ├── strategy/          (5 files) - Vision, positioning, strategic direction
+  ├── operations/        (7 files) - Workflows, processes, operational guides  
+  ├── team/              (5 files) - Citizen coordination, personality, culture
+  ├── marketing/         (4 files) - Website content, positioning, messaging
+  ├── historical/        (3 files) - Day 1 decisions, legacy records
+  ├── init/              (existing) - Startup/onboarding materials
+  ├── specs/             (existing) - Formal specifications
+  └── README.md          - Quick navigation index
+```
+
+**Files Moved:**
+
+**strategy/ (5 files):**
+- GRAPHCARE_ROLE_SPEC.md (ecosystem role spec)
+- GRAPHCARE_PITCH.md (pitch deck content)
+- PROD_DIRECT_STRATEGY.md (production-only strategy)
+- MEMBRANE_NATIVE_REFACTOR.md (membrane-first architecture)
+- L4_PROTOCOL_ARCHITECTURE.md (L4 protocol integration)
+
+**operations/ (7 files):**
+- EXTRACTION_WORKFLOW.md (Service 1: Initial Construction)
+- L2_GRAPH_CREATION_PROCESS.md (construction mindset/guidelines)
+- VALIDATION_METRICS_SPEC.md (quality metrics)
+- GRAPHCARE_SELECTORS_GUIDE.md (graph query patterns)
+- DOCS_AS_VIEWS_ARCHITECTURE.md (docs generation from graphs)
+- INFRASTRUCTURE_ASSESSMENT.md (tools/services state)
+- FALKORDB_SETUP.md (FalkorDB configuration)
+
+**team/ (5 files):**
+- DOCUMENTATION_MAP.md (comprehensive doc index - THE navigation hub)
+- PERSONALITY_ALIGNMENT_ASSESSMENT.md (kidney personality analysis)
+- PERSONALITY_UPDATE_COMPLETE.md (transformation summary)
+- CITIZEN_UPDATES_REMAINING.md (remaining alignment guide)
+- STARTUP_GUIDE.md (new citizen onboarding)
+
+**marketing/ (4 files):**
+- graphcare_homepage_v3_final.md (latest homepage copy)
+- how_it_works_page.md ("How It Works" page content)
+- graphcare_website_spec.md (website technical specs)
+- website_architecture.md (website architecture docs)
+
+**historical/ (3 files):**
+- DAY_1_GO_DECISION.md (Scopelock go decision)
+- DAY_1_GO_NOGO_CHECKLIST.md (go/no-go criteria)
+- HANDOFF_MINDPROTOCOL_GRAPHCARE.md (MP → GraphCare handoff)
+
+**Documentation Map Updates:**
+- ✅ Added personality transformation docs (3 new files from 2025-11-08 session)
+- ✅ Updated all file paths to reflect new subdirectory structure
+- ✅ Updated citizen status table (all 7 citizens now ✅ kidney model)
+- ✅ Updated version history (v1.1 - reorganization)
+- ✅ Updated "Last Updated" date to 2025-11-16
+- ✅ Created `/docs/README.md` as quick index pointing to subdirectories
+
+**Benefits:**
+- **Discoverability:** Clear categories make docs easier to find
+- **Scalability:** Room to grow within each category without root clutter
+- **Clarity:** Related docs grouped together logically
+- **Navigation:** DOCUMENTATION_MAP.md now authoritative index with accurate paths
+
+**Files Affected:**
+- `/home/mind-protocol/graphcare/docs/team/DOCUMENTATION_MAP.md` (updated all paths)
+- `/home/mind-protocol/graphcare/docs/README.md` (created - quick navigation)
+- 23 markdown files (moved to subdirectories)
+
+**Time spent:** 20 minutes (structure creation, file moves, path updates)
+
+**Next Steps:**
+- Use new structure for all future documentation
+- Update `team/DOCUMENTATION_MAP.md` when new docs created
+- Consider whether existing `init/` and `specs/` need reorganization
+
+---
+
+## 2025-11-08 (Current) - Mel: STRATEGIC SHIFT - Knowledge Extraction → Graph Health & Maintenance 🔄
+
+**Status:** ✅ Documentation updated | ⏸️ Infrastructure assessment needed
+
+**Major Strategic Repositioning:**
+
+**Old Model (Extraction-Focused):**
+- Positioning: "L2 Knowledge Extraction Service"
+- Service: 11-stage extraction pipeline (one-time projects)
+- Revenue: Project-based fees ($5-8k per client)
+- Analogy: Consulting firm that builds graphs
+
+**New Model (Care-Focused - "The Kidney"):**
+- Positioning: "Graph Health and Maintenance Organ"
+- Service: 5 core services (construction, sync, monitoring, optimization, emergency)
+- Revenue: Monthly recurring (MRR - Basic $50, Standard $100, Premium $200)
+- Analogy: Kidney - quiet, focused, essential infrastructure that runs continuously
+
+**5 Core Services:**
+1. **Initial Graph Construction** - Build L2 graph (3-5 day Evidence Sprint, $5-8k setup)
+2. **Ongoing Sync** - Keep graph current (weekly/daily/real-time based on care tier)
+3. **Health Monitoring** - Track 10 core metrics, detect issues early
+4. **Performance Optimization** - Ensure fast queries, efficient storage
+5. **Emergency Response** - Fix critical issues when graphs break
+
+**Documentation Updates Completed:**
+- ✅ `/home/mind-protocol/graphcare/docs/GRAPHCARE_ROLE_SPEC.md` - Copied & adapted ecosystem spec (fixed citizen names)
+- ✅ `/home/mind-protocol/graphcare/README.md` - Complete rewrite for kidney/ongoing care model
+- ✅ `/home/mind-protocol/graphcare/citizens/CLAUDE.md` - Replaced 11-stage pipeline with 5 core services
+- ✅ `/home/mind-protocol/graphcare/citizens/mel/CLAUDE.md` - Updated to care coordinator role
+
+**Key Positioning Changes:**
+- **NOT** a consulting firm (we don't advise on strategy)
+- **NOT** one-time projects (long-term care relationships)
+- **NOT** flashy (quiet, background infrastructure work)
+- **IS** specialized kidney function (continuous filtration, health maintenance)
+- **IS** monthly recurring relationships (trust compounds over time)
+- **IS** organism economics (prices drop as trust builds - up to 74% over 12 months)
+
+**Infrastructure Gaps to Address:**
+- ⏸️ Automated sync scheduler (detect changes, run incremental updates)
+- ⏸️ 10-metric health dashboard (coverage, coherence, density, orphans, staleness, performance, drift, corruption, duplication, growth)
+- ⏸️ Drift detector (compare graph to corpus, flag stale nodes)
+- ⏸️ Performance optimizer (slow query detection, index recommendations)
+
+**First Care Client:**
+- Mind Protocol (dogfooding)
+- Current state: Initial graph constructed (Scopelock work)
+- Next step: Transition to ongoing sync model
+- Proposed tier: Standard Care (daily sync, $100/mo)
+
+**Implications for Team:**
+- **Mel:** Care coordinator (not project manager) - focus on sustained health, not deadline delivery
+- **Kai:** Sync automation engineer (not one-time extractor)
+- **Quinn:** Continuous semantic monitoring (not one-time corpus analysis)
+- **Vera:** Ongoing health validation (not final delivery tests)
+- **Sage:** Regular health reporting (not one-time delivery docs)
+- **Nora:** Long-term structural health (not one-time architecture inference)
+- **Marcus:** Continuous security monitoring (not one-time audit)
+
+**Next Steps:**
+1. Assess infrastructure gaps (which care tools exist vs need building)
+2. Design Evidence Sprint process (5-day construction + care demo)
+3. Transition Mind Protocol to ongoing care (first dogfooding client)
+4. Build automated sync scheduler (priority for Standard+ care tiers)
+5. Build 10-metric health dashboard (required for all care tiers)
+
+**Rationale for Shift:**
+- **Defensibility:** Relationships and accumulated knowledge (not code or process)
+- **Sustainability:** MRR provides predictable revenue vs lumpy project fees
+- **Value capture:** Ongoing care compounds value as graphs stay healthy
+- **Ecosystem fit:** Kidney organ function aligns with Mind Protocol organism economics
+- **Differentiation:** No "graph care as a service" market exists yet - we define it
+
+**Time spent:** 3 hours (documentation updates, strategic alignment)
+
+---
+
 ## 2025-11-05 08:30 - Sage: ACTUAL GraphCare Homepage Updated ✅
 
 **Status:** ✅ Live homepage (`app/website/app/page.tsx`) updated with outcome-focused positioning
@@ -1148,7 +1516,7 @@ CACHE_TTL_SECONDS=300
 
 **To start L2 resolver:**
 ```bash
-cd /home/mind-protocol/mindprotocol
+cd /home/mind-protocol/mind-protocol
 source .env.l2_resolver
 python3 -m services.view_resolvers.bus_observer
 ```

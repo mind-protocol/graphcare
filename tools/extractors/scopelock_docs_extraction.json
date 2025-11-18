@@ -1,0 +1,2185 @@
+{
+  "metadata": {
+    "source": "scopelock_docs",
+    "scope_ref": "scopelock",
+    "extraction_date": "2025-11-05",
+    "files_processed": 12,
+    "total_files": 82
+  },
+  "nodes": [
+    {
+      "id": "ko_f50f1db15143",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Evidence must be immediately visible. When a milestone is tagged, proo",
+        "description": "**Consciousness Principle:** \"Evidence must be immediately visible. When a milestone is tagged, proof pages regenerate automatically\u2014no human memory required.\"  **Why:** Manual regeneration creates ga",
+        "ko_type": "pattern",
+        "path": "docs/automation/01_proof_regeneration.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 9,
+        "line_end": 16,
+        "content_length": 354,
+        "markdown_content": "**Consciousness Principle:** \"Evidence must be immediately visible. When a milestone is tagged, proof pages regenerate automatically\u2014no human memory required.\"\n\n**Why:** Manual regeneration creates gaps. If Daniel tags `ac-green_feature_2025-11-05` but forgets to run proofgen, clients see outdated `/proof`. Automation eliminates this failure mode.\n\n---"
+      }
+    },
+    {
+      "id": "ko_cfbff46d99df",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow  ``` git tag ac-green_*           \u2192 tag.pushed@1.0   \u2193 Deployment system detects tag   \u2193 Run proofgen (reads tags)     \u2192 proof.generated@1.0   \u2193 Build Next.js with new proof HTML   \u2193 De",
+        "ko_type": "spec",
+        "path": "docs/automation/01_proof_regeneration.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 17,
+        "line_end": 51,
+        "content_length": 825,
+        "markdown_content": "### Event Flow\n\n```\ngit tag ac-green_*           \u2192 tag.pushed@1.0\n  \u2193\nDeployment system detects tag\n  \u2193\nRun proofgen (reads tags)     \u2192 proof.generated@1.0\n  \u2193\nBuild Next.js with new proof HTML\n  \u2193\nDeploy to production          \u2192 deployment.complete@1.0\n  \u2193\nClient sees updated /proof\n```\n\n### Contract\n\n**Input:**\n- Git tag matching pattern: `evidence-sprint_*`, `ac-green_*`, `change-*`\n- Tag must reference commit with `/proof/AC.md`, `/proof/DEMO.md`, `/proof/DELTA.md`\n\n**Output:**\n- Updated `public/proof/[tag]/index.html`\n- Updated `public/proof/index.html` (index page)\n- Updated `public/proof/index.json` (homepage teaser)\n- Event emitted: `proof.generated@1.0 { tag, entry_count, timestamp }`\n\n**Failure Mode:**\n- Tag pushed but proof files missing \u2192 Generate page with \"Missing files\" chips, don't crash build\n\n---"
+      }
+    },
+    {
+      "id": "ko_4820696af6e8",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: Proof regenerates on tag push**",
+        "description": "### Acceptance Criteria  **V1: Proof regenerates on tag push** ```bash # Test: git tag ac-green_test_2025-11-02 git push origin ac-green_test_2025-11-02  # Wait 2 minutes  # Verify: curl https://scope",
+        "ko_type": "validation",
+        "path": "docs/automation/01_proof_regeneration.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 52,
+        "line_end": 88,
+        "content_length": 848,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: Proof regenerates on tag push**\n```bash\n# Test:\ngit tag ac-green_test_2025-11-02\ngit push origin ac-green_test_2025-11-02\n\n# Wait 2 minutes\n\n# Verify:\ncurl https://scopelock.mindprotocol.ai/proof/ac-green_test_2025-11-02 | grep \"test\"\n# \u2705 Should return 200 with proof page HTML\n```\n\n**V2: Index updates with new entry**\n```bash\n# Verify:\ncurl https://scopelock.mindprotocol.ai/proof/index.json | jq '.entries | length'\n# \u2705 Should show N+1 entries (previous count + new tag)\n```\n\n**V3: Missing proof files handled gracefully**\n```bash\n# Test:\ngit tag ac-green_no-proof_2025-11-02  # Tag without proof/ files\ngit push origin ac-green_no-proof_2025-11-02\n\n# Verify:\ncurl https://scopelock.mindprotocol.ai/proof/ac-green_no-proof_2025-11-02 | grep \"Missing AC.md\"\n# \u2705 Should show \"Missing files\" chips, not crash\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_d436af42dbc3",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** Integrate proofgen into Vercel build script",
+        "description": "**Implementation Approach:** Integrate proofgen into Vercel build script  **Current Problem:** GitHub Actions would require separate workflow, adds complexity. Simpler: run proofgen during Vercel buil",
+        "ko_type": "mechanism",
+        "path": "docs/automation/01_proof_regeneration.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 89,
+        "line_end": 116,
+        "content_length": 844,
+        "markdown_content": "**Implementation Approach:** Integrate proofgen into Vercel build script\n\n**Current Problem:** GitHub Actions would require separate workflow, adds complexity. Simpler: run proofgen during Vercel build.\n\n**Solution:**\n```json\n// package.json\n{\n  \"scripts\": {\n    \"build\": \"npm run proofgen && next build\"\n  }\n}\n```\n\n**Why this works:**\n- Vercel fetches tags automatically (no manual `git fetch --tags` needed on main branch deploys)\n- Proofgen runs before Next.js build \u2192 proof HTML available during static generation\n- No additional CI/CD infrastructure needed\n\n**Current Issue (Resolved):**\n- Vercel's shallow clone doesn't fetch tags on branch deploys\n- **Fix:** We now commit generated proof HTML directly (already implemented)\n- **New approach:** On tag push, trigger Vercel deployment hook with `VERCEL_REGENERATE_PROOF=true` env var\n\n---"
+      }
+    },
+    {
+      "id": "ko_9d13ff9d2108",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Step 1: Detect Tag Push**",
+        "description": "### Step-by-Step Execution  **Step 1: Detect Tag Push** ``` IF git push includes tag matching /^(evidence-sprint|ac-green|change)_/ THEN trigger Vercel deployment webhook ```  **Step 2: Vercel Build H",
+        "ko_type": "algorithm",
+        "path": "docs/automation/01_proof_regeneration.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 117,
+        "line_end": 164,
+        "content_length": 1204,
+        "markdown_content": "### Step-by-Step Execution\n\n**Step 1: Detect Tag Push**\n```\nIF git push includes tag matching /^(evidence-sprint|ac-green|change)_/\nTHEN trigger Vercel deployment webhook\n```\n\n**Step 2: Vercel Build Hook**\n```\nINPUT: Tag name from git push\nPROCESS:\n  1. Fetch all tags: git fetch --tags --force\n  2. List tags matching pattern:\n     tags = git tag --list 'evidence-sprint_*' 'ac-green_*' 'change-*'\n  3. FOR EACH tag IN tags:\n       entry = resolveTagEntry(tag)\n       IF entry has all files (AC, DEMO, DELTA):\n         entries.push(entry)\n       ELSE:\n         entries.push(entry WITH missing_files flags)\n  4. Sort entries by date DESC\n  5. Generate HTML:\n     - public/proof/index.html (index page)\n     - public/proof/[tag]/index.html (detail pages)\n     - public/proof/index.json (API for homepage)\n  6. Emit event: proof.generated@1.0\nOUTPUT: Generated HTML files in public/proof/\n```\n\n**Step 3: Next.js Build**\n```\nINPUT: Generated proof HTML files\nPROCESS: next build (includes public/ direct"
+      }
+    },
+    {
+      "id": "ko_6053be45d6b0",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**File:** `package.json`",
+        "description": "### Implementation Steps  **File:** `package.json` ```json {   \"scripts\": {     \"build\": \"git fetch --tags 2>/dev/null || true && npm run proofgen && next build\",     \"build:local\": \"git fetch --tags",
+        "ko_type": "guide",
+        "path": "docs/automation/01_proof_regeneration.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 165,
+        "line_end": 240,
+        "content_length": 2099,
+        "markdown_content": "### Implementation Steps\n\n**File:** `package.json`\n```json\n{\n  \"scripts\": {\n    \"build\": \"git fetch --tags 2>/dev/null || true && npm run proofgen && next build\",\n    \"build:local\": \"git fetch --tags 2>/dev/null || true && npm run proofgen && next build\",\n    \"proofgen\": \"node proofgen/index.js\"\n  }\n}\n```\n\n**Explanation:**\n- `git fetch --tags` ensures tags are available (Vercel fetches branches but not always tags)\n- `|| true` prevents build failure if git fetch errors\n- `npm run proofgen` generates proof HTML before Next.js build\n- `next build` includes generated HTML as static assets\n\n**Testing Locally:**\n```bash\n# Simulate tag push\ngit tag ac-green_local-test_2025-11-02\ngit push origin ac-green_local-test_2025-11-02\n\n# Verify proofgen detects it\nnpm run proofgen\n# Should output: \"[proofgen] Generated 1 entry in public/proof\"\n\n# Build and check\nnpm run build:local\nls public/proof/ac-green_local-test_2025-11-02/\n# Should show: index.html\n\n# Commit generated files (current workflow)\ngi"
+      }
+    },
+    {
+      "id": "ko_85541a6e8103",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Attention allocation is precious. When a client responds, wake the rel",
+        "description": "**Consciousness Principle:** \"Attention allocation is precious. When a client responds, wake the relevant citizen immediately\u2014don't wait for human to check inbox.\"  **Why:** Checking Upwork inbox ever",
+        "ko_type": "pattern",
+        "path": "docs/automation/02_response_monitoring.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 9,
+        "line_end": 16,
+        "content_length": 322,
+        "markdown_content": "**Consciousness Principle:** \"Attention allocation is precious. When a client responds, wake the relevant citizen immediately\u2014don't wait for human to check inbox.\"\n\n**Why:** Checking Upwork inbox every 2 hours is manual labor that a machine can do better. Instant notification enables <2h SLA without human vigilance.\n\n---"
+      }
+    },
+    {
+      "id": "ko_dc2fc52ddb9d",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow (Full Automation)  ``` Client sends Upwork message   \u2193 Upwork \u2192 Email notification \u2192 Gmail inbox   \u2193 Gmail filter detects \"Upwork message\"   \u2193 Trigger webhook \u2192 Wake Rafael citizen   \u2193",
+        "ko_type": "spec",
+        "path": "docs/automation/02_response_monitoring.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 17,
+        "line_end": 71,
+        "content_length": 1315,
+        "markdown_content": "### Event Flow (Full Automation)\n\n```\nClient sends Upwork message\n  \u2193\nUpwork \u2192 Email notification \u2192 Gmail inbox\n  \u2193\nGmail filter detects \"Upwork message\"\n  \u2193\nTrigger webhook \u2192 Wake Rafael citizen\n  \u2193\nRafael (Claude Code instance):\n  - Reads message via email integration\n  - Parses client intent (question, acceptance, negotiation)\n  - Drafts response\n  - Sends to approval queue (Telegram)\n  \u2193\nNicolas reviews in Telegram:\n  - \u2705 Approve \u2192 Rafael sends response via Upwork\n  - \u270f\ufe0f Edit \u2192 Modify + approve\n  - \u274c Reject \u2192 Rafael waits for manual response\n```\n\n### Contract\n\n**Input:**\n- Email from Upwork with subject: \"New message from [Client Name]\"\n- Email body contains: client message + job post link\n\n**Output:**\n- Telegram message to Nicolas:\n  ```\n  \ud83d\udd14 NEW RESPONSE: [Client Name]\n  Job: [Job Title]\n  Message: \"[First 100 chars...]\"\n\n  Rafael's draft response:\n  \"[Proposed response text]\"\n\n  [Approve] [Edit] [Reject]\n  ```\n\n**Events:**\n- `response.detected@1.0 { client, job, message_preview }"
+      }
+    },
+    {
+      "id": "ko_06ba952b30da",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: Email triggers Rafael wake-up**",
+        "description": "### Acceptance Criteria  **V1: Email triggers Rafael wake-up** ```bash # Test: Send test email to Gmail # Subject: \"New message from Test Client on Upwork\" # Body: \"Hi, I'm interested in your proposal",
+        "ko_type": "validation",
+        "path": "docs/automation/02_response_monitoring.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 72,
+        "line_end": 114,
+        "content_length": 1157,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: Email triggers Rafael wake-up**\n```bash\n# Test: Send test email to Gmail\n# Subject: \"New message from Test Client on Upwork\"\n# Body: \"Hi, I'm interested in your proposal. Can we schedule a call?\"\n\n# Expected:\n# - Rafael citizen wakes up within 60 seconds\n# - Telegram message appears with draft response\n# - \u2705 Latency <60s from email arrival to Telegram notification\n```\n\n**V2: Rafael drafts appropriate response**\n```bash\n# Test cases:\n# 1. Client asks question \u2192 Rafael drafts answer\n# 2. Client accepts proposal \u2192 Rafael drafts kickoff message\n# 3. Client negotiates price \u2192 Rafael drafts negotiation response\n\n# Verify:\n# - Draft tone matches ScopeLock voice (calm, precise, builder-grade)\n# - No \"excited/passionate/thrilled\" language\n# - References AC.md, Evidence Sprint, or proof\n# \u2705 80%+ of drafts require no edits\n```\n\n**V3: Approval flow works**\n```bash\n# Test: Click [Approve] in Telegram\n\n# Expected:\n# - Rafael sends response via Upwork API\n# - Confirmati"
+      }
+    },
+    {
+      "id": "ko_65fb7d7b2234",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** Gmail \u2192 Webhook \u2192 Wake Rafael (Claude Code) \u2192 Telegram approval",
+        "description": "**Implementation Approach:** Gmail \u2192 Webhook \u2192 Wake Rafael (Claude Code) \u2192 Telegram approval  **Architecture:**  ``` [Gmail]   \u2193 (Gmail filter + webhook) [Cloud Function / Webhook Endpoint]   \u2193 (HTTP",
+        "ko_type": "mechanism",
+        "path": "docs/automation/02_response_monitoring.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 115,
+        "line_end": 156,
+        "content_length": 927,
+        "markdown_content": "**Implementation Approach:** Gmail \u2192 Webhook \u2192 Wake Rafael (Claude Code) \u2192 Telegram approval\n\n**Architecture:**\n\n```\n[Gmail]\n  \u2193 (Gmail filter + webhook)\n[Cloud Function / Webhook Endpoint]\n  \u2193 (HTTP POST)\n[Rafael Citizen Service]\n  \u2193 (Parse email, draft response)\n[Telegram Bot API]\n  \u2193 (Send approval request)\n[Nicolas (Telegram)]\n  \u2193 (Click button)\n[Rafael Citizen Service]\n  \u2193 (Send via Upwork API)\n[Upwork]\n```\n\n**Why this works:**\n- Gmail filters are reliable (99.9% uptime)\n- Cloud Function triggers instantly (<1s)\n- Rafael citizen runs on-demand (no always-on cost)\n- Telegram for approval (mobile-friendly, instant)\n\n**Alternative (Simpler but Higher Latency):**\n```\n[Gmail]\n  \u2193 (IFTTT Gmail trigger)\n[Telegram Bot]\n  \u2193 (Notification with raw message)\n[Nicolas]\n  \u2193 (Manual: Copy message \u2192 Open Rafael \u2192 Get draft \u2192 Send)\n```\n\n**Recommendation:** Start with IFTTT (2h to set up), upgrade to full automation later\n\n---"
+      }
+    },
+    {
+      "id": "ko_91979722d713",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Step 1: Email Detection ``` INPUT: Gmail inbox PROCESS:   1. Gmail filter:      from:(@upwork.com)      subject:(New message from)      \u2192 Apply label: \"Upwork/Responses\"      \u2192 Forward to webhook:",
+        "ko_type": "algorithm",
+        "path": "docs/automation/02_response_monitoring.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 157,
+        "line_end": 277,
+        "content_length": 3216,
+        "markdown_content": "### Step 1: Email Detection\n```\nINPUT: Gmail inbox\nPROCESS:\n  1. Gmail filter:\n     from:(@upwork.com)\n     subject:(New message from)\n     \u2192 Apply label: \"Upwork/Responses\"\n     \u2192 Forward to webhook: https://api.scopelock.mindprotocol.ai/webhook/upwork-response\nOUTPUT: HTTP POST to webhook with email body\n```\n\n### Step 2: Parse Email\n```\nINPUT: Email body (HTML)\nPROCESS:\n  1. Extract client name: regex(subject, /New message from (.+) on Upwork/)\n  2. Extract message text: parse HTML, find <div class=\"message-body\">\n  3. Extract job title: regex(body, /Re: (.+)/)\n  4. Extract job link: regex(body, /upwork\\.com\\/jobs\\/~[a-z0-9]+/)\nOUTPUT: Structured data { client, message, job_title, job_link }\n```\n\n### Step 3: Wake Rafael Citizen\n```\nINPUT: Structured response data\nPROCESS:\n  1. Load Rafael context:\n     - Read /citizens/rafael/CLAUDE.md (system prompt)\n     - Read /citizens/SYNC.md (recent activity)\n     - Read /citizens/emma/proposals/ (find matching proposal)\n  2. Call Claude API:\n "
+      }
+    },
+    {
+      "id": "ko_7d675631e266",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Phase 1: IFTTT (Quick Setup)**",
+        "description": "### Implementation Steps  **Phase 1: IFTTT (Quick Setup)**  1. **Create Gmail Filter:**    - Go to Gmail \u2192 Settings \u2192 Filters    - From: `@upwork.com`    - Subject: `New message from`    - Apply label",
+        "ko_type": "guide",
+        "path": "docs/automation/02_response_monitoring.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 278,
+        "line_end": 615,
+        "content_length": 9457,
+        "markdown_content": "### Implementation Steps\n\n**Phase 1: IFTTT (Quick Setup)**\n\n1. **Create Gmail Filter:**\n   - Go to Gmail \u2192 Settings \u2192 Filters\n   - From: `@upwork.com`\n   - Subject: `New message from`\n   - Apply label: `Upwork/Responses`\n\n2. **Set up IFTTT:**\n   - New Applet: Gmail (New email in label) \u2192 Telegram (Send message)\n   - Channel: Your Telegram\n   - Message format:\n     ```\n     \ud83d\udd14 UPWORK RESPONSE\n     From: {{Subject}}\n     {{BodyPlain}}\n\n     [Link to Upwork]\n     ```\n\n3. **Test:**\n   - Send test email to yourself with Upwork-like format\n   - Verify Telegram notification arrives <60s\n\n**Time:** 30 minutes\n**Cost:** Free\n**Benefit:** Instant notifications, no inbox checking\n\n---\n\n**Phase 2: Rafael Auto-Draft (Full Automation)**\n\n**File Structure:**\n```\n/services/\n  rafael-responder/\n    index.js          # Express server for webhook\n    parse-email.js    # Email HTML parser\n    draft-response.js # Claude API caller\n    send-upwork.js    # Upwork API integration\n    telegram-bot.js   # Telegr"
+      }
+    },
+    {
+      "id": "ko_93f11a35440e",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Metrics emerge from activity, not from manual logging. When Emma evalu",
+        "description": "**Consciousness Principle:** \"Metrics emerge from activity, not from manual logging. When Emma evaluates a lead, the tracker updates itself\u2014no human bookkeeping.\"  **Why:** Manual tracking creates lag",
+        "ko_type": "pattern",
+        "path": "docs/automation/03_lead_tracker.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 9,
+        "line_end": 16,
+        "content_length": 324,
+        "markdown_content": "**Consciousness Principle:** \"Metrics emerge from activity, not from manual logging. When Emma evaluates a lead, the tracker updates itself\u2014no human bookkeeping.\"\n\n**Why:** Manual tracking creates lag and errors. Automated tracking is instant, accurate, and enables analytics (GO rate, conversion rate, best job types).\n\n---"
+      }
+    },
+    {
+      "id": "ko_737b06ab74f6",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow  ``` Emma evaluates Upwork post   \u2193 Emma outputs: DECISION: GO/NO-GO + REASON   \u2193 Script captures output       \u2192 lead.evaluated@1.0   \u2193 Append to citizens/emma/leads.json   \u2193 Regenerate",
+        "ko_type": "spec",
+        "path": "docs/automation/03_lead_tracker.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 17,
+        "line_end": 78,
+        "content_length": 1059,
+        "markdown_content": "### Event Flow\n\n```\nEmma evaluates Upwork post\n  \u2193\nEmma outputs: DECISION: GO/NO-GO + REASON\n  \u2193\nScript captures output       \u2192 lead.evaluated@1.0\n  \u2193\nAppend to citizens/emma/leads.json\n  \u2193\nRegenerate leads-tracker.md from JSON\n  \u2193\nHuman sees updated tracker\n```\n\n### Contract\n\n**Input:**\n- Emma's evaluation output (text)\n  ```\n  DECISION: GO\n  REASON: AI chat widget, verified client, $8K budget\n  Urgency: 8/10\n  Pain: 7/10\n\n  [Proposal text follows...]\n  ```\n\n**Output:**\n- JSON entry:\n  ```json\n  {\n    \"timestamp\": \"2025-11-02T14:23:00Z\",\n    \"platform\": \"Upwork\",\n    \"title\": \"Build AI chat widget\",\n    \"budget\": \"$8,000\",\n    \"decision\": \"GO\",\n    \"reason\": \"AI chat widget, verified client, $8K budget\",\n    \"urgency\": 8,\n    \"pain\": 7,\n    \"sent\": false,\n    \"link\": \"https://upwork.com/jobs/~abc123\"\n  }\n  ```\n\n- Markdown update:\n  ```markdown\n  ## Quick Stats\n  - **Evaluated:** 1/20\n  - **GO decisions:** 1 (100%)\n  - **NO-GO decisions:** 0 (0%)\n  - **Proposals sent:** 0\n  ```\n\n**Even"
+      }
+    },
+    {
+      "id": "ko_5868b6962b05",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: Tracker updates automatically**",
+        "description": "### Acceptance Criteria  **V1: Tracker updates automatically** ```bash # Test: Paste job post to Emma, get GO decision  # Expected: # - leads.json appends new entry within 1 second # - leads-tracker.m",
+        "ko_type": "validation",
+        "path": "docs/automation/03_lead_tracker.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 79,
+        "line_end": 121,
+        "content_length": 875,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: Tracker updates automatically**\n```bash\n# Test: Paste job post to Emma, get GO decision\n\n# Expected:\n# - leads.json appends new entry within 1 second\n# - leads-tracker.md regenerates with updated stats\n# \u2705 Manual markdown editing eliminated\n```\n\n**V2: Stats are accurate**\n```bash\n# Test: Evaluate 10 posts (mix of GO/NO-GO)\n\n# Verify:\ncat citizens/emma/leads-tracker.md | grep \"GO rate\"\n# Expected: \"GO rate: 40%\" (if 4 out of 10 were GO)\n# \u2705 Stats match actual decisions\n```\n\n**V3: Script works with Emma workflow**\n```python\n# Test: Run script after Emma evaluation\n\npython scripts/track-lead.py \\\n  --platform \"Upwork\" \\\n  --title \"Build AI chat\" \\\n  --budget \"$8K\" \\\n  --decision \"GO\" \\\n  --reason \"AI + clear budget\"\n\n# Expected:\n# - leads.json updated\n# - leads-tracker.md regenerated\n# \u2705 Integration with Emma workflow seamless\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_f7b61fff57af",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** Python script parses Emma output, appends JSON, regenerates markdown",
+        "description": "**Implementation Approach:** Python script parses Emma output, appends JSON, regenerates markdown  **Why Python:** - Simple file I/O - JSON parsing built-in - Easy to integrate with Emma (call after e",
+        "ko_type": "mechanism",
+        "path": "docs/automation/03_lead_tracker.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 122,
+        "line_end": 156,
+        "content_length": 601,
+        "markdown_content": "**Implementation Approach:** Python script parses Emma output, appends JSON, regenerates markdown\n\n**Why Python:**\n- Simple file I/O\n- JSON parsing built-in\n- Easy to integrate with Emma (call after evaluation)\n\n**Data Flow:**\n```\nEmma output (text)\n  \u2193\nPython script parses:\n  - Extract DECISION\n  - Extract REASON\n  - Extract Urgency/Pain (if present)\n  \u2193\nAppend to leads.json (newline-delimited JSON)\n  \u2193\nRead all leads.json\n  \u2193\nCalculate stats:\n  - Total evaluated\n  - GO count / NO-GO count\n  - GO rate %\n  - Proposals sent count\n  \u2193\nGenerate markdown table\n  \u2193\nWrite to leads-tracker.md\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_67e509ff8060",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Input:** Emma's text output (string)",
+        "description": "### 1. Parse Emma Output  **Input:** Emma's text output (string)  **Steps:** 1. Split text into lines 2. Find line containing \"DECISION:\" substring 3. Extract value after colon and whitespace 4. Find",
+        "ko_type": "algorithm",
+        "path": "docs/automation/03_lead_tracker.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 157,
+        "line_end": 244,
+        "content_length": 2753,
+        "markdown_content": "### 1. Parse Emma Output\n\n**Input:** Emma's text output (string)\n\n**Steps:**\n1. Split text into lines\n2. Find line containing \"DECISION:\" substring\n3. Extract value after colon and whitespace\n4. Find line containing \"REASON:\" substring\n5. Extract value after colon and whitespace\n6. Search for \"Urgency:\" pattern with regex `Urgency:\\s*(\\d+)`\n7. Search for \"Pain:\" pattern with regex `Pain:\\s*(\\d+)`\n\n**Output:** Dictionary with `{ decision, reason, urgency, pain }`\n\n---\n\n### 2. Append to JSON Log\n\n**Input:** `{ decision, reason, urgency, pain, title, budget, platform }`\n\n**Steps:**\n1. Get current UTC timestamp in ISO 8601 format\n2. Construct JSON object with all fields plus timestamp\n3. Set `sent` field to `false` by default\n4. Set `link` field to `null` by default\n5. Serialize object to JSON string\n6. Append JSON string + newline to `citizens/emma/leads.json`\n\n**Output:** Updated leads.json file with new entry\n\n---\n\n### 3. Calculate Stats\n\n**Input:** All entries in leads.json file\n\n**Ste"
+      }
+    },
+    {
+      "id": "ko_8367d90cffcb",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**File:** `scripts/track-lead.py`",
+        "description": "### Implementation  **File:** `scripts/track-lead.py`  ```python #!/usr/bin/env python3 import json import argparse from datetime import datetime from pathlib import Path  # Paths BASE_DIR = Path(__fi",
+        "ko_type": "guide",
+        "path": "docs/automation/03_lead_tracker.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 245,
+        "line_end": 494,
+        "content_length": 7024,
+        "markdown_content": "### Implementation\n\n**File:** `scripts/track-lead.py`\n\n```python\n#!/usr/bin/env python3\nimport json\nimport argparse\nfrom datetime import datetime\nfrom pathlib import Path\n\n# Paths\nBASE_DIR = Path(__file__).parent.parent\nLEADS_JSON = BASE_DIR / \"citizens/emma/leads.json\"\nTRACKER_MD = BASE_DIR / \"citizens/emma/leads-tracker.md\"\n\ndef track_lead(platform, title, budget, decision, reason, sent=False, link=None, urgency=None, pain=None):\n    \"\"\"Track a new lead evaluation\"\"\"\n    entry = {\n        \"timestamp\": datetime.utcnow().isoformat() + \"Z\",\n        \"platform\": platform,\n        \"title\": title,\n        \"budget\": budget,\n        \"decision\": decision,\n        \"reason\": reason,\n        \"urgency\": urgency,\n        \"pain\": pain,\n        \"sent\": sent,\n        \"link\": link\n    }\n\n    # Append to JSON log\n    with open(LEADS_JSON, \"a\") as f:\n        f.write(json.dumps(entry) + \"\\n\")\n\n    # Regenerate markdown\n    regenerate_tracker()\n\ndef regenerate_tracker():\n    \"\"\"Regenerate leads-tracker.md "
+      }
+    },
+    {
+      "id": "ko_8059caca0827",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Discovery should be continuous, not episodic. When new leads appear, E",
+        "description": "**Consciousness Principle:** \"Discovery should be continuous, not episodic. When new leads appear, Emma evaluates them immediately\u2014before humans even see them.\"  **Why:** Manual job board scanning is",
+        "ko_type": "pattern",
+        "path": "docs/automation/04_emma_rss_auto_send.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 9,
+        "line_end": 16,
+        "content_length": 333,
+        "markdown_content": "**Consciousness Principle:** \"Discovery should be continuous, not episodic. When new leads appear, Emma evaluates them immediately\u2014before humans even see them.\"\n\n**Why:** Manual job board scanning is reactive and slow. RSS monitoring enables Emma to claim first-mover advantage on fresh posts (higher response rate in first 2h).\n\n---"
+      }
+    },
+    {
+      "id": "ko_4f9c3dce1c5c",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow  ``` New Upwork job posted   \u2193 RSS feed updates   \u2193 Emma scraper detects new post       \u2192 lead.discovered@1.0   \u2193 Emma citizen wakes, evaluates post  \u2192 lead.parsed@1.0   \u2193 Decision: GO",
+        "ko_type": "spec",
+        "path": "docs/automation/04_emma_rss_auto_send.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 17,
+        "line_end": 72,
+        "content_length": 1605,
+        "markdown_content": "### Event Flow\n\n```\nNew Upwork job posted\n  \u2193\nRSS feed updates\n  \u2193\nEmma scraper detects new post       \u2192 lead.discovered@1.0\n  \u2193\nEmma citizen wakes, evaluates post  \u2192 lead.parsed@1.0\n  \u2193\nDecision: GO (urgency \u22657, pain \u22656, budget \u2265$5K)\n  \u2193\nEmma generates proposal             \u2192 proposal.draft_ready@1.0\n  \u2193\nCalculate confidence score\n  \u2193\nIF confidence \u226580%:\n  Auto-send via Upwork              \u2192 proposal.sent@1.0 (auto)\nELSE:\n  Send to Telegram for approval     \u2192 proposal.approval_requested@1.0\n  \u2193\n  Nicolas: [Approve] [Edit] [Reject]\n  \u2193\n  IF approved: Send via Upwork      \u2192 proposal.sent@1.0 (manual)\n```\n\n### Contract\n\n**Input:**\n- RSS feed URL: `https://www.upwork.com/ab/feed/topics/rss?securityToken=...&topic=...`\n- Feed contains: job title, description, budget, client info, posted date\n\n**Output:**\n- Auto-sent proposals for high-confidence GO decisions (\u226580%)\n- Telegram approval request for low-confidence GO decisions (<80%)\n- Logged NO-GO decisions with reasons\n- Updated leads.json t"
+      }
+    },
+    {
+      "id": "ko_0906633abcda",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: RSS monitoring works continuously**",
+        "description": "### Acceptance Criteria  **V1: RSS monitoring works continuously** ```bash # Test: Monitor RSS feed for 1 hour  # Expected: # - Emma checks feed every 5 minutes # - New posts detected within 5min of p",
+        "ko_type": "validation",
+        "path": "docs/automation/04_emma_rss_auto_send.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 73,
+        "line_end": 120,
+        "content_length": 1246,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: RSS monitoring works continuously**\n```bash\n# Test: Monitor RSS feed for 1 hour\n\n# Expected:\n# - Emma checks feed every 5 minutes\n# - New posts detected within 5min of posting\n# - \u2705 No missed posts during monitoring period\n```\n\n**V2: Emma evaluates and generates proposals**\n```bash\n# Test: Add test job to monitored feed\n\n# Expected:\n# - Emma detects post within 5min\n# - Emma outputs DECISION + REASON + proposal\n# - Proposal references AC.md, Evidence Sprint, or /proof\n# - \u2705 Proposal quality matches manual Emma evaluations\n```\n\n**V3: Confidence-based auto-send works**\n```bash\n# Test: Trigger 5 GO decisions with varying complexity\n\n# Expected:\n# - Simple posts (1 question, clear budget) \u2192 confidence \u226580% \u2192 auto-send\n# - Complex posts (multiple questions, vague scope) \u2192 confidence <80% \u2192 Telegram approval\n# - \u2705 80%+ of simple posts auto-sent, 0% of complex posts auto-sent\n```\n\n**V4: Telegram approval flow works**\n```bash\n# Test: Low-confidence proposal sent "
+      }
+    },
+    {
+      "id": "ko_46f283e99744",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** RSS polling \u2192 Emma citizen wake \u2192 Confidence-based routing \u2192 Auto-send ",
+        "description": "**Implementation Approach:** RSS polling \u2192 Emma citizen wake \u2192 Confidence-based routing \u2192 Auto-send or Telegram  **Architecture:**  ``` [RSS Feed Monitor]   \u2193 (Poll every 5min) [New Post Detector]   \u2193",
+        "ko_type": "mechanism",
+        "path": "docs/automation/04_emma_rss_auto_send.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 121,
+        "line_end": 158,
+        "content_length": 1061,
+        "markdown_content": "**Implementation Approach:** RSS polling \u2192 Emma citizen wake \u2192 Confidence-based routing \u2192 Auto-send or Telegram\n\n**Architecture:**\n\n```\n[RSS Feed Monitor]\n  \u2193 (Poll every 5min)\n[New Post Detector]\n  \u2193 (Filter: unseen posts)\n[Emma Citizen Service]\n  \u2193 (Evaluate + Generate)\n[Confidence Calculator]\n  \u2193 (Score 0-100)\n[Router]\n  \u251c\u2500 \u226580% \u2192 [Upwork Auto-Sender]\n  \u2514\u2500 <80% \u2192 [Telegram Approval]\n       \u2193 (If approved)\n       [Upwork Sender]\n```\n\n**Why this works:**\n- RSS feeds update instantly (no scraping needed)\n- Emma evaluates in <30s (Claude API fast)\n- Confidence formula is deterministic and tunable\n- Telegram approval preserves human oversight for edge cases\n\n**Upwork API Constraint:**\nUpwork doesn't provide official API for proposal submission. Options:\n1. **Browser automation** (Puppeteer/Playwright) - simulate human interaction\n2. **Manual fallback** - Emma drafts, human pastes into Upwork UI\n3. **Upwork OAuth** (if available) - proper API integration\n\n**Recommendation:** Start with Pu"
+      }
+    },
+    {
+      "id": "ko_2a11897135a0",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Input:** RSS feed URL (with security token)",
+        "description": "### 1. RSS Feed Monitoring  **Input:** RSS feed URL (with security token)  **Steps:** 1. Set polling interval: 5 minutes (300 seconds) 2. Initialize `seen_posts` set (empty) 3. Start infinite loop:",
+        "ko_type": "algorithm",
+        "path": "docs/automation/04_emma_rss_auto_send.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 159,
+        "line_end": 294,
+        "content_length": 4245,
+        "markdown_content": "### 1. RSS Feed Monitoring\n\n**Input:** RSS feed URL (with security token)\n\n**Steps:**\n1. Set polling interval: 5 minutes (300 seconds)\n2. Initialize `seen_posts` set (empty)\n3. Start infinite loop:\n   - Fetch RSS feed XML via HTTP GET\n   - Parse XML to extract `<item>` elements\n   - For each item:\n     - Extract `<link>` as unique identifier\n     - Check if link exists in `seen_posts`\n     - If not seen: add to `seen_posts`, emit `lead.discovered` event\n   - Sleep for 300 seconds\n   - Repeat\n\n**Output:** Stream of `lead.discovered` events for new posts\n\n---\n\n### 2. Emma Evaluation\n\n**Input:** Job post data `{ title, description, budget, client_info, link }`\n\n**Steps:**\n1. Load Emma system prompt from `citizens/emma/CLAUDE.md`\n2. Format evaluation prompt with job post data\n3. Call Claude API with max_tokens=2000\n4. Parse response to extract:\n   - DECISION line (GO or NO-GO)\n   - REASON line (explanation)\n   - Urgency score (regex `Urgency:\\s*(\\d+)`)\n   - Pain score (regex `Pain:\\s*(\\d+)"
+      }
+    },
+    {
+      "id": "ko_dd297026dbf9",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**File Structure:**",
+        "description": "### Implementation  **File Structure:** ``` /services/   emma-rss/     index.js              # Main RSS monitor     evaluator.js          # Emma citizen caller     confidence.js         # Confidence s",
+        "ko_type": "guide",
+        "path": "docs/automation/04_emma_rss_auto_send.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 295,
+        "line_end": 713,
+        "content_length": 11234,
+        "markdown_content": "### Implementation\n\n**File Structure:**\n```\n/services/\n  emma-rss/\n    index.js              # Main RSS monitor\n    evaluator.js          # Emma citizen caller\n    confidence.js         # Confidence score calculator\n    upwork-sender.js      # Puppeteer automation\n    telegram-approval.js  # Approval flow handler\n    state.json            # Seen posts tracker\n```\n\n**1. RSS Monitor**\n\nFile: `services/emma-rss/index.js`\n```javascript\nimport Parser from 'rss-parser';\nimport fs from 'fs/promises';\nimport { evaluateLead } from './evaluator.js';\n\nconst FEED_URL = process.env.UPWORK_RSS_FEED_URL;\nconst POLL_INTERVAL = 5 * 60 * 1000; // 5 minutes\nconst STATE_FILE = './state.json';\n\nasync function loadState() {\n  try {\n    const data = await fs.readFile(STATE_FILE, 'utf-8');\n    return JSON.parse(data);\n  } catch {\n    return { seen_posts: [] };\n  }\n}\n\nasync function saveState(state) {\n  await fs.writeFile(STATE_FILE, JSON.stringify(state, null, 2));\n}\n\nasync function monitorFeed() {\n  const pa"
+      }
+    },
+    {
+      "id": "ko_e6964a23f7b7",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Acceptance criteria are the contract. When a client agrees to a milest",
+        "description": "**Consciousness Principle:** \"Acceptance criteria are the contract. When a client agrees to a milestone, wake Rafael to co-author AC.md\u2014don't wait for human to start the session.\"  **Why:** AC.md draf",
+        "ko_type": "pattern",
+        "path": "docs/automation/05_ac_drafting.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 9,
+        "line_end": 16,
+        "content_length": 394,
+        "markdown_content": "**Consciousness Principle:** \"Acceptance criteria are the contract. When a client agrees to a milestone, wake Rafael to co-author AC.md\u2014don't wait for human to start the session.\"\n\n**Why:** AC.md drafting is repeatable but requires context (client needs, technical constraints, verification approach). A citizen can draft 80% of it, leaving humans to refine the 20% that requires judgment.\n\n---"
+      }
+    },
+    {
+      "id": "ko_890da6231f1a",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow  ``` Client agrees to milestone (Rafael detects via email/Upwork)   \u2193 Rafael marks milestone as \"ready for AC\"   \u2193 Trigger AC drafting workflow            \u2192 ac.draft_requested@1.0   \u2193 W",
+        "ko_type": "spec",
+        "path": "docs/automation/05_ac_drafting.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 17,
+        "line_end": 75,
+        "content_length": 1579,
+        "markdown_content": "### Event Flow\n\n```\nClient agrees to milestone (Rafael detects via email/Upwork)\n  \u2193\nRafael marks milestone as \"ready for AC\"\n  \u2193\nTrigger AC drafting workflow            \u2192 ac.draft_requested@1.0\n  \u2193\nWake Rafael citizen (Claude Code instance)\n  \u2193\nRafael loads:\n  - Client conversation history\n  - Original proposal\n  - Similar past AC.md files (as templates)\n  \u2193\nRafael generates AC.md draft with:\n  - Functional criteria (features)\n  - Non-functional criteria (performance, quality)\n  - Verification (test command + seed data)\n  \u2193\nSave draft to /proof/AC.md (uncommitted)  \u2192 ac.draft_ready@1.0\n  \u2193\nNotify human via Telegram:\n  \"AC.md draft ready for [Client Name]\"\n  \u2193\nHuman reviews, edits, commits\n  \u2193\nTag as ac-baseline_*                     \u2192 ac.baseline@1.0\n```\n\n### Contract\n\n**Input:**\n- Client name\n- Milestone description (from proposal or conversation)\n- Budget\n- Client conversation history (emails, Upwork messages)\n\n**Output:**\n- Draft `/proof/AC.md` with:\n  - **Context** section (what p"
+      }
+    },
+    {
+      "id": "ko_fcb6d3bfc42a",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: Rafael wakes and drafts AC.md**",
+        "description": "### Acceptance Criteria  **V1: Rafael wakes and drafts AC.md** ```bash # Test: Trigger AC drafting for test client  # Expected: # - Rafael citizen wakes within 30s # - AC.md draft generated in <2min #",
+        "ko_type": "validation",
+        "path": "docs/automation/05_ac_drafting.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 76,
+        "line_end": 114,
+        "content_length": 991,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: Rafael wakes and drafts AC.md**\n```bash\n# Test: Trigger AC drafting for test client\n\n# Expected:\n# - Rafael citizen wakes within 30s\n# - AC.md draft generated in <2min\n# - File contains Functional + Non-Functional + Verification sections\n# - \u2705 Draft is 80%+ complete (minimal editing needed)\n```\n\n**V2: AC.md follows ScopeLock template**\n```bash\n# Test: Compare generated AC.md to existing proof entries\n\n# Expected:\n# - Same section structure (Context, Functional, Non-Functional, Verification)\n# - Test commands are executable (e.g., `npm test`, `pytest tests/`)\n# - Seed data provided (URLs, sample inputs, expected outputs)\n# - \u2705 Format matches existing AC.md files\n```\n\n**V3: Human can review and commit**\n```bash\n# Test: Human edits draft and tags baseline\n\n# Expected:\n# - Draft is in /proof/AC.md (uncommitted)\n# - Human can edit in IDE\n# - After commit + tag, baseline guard activates\n# - \u2705 Workflow integrates with existing ScopeLock process\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_e90f633093d9",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** Wake Rafael citizen via Claude Code instance, not direct Claude API",
+        "description": "**Implementation Approach:** Wake Rafael citizen via Claude Code instance, not direct Claude API  **Architecture:**  ``` [Trigger: Client milestone ready]   \u2193 [Wake Rafael Service]   \u2193 (Spawn Claude C",
+        "ko_type": "mechanism",
+        "path": "docs/automation/05_ac_drafting.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 115,
+        "line_end": 149,
+        "content_length": 909,
+        "markdown_content": "**Implementation Approach:** Wake Rafael citizen via Claude Code instance, not direct Claude API\n\n**Architecture:**\n\n```\n[Trigger: Client milestone ready]\n  \u2193\n[Wake Rafael Service]\n  \u2193 (Spawn Claude Code instance with Rafael prompt)\n[Rafael Citizen (Claude Code)]\n  \u2193 (Load context: client history, past AC.md templates)\n[Claude API]\n  \u2193 (Generate draft AC.md)\n[Save to /proof/AC.md]\n  \u2193\n[Notify Telegram]\n```\n\n**Why wake citizen instead of direct API:**\n- Citizens have persistent context (SYNC.md, client history)\n- Citizens can use tools (Read, Write, Grep) to find templates\n- Citizens can emit events for tracking\n- Consistent with ScopeLock's \"citizens do repeatable work\" principle\n\n**Alternative (Direct API):**\n- Simpler but loses citizen context and tooling\n- Would require manual template selection\n- No event tracking\n\n**Recommendation:** Wake Rafael citizen for full context + tooling access\n\n---"
+      }
+    },
+    {
+      "id": "ko_63f2bd08f146",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Input:** Event source (email, Upwork message, Telegram command)",
+        "description": "### 1. Trigger Detection  **Input:** Event source (email, Upwork message, Telegram command)  **Steps:** 1. Monitor Rafael's inbox for keywords: \"let's proceed\", \"ready to start\", \"kick off\" 2. Parse c",
+        "ko_type": "algorithm",
+        "path": "docs/automation/05_ac_drafting.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 150,
+        "line_end": 252,
+        "content_length": 2794,
+        "markdown_content": "### 1. Trigger Detection\n\n**Input:** Event source (email, Upwork message, Telegram command)\n\n**Steps:**\n1. Monitor Rafael's inbox for keywords: \"let's proceed\", \"ready to start\", \"kick off\"\n2. Parse client name from email subject or sender\n3. Fetch client conversation history (last 10 emails or messages)\n4. Extract milestone description from most recent message\n5. Emit `ac.draft_requested` event with client metadata\n\n**Output:** `{ client_name, milestone_description, budget, history }`\n\n---\n\n### 2. Wake Rafael Citizen\n\n**Input:** `{ client_name, milestone_description }`\n\n**Steps:**\n1. Construct citizen wake command:\n   ```\n   claude-code --prompt \"You are Rafael. Draft AC.md for [client] milestone: [description]\"\n   ```\n2. Set working directory: `/home/mind-protocol/scopelock`\n3. Pass context via environment variables:\n   - `CLAUDE_CLIENT_NAME=[client_name]`\n   - `CLAUDE_MILESTONE=[milestone_description]`\n   - `CLAUDE_TASK=ac-draft`\n4. Execute command asynchronously (non-blocking)\n5. M"
+      }
+    },
+    {
+      "id": "ko_f976e365df69",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**File Structure:**",
+        "description": "### Implementation  **File Structure:** ``` /services/   ac-drafter/     index.js          # Trigger detector + citizen waker     wake-citizen.js   # Claude Code instance spawner     templates/",
+        "ko_type": "guide",
+        "path": "docs/automation/05_ac_drafting.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 253,
+        "line_end": 599,
+        "content_length": 8261,
+        "markdown_content": "### Implementation\n\n**File Structure:**\n```\n/services/\n  ac-drafter/\n    index.js          # Trigger detector + citizen waker\n    wake-citizen.js   # Claude Code instance spawner\n    templates/        # Example AC.md templates\n```\n\n**1. Trigger Detector**\n\nFile: `services/ac-drafter/index.js`\n```javascript\nimport { spawn } from 'child_process';\nimport fs from 'fs/promises';\nimport { sendToTelegram } from '../shared/telegram.js';\n\n// Monitor for AC draft requests\nexport async function detectACRequest(message) {\n  // Keywords that trigger AC drafting\n  const triggers = [\n    /let'?s proceed/i,\n    /ready to start/i,\n    /kick ?off/i,\n    /begin milestone/i\n  ];\n\n  const isTriggered = triggers.some(pattern => pattern.test(message.body));\n\n  if (isTriggered) {\n    const clientName = extractClientName(message);\n    const milestone = extractMilestone(message);\n\n    await draftAC({ clientName, milestone });\n  }\n}\n\nasync function draftAC({ clientName, milestone }) {\n  console.log(`[AC DRAFT] S"
+      }
+    },
+    {
+      "id": "ko_cd3c953c54bd",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"If it's not tested, it's not built. When AC.md is finalized, generate ",
+        "description": "**Consciousness Principle:** \"If it's not tested, it's not built. When AC.md is finalized, generate acceptance tests automatically\u2014don't wait for human to write boilerplate.\"  **Why:** Test writing is",
+        "ko_type": "pattern",
+        "path": "docs/automation/06_test_generation.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 9,
+        "line_end": 16,
+        "content_length": 356,
+        "markdown_content": "**Consciousness Principle:** \"If it's not tested, it's not built. When AC.md is finalized, generate acceptance tests automatically\u2014don't wait for human to write boilerplate.\"\n\n**Why:** Test writing is tedious but follows patterns. Daniel can generate 70-80% of test code from AC.md criteria, leaving humans to add edge cases and domain-specific logic.\n\n---"
+      }
+    },
+    {
+      "id": "ko_cd9cd2a399cc",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow  ``` AC.md finalized and tagged as ac-baseline_*   \u2193 Trigger test generation workflow       \u2192 test.generation_requested@1.0   \u2193 Wake Daniel citizen (Claude Code)   \u2193 Daniel reads AC.md:",
+        "ko_type": "spec",
+        "path": "docs/automation/06_test_generation.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 17,
+        "line_end": 76,
+        "content_length": 1741,
+        "markdown_content": "### Event Flow\n\n```\nAC.md finalized and tagged as ac-baseline_*\n  \u2193\nTrigger test generation workflow       \u2192 test.generation_requested@1.0\n  \u2193\nWake Daniel citizen (Claude Code)\n  \u2193\nDaniel reads AC.md:\n  - Functional criteria (F1, F2, F3...)\n  - Non-functional criteria (NF1, NF2, NF3...)\n  - Verification section (tech stack hints)\n  \u2193\nDaniel generates test files:\n  - tests/acceptance/f1-[feature].spec.ts (Playwright)\n  - tests/acceptance/nf1-performance.spec.ts\n  - tests/acceptance/nf2-quality.spec.ts\n  \u2193\nSave test files to /tests/acceptance/    \u2192 test.generated@1.0\n  \u2193\nRun tests locally (expect failures)\n  \u2193\nNotify Telegram:\n  \"Acceptance tests generated for [milestone]\"\n  \"Status: 0/X passing (expected - implement features first)\"\n```\n\n### Contract\n\n**Input:**\n- `/proof/AC.md` with:\n  - Functional criteria (F1, F2, ...)\n  - Non-functional criteria (NF1: Performance, NF2: Quality, NF3: Deployment)\n  - Verification section (tech stack, test approach)\n\n**Output:**\n- Test files in `/tests"
+      }
+    },
+    {
+      "id": "ko_ff74df70a0fa",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: Tests generated from AC.md**",
+        "description": "### Acceptance Criteria  **V1: Tests generated from AC.md** ```bash # Test: Tag AC.md as baseline, trigger test generation  git tag ac-baseline_test_2025-11-02 # Trigger test generation (manual or web",
+        "ko_type": "validation",
+        "path": "docs/automation/06_test_generation.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 77,
+        "line_end": 119,
+        "content_length": 964,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: Tests generated from AC.md**\n```bash\n# Test: Tag AC.md as baseline, trigger test generation\n\ngit tag ac-baseline_test_2025-11-02\n# Trigger test generation (manual or webhook)\n\n# Expected:\n# - /tests/acceptance/ contains test files\n# - One file per functional criterion (F1.spec.ts, F2.spec.ts...)\n# - One file per non-functional criterion (NF1.spec.ts, NF2.spec.ts...)\n# - \u2705 Test count matches criterion count in AC.md\n```\n\n**V2: Generated tests are executable**\n```bash\n# Test: Run generated tests\n\nnpm test\n\n# Expected:\n# - Tests run (may fail, but no syntax errors)\n# - Test names match AC.md criteria\n# - \u2705 0 compilation errors, test structure valid\n```\n\n**V3: Tests follow ScopeLock patterns**\n```bash\n# Test: Compare generated tests to existing tests\n\n# Expected:\n# - Playwright for frontend tests\n# - PyTest for backend tests\n# - fail-loud pattern (no try/catch without rethrow)\n# - \u2705 Code matches existing test style\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_f64716317399",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** Wake Daniel citizen, read AC.md, generate Playwright/PyTest tests",
+        "description": "**Implementation Approach:** Wake Daniel citizen, read AC.md, generate Playwright/PyTest tests  **Architecture:**  ``` [Trigger: ac-baseline_* tag pushed]   \u2193 [Test Generation Service]   \u2193 (Wake Danie",
+        "ko_type": "mechanism",
+        "path": "docs/automation/06_test_generation.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 120,
+        "line_end": 152,
+        "content_length": 858,
+        "markdown_content": "**Implementation Approach:** Wake Daniel citizen, read AC.md, generate Playwright/PyTest tests\n\n**Architecture:**\n\n```\n[Trigger: ac-baseline_* tag pushed]\n  \u2193\n[Test Generation Service]\n  \u2193 (Wake Daniel citizen)\n[Daniel Citizen (Claude Code)]\n  \u2193 (Read AC.md, extract criteria)\n[Generate Tests]\n  \u2193 (Write test files)\n[Save to /tests/acceptance/]\n  \u2193\n[Notify Telegram]\n```\n\n**Why wake citizen:**\n- Daniel can use Read/Write tools to access AC.md\n- Daniel can detect tech stack from project files (package.json, requirements.txt)\n- Daniel can reference existing tests as templates\n- Consistent with ScopeLock's \"citizens do repeatable work\" principle\n\n**Tech Stack Detection:**\n- If `package.json` exists \u2192 JavaScript/TypeScript \u2192 Playwright\n- If `requirements.txt` exists \u2192 Python \u2192 PyTest\n- If both \u2192 Hybrid (Playwright for frontend, PyTest for backend)\n\n---"
+      }
+    },
+    {
+      "id": "ko_4ca2f708ab58",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Input:** Git tag matching `ac-baseline_*`",
+        "description": "### 1. Trigger Detection  **Input:** Git tag matching `ac-baseline_*`  **Steps:** 1. Listen for git push events (webhook or git hooks) 2. Filter for tags matching regex: `^ac-baseline_` 3. Extract mil",
+        "ko_type": "algorithm",
+        "path": "docs/automation/06_test_generation.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 153,
+        "line_end": 313,
+        "content_length": 4415,
+        "markdown_content": "### 1. Trigger Detection\n\n**Input:** Git tag matching `ac-baseline_*`\n\n**Steps:**\n1. Listen for git push events (webhook or git hooks)\n2. Filter for tags matching regex: `^ac-baseline_`\n3. Extract milestone name from tag: `ac-baseline_([^_]+)_`\n4. Emit `test.generation_requested` event with milestone name\n\n**Output:** `{ milestone, tag }`\n\n---\n\n### 2. Wake Daniel Citizen\n\n**Input:** `{ milestone, tag }`\n\n**Steps:**\n1. Construct Daniel wake command:\n   ```\n   claude-code --prompt \"You are Daniel. Generate acceptance tests for [milestone].\"\n   ```\n2. Set environment variables:\n   - `CLAUDE_CITIZEN=daniel`\n   - `CLAUDE_MILESTONE=[milestone]`\n   - `CLAUDE_TAG=[tag]`\n   - `CLAUDE_TASK=test-generation`\n3. Execute command asynchronously\n4. Monitor for completion signal\n\n**Output:** Running Daniel citizen process\n\n---\n\n### 3. Parse AC.md (Inside Daniel Citizen)\n\n**Input:** `/proof/AC.md` file\n\n**Steps:**\n1. Read file content using Read tool\n2. Split into sections by markdown headers (`##`)\n3. "
+      }
+    },
+    {
+      "id": "ko_089ac7f155c5",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**File Structure:**",
+        "description": "### Implementation  **File Structure:** ``` /services/   test-generator/     index.js              # Git webhook listener     wake-daniel.js        # Daniel citizen spawner     templates/       playwr",
+        "ko_type": "guide",
+        "path": "docs/automation/06_test_generation.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 314,
+        "line_end": 675,
+        "content_length": 10059,
+        "markdown_content": "### Implementation\n\n**File Structure:**\n```\n/services/\n  test-generator/\n    index.js              # Git webhook listener\n    wake-daniel.js        # Daniel citizen spawner\n    templates/\n      playwright.template.js\n      pytest.template.py\n```\n\n**1. Git Webhook Listener**\n\nFile: `services/test-generator/index.js`\n```javascript\nimport express from 'express';\nimport { wakeDaniel } from './wake-daniel.js';\n\nconst app = express();\napp.use(express.json());\n\n// Webhook endpoint for git push events\napp.post('/webhook/git-push', async (req, res) => {\n  const { ref, commits } = req.body;\n\n  // Check if tag was pushed\n  if (ref && ref.startsWith('refs/tags/ac-baseline_')) {\n    const tag = ref.replace('refs/tags/', '');\n    const milestone = tag.match(/ac-baseline_([^_]+)_/)?.[1];\n\n    console.log(`[TEST GEN] Baseline tag detected: ${tag}`);\n\n    // Wake Daniel to generate tests\n    await wakeDaniel({ milestone, tag });\n\n    res.status(200).send('Test generation triggered');\n  } else {\n    res"
+      }
+    },
+    {
+      "id": "ko_dee4815a9fd1",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Evidence emerges from measurement, not description. When a feature is ",
+        "description": "**Consciousness Principle:** \"Evidence emerges from measurement, not description. When a feature is built, capture demo URL + quantified deltas automatically\u2014don't rely on human memory.\"  **Why:** Man",
+        "ko_type": "pattern",
+        "path": "docs/automation/07_demo_delta_generation.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 9,
+        "line_end": 16,
+        "content_length": 376,
+        "markdown_content": "**Consciousness Principle:** \"Evidence emerges from measurement, not description. When a feature is built, capture demo URL + quantified deltas automatically\u2014don't rely on human memory.\"\n\n**Why:** Manual DEMO.md/DELTA.md writing is error-prone and time-consuming. Automated generation ensures consistency, forces measurement, and eliminates \"forgot to document\" failures.\n\n---"
+      }
+    },
+    {
+      "id": "ko_39699316f31b",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow  ``` Developer tags evidence-sprint_* or ac-green_*   \u2193 Trigger demo/delta generation           \u2192 demo.generation_requested@1.0   \u2193 Wake Maya citizen (Claude Code)   \u2193 Maya captures:",
+        "ko_type": "spec",
+        "path": "docs/automation/07_demo_delta_generation.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 17,
+        "line_end": 94,
+        "content_length": 1749,
+        "markdown_content": "### Event Flow\n\n```\nDeveloper tags evidence-sprint_* or ac-green_*\n  \u2193\nTrigger demo/delta generation           \u2192 demo.generation_requested@1.0\n  \u2193\nWake Maya citizen (Claude Code)\n  \u2193\nMaya captures:\n  - Demo URL (from tag commit or staging environment)\n  - Screenshots (Playwright automation)\n  - Video recording (optional, 90s max)\n  \u2193\nMaya generates DEMO.md:\n  - URL to live demo\n  - 3-5 bullet points (what changed)\n  - Screenshots or video embed\n  \u2193\nMaya generates DELTA.md:\n  - Quantified before/after metrics\n  - Performance: p95 latency, page load time\n  - User experience: steps reduced, fields removed\n  - Quality: test coverage, error rate\n  \u2193\nSave to /proof/DEMO.md and /proof/DELTA.md\n  \u2193\nEmit demo.generated@1.0\n```\n\n### Contract\n\n**Input:**\n- Git tag: `evidence-sprint_*` or `ac-green_*`\n- Staging/production URL\n- Baseline commit (for DELTA comparison)\n\n**Output:**\n- `/proof/DEMO.md`:\n  ```markdown\n  # Demo: [Feature Name]\n\n  **URL:** https://staging.scopelock.mindprotocol.ai\n\n  **Wh"
+      }
+    },
+    {
+      "id": "ko_fc9e36534afc",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: DEMO.md generated from tag**",
+        "description": "### Acceptance Criteria  **V1: DEMO.md generated from tag** ```bash # Test: Tag feature, trigger generation  git tag evidence-sprint_signup_2025-11-02 # Trigger Maya  # Expected: # - /proof/DEMO.md ex",
+        "ko_type": "validation",
+        "path": "docs/automation/07_demo_delta_generation.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 95,
+        "line_end": 138,
+        "content_length": 870,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: DEMO.md generated from tag**\n```bash\n# Test: Tag feature, trigger generation\n\ngit tag evidence-sprint_signup_2025-11-02\n# Trigger Maya\n\n# Expected:\n# - /proof/DEMO.md exists\n# - Contains URL, 3+ bullet points, screenshots\n# - \u2705 Demo page accessible via URL\n```\n\n**V2: DELTA.md contains quantified metrics**\n```bash\n# Test: Check generated DELTA.md\n\ncat proof/DELTA.md\n\n# Expected:\n# - Table with Before/After/Delta columns\n# - At least 2 quantified metrics (p95, steps, coverage, etc.)\n# - Percentage or absolute change calculated\n# - \u2705 No vague claims (\"faster\", \"better\") without numbers\n```\n\n**V3: Screenshots captured automatically**\n```bash\n# Test: Verify screenshots in DEMO.md\n\nls proof/screenshots/\n\n# Expected:\n# - before.png and after.png exist\n# - Screenshots show relevant UI changes\n# - \u2705 Embedded in DEMO.md markdown\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_52889171173a",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** Wake Maya citizen, capture demo via Playwright, measure deltas, generat",
+        "description": "**Implementation Approach:** Wake Maya citizen, capture demo via Playwright, measure deltas, generate markdown  **Architecture:**  ``` [Tag: evidence-sprint_* or ac-green_*]   \u2193 [Demo Generator Servic",
+        "ko_type": "mechanism",
+        "path": "docs/automation/07_demo_delta_generation.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 139,
+        "line_end": 172,
+        "content_length": 923,
+        "markdown_content": "**Implementation Approach:** Wake Maya citizen, capture demo via Playwright, measure deltas, generate markdown\n\n**Architecture:**\n\n```\n[Tag: evidence-sprint_* or ac-green_*]\n  \u2193\n[Demo Generator Service]\n  \u2193 (Wake Maya citizen)\n[Maya Citizen (Claude Code)]\n  \u2193 (Capture screenshots + metrics)\n[Playwright Automation]\n  \u2193 (Generate DEMO.md + DELTA.md)\n[Save to /proof/]\n  \u2193\n[Emit demo.generated event]\n```\n\n**Why wake citizen:**\n- Maya can use Bash tool to run Playwright for screenshots\n- Maya can Read baseline files to compare metrics\n- Maya can Write markdown files with proper structure\n- Maya can calculate percentage changes\n\n**Measurement Sources:**\n- **p95 latency:** Lighthouse report or Playwright performance API\n- **Steps reduced:** Count form fields or navigation clicks in test\n- **Test coverage:** Parse Jest/Playwright coverage report\n- **Error rate:** Grep logs for error patterns, compare before/after\n\n---"
+      }
+    },
+    {
+      "id": "ko_ed8d0d95f7cc",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Input:** Git tag matching `evidence-sprint_*` or `ac-green_*`",
+        "description": "### 1. Trigger Detection  **Input:** Git tag matching `evidence-sprint_*` or `ac-green_*`  **Steps:** 1. Parse tag name to extract feature name 2. Find baseline tag: Search for most recent `ac-baselin",
+        "ko_type": "algorithm",
+        "path": "docs/automation/07_demo_delta_generation.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 173,
+        "line_end": 335,
+        "content_length": 4090,
+        "markdown_content": "### 1. Trigger Detection\n\n**Input:** Git tag matching `evidence-sprint_*` or `ac-green_*`\n\n**Steps:**\n1. Parse tag name to extract feature name\n2. Find baseline tag: Search for most recent `ac-baseline_*` tag\n3. Extract commit SHAs:\n   - Baseline commit: `git rev-parse ac-baseline_*`\n   - Current commit: `git rev-parse evidence-sprint_*`\n4. Emit `demo.generation_requested` event\n\n**Output:** `{ tag, feature_name, baseline_commit, current_commit }`\n\n---\n\n### 2. Wake Maya Citizen\n\n**Input:** `{ tag, feature_name, baseline_commit, current_commit }`\n\n**Steps:**\n1. Construct Maya wake command with task: `demo-delta-generation`\n2. Set environment variables with baseline + current commits\n3. Execute Claude Code instance asynchronously\n4. Monitor for completion\n\n**Output:** Running Maya citizen process\n\n---\n\n### 3. Capture Demo (Inside Maya Citizen)\n\n**Input:** Staging URL\n\n**Steps:**\n1. Launch Playwright browser (headless mode)\n2. Navigate to staging URL\n3. Wait for page load (network idle)\n4"
+      }
+    },
+    {
+      "id": "ko_e2673718b338",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**File Structure:**",
+        "description": "### Implementation  **File Structure:** ``` /services/   demo-delta-gen/     index.js              # Git webhook listener     wake-maya.js          # Maya citizen spawner     capture-demo.js       # P",
+        "ko_type": "guide",
+        "path": "docs/automation/07_demo_delta_generation.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 336,
+        "line_end": 633,
+        "content_length": 9207,
+        "markdown_content": "### Implementation\n\n**File Structure:**\n```\n/services/\n  demo-delta-gen/\n    index.js              # Git webhook listener\n    wake-maya.js          # Maya citizen spawner\n    capture-demo.js       # Playwright screenshot automation\n    measure-metrics.js    # Performance + coverage measurement\n```\n\n**1. Trigger + Maya Waker**\n\nFile: `services/demo-delta-gen/index.js`\n```javascript\nimport { spawn } from 'child_process';\nimport { sendToTelegram } from '../shared/telegram.js';\n\nexport async function generateDemoAndDelta(tag) {\n  const featureName = tag.match(/(?:evidence-sprint|ac-green)_([^_]+)/)[1];\n\n  // Find baseline commit\n  const { execSync } = await import('child_process');\n  const baselineTag = execSync('git tag --list \"ac-baseline_*\" | tail -1', { encoding: 'utf-8' }).trim();\n  const baselineCommit = execSync(`git rev-parse ${baselineTag}`, { encoding: 'utf-8' }).trim();\n  const currentCommit = execSync(`git rev-parse ${tag}`, { encoding: 'utf-8' }).trim();\n\n  console.log(`[DEMO/"
+      }
+    },
+    {
+      "id": "ko_bf490f46b8b3",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Autonomy requires judgment. When Emma evaluates a lead, she decides wh",
+        "description": "**Consciousness Principle:** \"Autonomy requires judgment. When Emma evaluates a lead, she decides whether to proceed independently or request human oversight\u2014based on confidence in her assessment.\"  *",
+        "ko_type": "pattern",
+        "path": "docs/automation/08_emma_autonomous.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 9,
+        "line_end": 16,
+        "content_length": 383,
+        "markdown_content": "**Consciousness Principle:** \"Autonomy requires judgment. When Emma evaluates a lead, she decides whether to proceed independently or request human oversight\u2014based on confidence in her assessment.\"\n\n**Why:** Full automation without oversight is risky (could send bad proposals). Full manual review negates automation benefits. Confidence-based routing balances speed and safety.\n\n---"
+      }
+    },
+    {
+      "id": "ko_335ebaeb5da7",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow  ``` Emma evaluates lead via RSS scraper   \u2193 Emma outputs: DECISION + REASON + PROPOSAL   \u2193 Calculate confidence score (0-100)     \u2192 confidence.calculated@1.0   \u2193 IF confidence \u2265 80%:",
+        "ko_type": "spec",
+        "path": "docs/automation/08_emma_autonomous.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 17,
+        "line_end": 64,
+        "content_length": 1532,
+        "markdown_content": "### Event Flow\n\n```\nEmma evaluates lead via RSS scraper\n  \u2193\nEmma outputs: DECISION + REASON + PROPOSAL\n  \u2193\nCalculate confidence score (0-100)     \u2192 confidence.calculated@1.0\n  \u2193\nIF confidence \u2265 80%:\n  Auto-send proposal                   \u2192 proposal.sent@1.0 { method: \"auto\" }\n  Log to sent-proposals.log\n  Notify Telegram: \"Auto-sent (90% confidence)\"\nELSE IF confidence \u2265 30% AND < 80%:\n  Send to Telegram for approval        \u2192 proposal.approval_requested@1.0\n  Wait for [Approve] [Edit] [Reject]\n  IF approved:\n    Send proposal                      \u2192 proposal.sent@1.0 { method: \"manual\" }\nELSE (confidence < 30%):\n  Auto-reject (log only)               \u2192 proposal.rejected@1.0 { reason: \"low_confidence\" }\n  Notify Telegram: \"Auto-rejected (20% confidence)\"\n```\n\n### Contract\n\n**Input:**\n- Emma's evaluation: `{ decision, reason, urgency, pain, proposal_text }`\n- Job post data: `{ title, description, budget, client_info }`\n\n**Output:**\n- **High confidence (\u226580%):** Proposal sent automatically"
+      }
+    },
+    {
+      "id": "ko_480b33f9077b",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: High-confidence proposals auto-sent**",
+        "description": "### Acceptance Criteria  **V1: High-confidence proposals auto-sent** ```bash # Test: Emma evaluates simple, clear job post (verified client, clear budget, AI domain)  # Expected: # - Confidence \u2265 80%",
+        "ko_type": "validation",
+        "path": "docs/automation/08_emma_autonomous.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 65,
+        "line_end": 103,
+        "content_length": 952,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: High-confidence proposals auto-sent**\n```bash\n# Test: Emma evaluates simple, clear job post (verified client, clear budget, AI domain)\n\n# Expected:\n# - Confidence \u2265 80%\n# - Proposal sent automatically within 2min\n# - Telegram notification: \"Auto-sent (85% confidence)\"\n# - \u2705 No human intervention needed\n```\n\n**V2: Low-confidence proposals go to approval**\n```bash\n# Test: Emma evaluates complex job (vague scope, new client, budget negotiable)\n\n# Expected:\n# - Confidence < 80%\n# - Telegram message with [Approve] [Edit] [Reject] buttons\n# - Clicking [Approve] sends proposal\n# - \u2705 Human reviews before send\n```\n\n**V3: Very low confidence auto-rejects**\n```bash\n# Test: Emma evaluates mismatched job (wrong domain, budget too low)\n\n# Expected:\n# - Confidence < 30%\n# - Proposal NOT sent\n# - Telegram notification: \"Auto-rejected (15% confidence) - budget too low\"\n# - \u2705 No manual review needed for obvious NO-GO\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_73275c21993b",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** Confidence calculator with tunable thresholds + routing logic",
+        "description": "**Implementation Approach:** Confidence calculator with tunable thresholds + routing logic  **Architecture:**  ``` [Emma Evaluation]   \u2193 [Confidence Calculator]   \u2193 (score 0-100) [Router]   \u251c\u2500 \u226580% \u2192",
+        "ko_type": "mechanism",
+        "path": "docs/automation/08_emma_autonomous.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 104,
+        "line_end": 140,
+        "content_length": 964,
+        "markdown_content": "**Implementation Approach:** Confidence calculator with tunable thresholds + routing logic\n\n**Architecture:**\n\n```\n[Emma Evaluation]\n  \u2193\n[Confidence Calculator]\n  \u2193 (score 0-100)\n[Router]\n  \u251c\u2500 \u226580% \u2192 [Auto-Send] \u2192 [Log + Notify]\n  \u251c\u2500 30-79% \u2192 [Telegram Approval] \u2192 [Manual Send]\n  \u2514\u2500 <30% \u2192 [Auto-Reject] \u2192 [Log + Notify]\n```\n\n**Why confidence-based routing:**\n- Reduces human workload for obvious GO decisions\n- Preserves human judgment for edge cases\n- Builds trust through transparency (confidence score visible)\n- Enables tuning (adjust thresholds based on send/reject accuracy)\n\n**Confidence Formula (from Feature 4):**\n```\nbase_score = 100\n- word_count_penalty (job desc >200 words)\n- question_penalty (each \"?\" in description)\n- vague_budget_penalty (\"TBD\" or \"negotiable\")\n- new_client_penalty (<5 jobs posted)\n- generic_proposal_penalty (no AC.md/Evidence Sprint mention)\n- length_penalty (proposal >300 words)\n+ urgency_boost (urgency score \u00d7 2)\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_d3f50899d20e",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Input:** `{ job_post, proposal, urgency_score }`",
+        "description": "### 1. Confidence Calculation (Detailed)  **Input:** `{ job_post, proposal, urgency_score }`  **Formula breakdown:**  **Base score:** 100  **Penalty 1: Job complexity (word count)** ``` word_count = c",
+        "ko_type": "algorithm",
+        "path": "docs/automation/08_emma_autonomous.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 141,
+        "line_end": 275,
+        "content_length": 3203,
+        "markdown_content": "### 1. Confidence Calculation (Detailed)\n\n**Input:** `{ job_post, proposal, urgency_score }`\n\n**Formula breakdown:**\n\n**Base score:** 100\n\n**Penalty 1: Job complexity (word count)**\n```\nword_count = count_words(job_post.description)\nIF word_count > 200:\n  penalty = floor((word_count - 200) / 50) \u00d7 5\nELSE:\n  penalty = 0\n\nExample:\n- 150 words \u2192 0 penalty\n- 250 words \u2192 floor((250-200)/50) \u00d7 5 = 5 penalty\n- 400 words \u2192 floor((400-200)/50) \u00d7 5 = 20 penalty\n```\n\n**Penalty 2: Questions (indicates uncertainty)**\n```\nquestion_count = count_occurrences(job_post.description, \"?\")\npenalty = question_count \u00d7 5\n\nExample:\n- \"Build a chat widget. Budget: $8K.\" \u2192 0 questions \u2192 0 penalty\n- \"Can you build X? How long? What stack?\" \u2192 3 questions \u2192 15 penalty\n```\n\n**Penalty 3: Vague budget**\n```\nIF \"TBD\" in job_post.budget OR \"negotiable\" in job_post.budget:\n  penalty = 20\nELSE:\n  penalty = 0\n```\n\n**Penalty 4: New/unverified client**\n```\nIF job_post.client_info.jobs_posted < 5:\n  penalty = 15\nELSE:\n  penal"
+      }
+    },
+    {
+      "id": "ko_8d3bc501da21",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "This feature is a **logic layer on top of Feature 4 (Emma RSS Auto-Send)**.",
+        "description": "### Implementation  This feature is a **logic layer on top of Feature 4 (Emma RSS Auto-Send)**.  **File:** `services/emma-rss/confidence.js` (already exists from Feature 4)  **Enhancements:**  Add con",
+        "ko_type": "guide",
+        "path": "docs/automation/08_emma_autonomous.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 276,
+        "line_end": 512,
+        "content_length": 6382,
+        "markdown_content": "### Implementation\n\nThis feature is a **logic layer on top of Feature 4 (Emma RSS Auto-Send)**.\n\n**File:** `services/emma-rss/confidence.js` (already exists from Feature 4)\n\n**Enhancements:**\n\nAdd confidence breakdown for debugging:\n\n```javascript\nexport function calculateConfidence(jobPost, proposal, urgency) {\n  let score = 100;\n  const breakdown = {\n    base: 100,\n    penalties: [],\n    boosts: []\n  };\n\n  // Word count penalty\n  const descWords = jobPost.description.split(/\\s+/).length;\n  if (descWords > 200) {\n    const penalty = Math.floor((descWords - 200) / 50) * 5;\n    score -= penalty;\n    breakdown.penalties.push({ reason: 'long_description', value: -penalty });\n  }\n\n  // Question penalty\n  const questionCount = (jobPost.description.match(/\\?/g) || []).length;\n  if (questionCount > 0) {\n    const penalty = questionCount * 5;\n    score -= penalty;\n    breakdown.penalties.push({ reason: 'questions', value: -penalty });\n  }\n\n  // Vague budget\n  if (/TBD|negotiable/i.test(jobPost"
+      }
+    },
+    {
+      "id": "ko_121b721c7930",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Quality gates must be instant and deterministic. When code is pushed, ",
+        "description": "**Consciousness Principle:** \"Quality gates must be instant and deterministic. When code is pushed, Sofia reviews automatically\u2014before humans even see the PR.\"  **Why:** Manual code review is slow and",
+        "ko_type": "pattern",
+        "path": "docs/automation/09_sofia_auto_review.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 9,
+        "line_end": 16,
+        "content_length": 367,
+        "markdown_content": "**Consciousness Principle:** \"Quality gates must be instant and deterministic. When code is pushed, Sofia reviews automatically\u2014before humans even see the PR.\"\n\n**Why:** Manual code review is slow and inconsistent. Sofia's rules (R-400/R-401: fail-loud, no silent fallbacks) are automatable. Humans should review architecture and logic, not boilerplate patterns.\n\n---"
+      }
+    },
+    {
+      "id": "ko_aab3eda5b378",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow  ``` Developer pushes commit to GitHub   \u2193 GitHub webhook triggers Sofia                \u2192 review.requested@1.0   \u2193 Sofia citizen wakes (Claude Code)   \u2193 Sofia analyzes diff:   - Check f",
+        "ko_type": "spec",
+        "path": "docs/automation/09_sofia_auto_review.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 17,
+        "line_end": 73,
+        "content_length": 1736,
+        "markdown_content": "### Event Flow\n\n```\nDeveloper pushes commit to GitHub\n  \u2193\nGitHub webhook triggers Sofia                \u2192 review.requested@1.0\n  \u2193\nSofia citizen wakes (Claude Code)\n  \u2193\nSofia analyzes diff:\n  - Check for silent fallbacks (try/catch without rethrow/emit)\n  - Check for baseline mutations (AC.md changed without CR tag)\n  - Check for missing tests (new features without test files)\n  - Check for performance regressions (p95 > threshold)\n  \u2193\nSofia outputs verdict:\n  - PASS: No issues found\n  - SOFT_FAIL: Warnings (e.g., missing comments, long functions)\n  - HARD_FAIL: Blockers (e.g., silent fallbacks, AC.md mutation)\n  \u2193\nIF HARD_FAIL:\n  Block merge (GitHub status = failure)      \u2192 review.verdict.hard_fail@1.0\n  Comment on PR with specific violations\nELSE IF SOFT_FAIL:\n  Allow merge but flag warnings               \u2192 review.verdict.soft_fail@1.0\n  Comment on PR with suggestions\nELSE (PASS):\n  Approve merge (GitHub status = success)    \u2192 review.verdict.pass@1.0\n```\n\n### Contract\n\n**Input:**\n- Gi"
+      }
+    },
+    {
+      "id": "ko_300aa699421e",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: Silent fallbacks detected**",
+        "description": "### Acceptance Criteria  **V1: Silent fallbacks detected** ```bash # Test: Push commit with try/catch without rethrow  git add -A git commit -m \"test: silent fallback\" git push origin feature-branch",
+        "ko_type": "validation",
+        "path": "docs/automation/09_sofia_auto_review.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 74,
+        "line_end": 115,
+        "content_length": 854,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: Silent fallbacks detected**\n```bash\n# Test: Push commit with try/catch without rethrow\n\ngit add -A\ngit commit -m \"test: silent fallback\"\ngit push origin feature-branch\n\n# Expected:\n# - GitHub status = failure\n# - PR comment: \"HARD_FAIL: Silent fallback detected in file.ts:42\"\n# - Merge blocked\n# - \u2705 Bad pattern caught before merge\n```\n\n**V2: AC.md mutation blocked**\n```bash\n# Test: Push commit that changes proof/AC.md without change-req_* tag\n\n# Expected:\n# - GitHub status = failure\n# - PR comment: \"HARD_FAIL: AC.md mutated without Change Request tag\"\n# - \u2705 Baseline guard enforced\n```\n\n**V3: Clean code passes**\n```bash\n# Test: Push commit with proper error handling + tests\n\n# Expected:\n# - GitHub status = success\n# - PR comment: \"PASS: No violations found\"\n# - Merge allowed\n# - \u2705 Good code auto-approved\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_a12d6f88521f",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** GitHub webhook \u2192 Sofia citizen \u2192 Policy checks \u2192 GitHub status API",
+        "description": "**Implementation Approach:** GitHub webhook \u2192 Sofia citizen \u2192 Policy checks \u2192 GitHub status API  **Architecture:**  ``` [GitHub Push]   \u2193 (webhook) [Sofia Review Service]   \u2193 (Wake Sofia citizen) [Sof",
+        "ko_type": "mechanism",
+        "path": "docs/automation/09_sofia_auto_review.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 116,
+        "line_end": 152,
+        "content_length": 938,
+        "markdown_content": "**Implementation Approach:** GitHub webhook \u2192 Sofia citizen \u2192 Policy checks \u2192 GitHub status API\n\n**Architecture:**\n\n```\n[GitHub Push]\n  \u2193 (webhook)\n[Sofia Review Service]\n  \u2193 (Wake Sofia citizen)\n[Sofia Citizen (Claude Code)]\n  \u2193 (Read diff, apply policies)\n[Policy Checks]\n  \u251c\u2500 R-400/R-401: Fail-loud enforcement\n  \u251c\u2500 Baseline guard: AC.md mutation check\n  \u251c\u2500 Test coverage: New features have tests\n  \u2514\u2500 Performance: p95 regression check\n  \u2193\n[Verdict: PASS | SOFT_FAIL | HARD_FAIL]\n  \u2193\n[GitHub Commit Status API]\n```\n\n**Why wake citizen:**\n- Sofia can use Grep tool to search for patterns\n- Sofia can Read files to check context\n- Sofia can apply complex policies (not just regex)\n- Sofia can emit detailed explanations (not just \"failed\")\n\n**GitHub Integration:**\n- Webhook: `POST /webhook/github-push` on every push\n- Status API: Update commit status (pending \u2192 success/failure)\n- Comment API: Post PR comment with verdict details\n\n---"
+      }
+    },
+    {
+      "id": "ko_ee66b661c387",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Input:** GitHub webhook payload",
+        "description": "### 1. Webhook Handler  **Input:** GitHub webhook payload  **Steps:** 1. Extract commit SHA, branch name, author 2. Fetch diff via GitHub API: `GET /repos/:owner/:repo/compare/{base}...{head}` 3. Pars",
+        "ko_type": "algorithm",
+        "path": "docs/automation/09_sofia_auto_review.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 153,
+        "line_end": 263,
+        "content_length": 2629,
+        "markdown_content": "### 1. Webhook Handler\n\n**Input:** GitHub webhook payload\n\n**Steps:**\n1. Extract commit SHA, branch name, author\n2. Fetch diff via GitHub API: `GET /repos/:owner/:repo/compare/{base}...{head}`\n3. Parse diff to extract changed files\n4. Emit `review.requested` event\n5. Set GitHub status to \"pending\": `POST /repos/:owner/:repo/statuses/{sha}`\n6. Wake Sofia citizen with diff data\n\n**Output:** Sofia citizen process started\n\n---\n\n### 2. Sofia Policy Checks\n\n**Input:** `{ changed_files[], commit_sha }`\n\n**Check 1: Fail-Loud Enforcement (R-400/R-401)**\n\n**Steps:**\n1. For each changed file ending in `.ts`, `.js`, `.py`:\n   - Grep for pattern: `catch.*\\{[^}]*\\}` (try/catch block)\n   - For each match:\n     - Check if block contains `throw` or `emit` or `console.error`\n     - If not: flag as silent fallback violation\n2. Collect violations: `{ file, line_number, code_snippet }`\n\n**Verdict:**\n- If violations.length > 0: HARD_FAIL\n- Else: Continue to next check\n\n---\n\n**Check 2: Baseline Guard (AC.md "
+      }
+    },
+    {
+      "id": "ko_9b05c7b98b49",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**File Structure:**",
+        "description": "### Implementation  **File Structure:** ``` /services/   sofia-reviewer/     index.js          # GitHub webhook handler     wake-sofia.js     # Sofia citizen spawner     policies/       fail-loud.js",
+        "ko_type": "guide",
+        "path": "docs/automation/09_sofia_auto_review.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 264,
+        "line_end": 535,
+        "content_length": 6950,
+        "markdown_content": "### Implementation\n\n**File Structure:**\n```\n/services/\n  sofia-reviewer/\n    index.js          # GitHub webhook handler\n    wake-sofia.js     # Sofia citizen spawner\n    policies/\n      fail-loud.js    # R-400/R-401 check\n      baseline.js     # AC.md guard\n      coverage.js     # Test coverage check\n      performance.js  # p95 regression check\n```\n\n**1. GitHub Webhook Handler**\n\nFile: `services/sofia-reviewer/index.js`\n```javascript\nimport express from 'express';\nimport { Octokit } from '@octokit/rest';\nimport { wakeSofia } from './wake-sofia.js';\n\nconst app = express();\napp.use(express.json());\n\nconst octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });\n\napp.post('/webhook/github-push', async (req, res) => {\n  const { repository, ref, after: commitSha } = req.body;\n\n  console.log(`[SOFIA] Review requested for ${commitSha}`);\n\n  // Set status to pending\n  await octokit.repos.createCommitStatus({\n    owner: repository.owner.login,\n    repo: repository.name,\n    sha: commitSha,\n  "
+      }
+    },
+    {
+      "id": "ko_7a1b07acb283",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Operations are observable. When systems run, metrics emit continuously",
+        "description": "**Consciousness Principle:** \"Operations are observable. When systems run, metrics emit continuously\u2014surfaced in a single pane of glass for instant health checks.\"  **Why:** Manual metric collection (",
+        "ko_type": "pattern",
+        "path": "docs/automation/10_priya_dashboard.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 9,
+        "line_end": 16,
+        "content_length": 359,
+        "markdown_content": "**Consciousness Principle:** \"Operations are observable. When systems run, metrics emit continuously\u2014surfaced in a single pane of glass for instant health checks.\"\n\n**Why:** Manual metric collection (check logs, count proposals, calculate GO rate) is slow and incomplete. Real-time dashboard enables proactive incident response and data-driven decisions.\n\n---"
+      }
+    },
+    {
+      "id": "ko_f24f9ea151fc",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow  ``` Citizens emit events during operation:   - lead.parsed@1.0 (Emma)   - proposal.sent@1.0 (Emma)   - response.sent@1.0 (Rafael)   - review.verdict@1.0 (Sofia)   - proof.generated@1.0",
+        "ko_type": "spec",
+        "path": "docs/automation/10_priya_dashboard.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 17,
+        "line_end": 70,
+        "content_length": 1438,
+        "markdown_content": "### Event Flow\n\n```\nCitizens emit events during operation:\n  - lead.parsed@1.0 (Emma)\n  - proposal.sent@1.0 (Emma)\n  - response.sent@1.0 (Rafael)\n  - review.verdict@1.0 (Sofia)\n  - proof.generated@1.0 (Maya)\n  - failure.emit@1.0 (any citizen)\n  \u2193\nEvents logged to /logs/events.json (append-only)\n  \u2193\nDashboard service reads events every 5 seconds\n  \u2193\nCalculate metrics:\n  - Acquisition: leads/day, GO rate, proposals sent\n  - Client: responses, CR TAT, testimonials\n  - Delivery: Evidence Sprints, AC green milestones\n  - Quality: verdicts, silent fallbacks, override rate\n  - Proof: entries, homepage CTR, proof generation time\n  - Operations: MTTR, manual starts, service health\n  \u2193\nGenerate static dashboard HTML\n  \u2193\nServe at /dashboard (internal only, password protected)\n```\n\n### Contract\n\n**Input:**\n- Event log: `/logs/events.json` (newline-delimited JSON)\n- Each event: `{ type, timestamp, data }`\n\n**Output:**\n- Dashboard HTML at `/dashboard`\n- Metrics updated every 5 seconds\n- Charts for t"
+      }
+    },
+    {
+      "id": "ko_1b2a6a48aa39",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: Dashboard loads and shows metrics**",
+        "description": "### Acceptance Criteria  **V1: Dashboard loads and shows metrics** ```bash # Test: Open /dashboard in browser  # Expected: # - Dashboard loads <2s # - Shows metrics for all categories (Acquisition, Cl",
+        "ko_type": "validation",
+        "path": "docs/automation/10_priya_dashboard.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 71,
+        "line_end": 109,
+        "content_length": 828,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: Dashboard loads and shows metrics**\n```bash\n# Test: Open /dashboard in browser\n\n# Expected:\n# - Dashboard loads <2s\n# - Shows metrics for all categories (Acquisition, Client, Delivery, Quality, Proof, Ops)\n# - Numbers match event log counts\n# - \u2705 Real-time updates (refresh every 5s)\n```\n\n**V2: Metrics are accurate**\n```bash\n# Test: Verify GO rate calculation\n\ncat logs/events.json | grep \"lead.parsed\" | jq 'select(.data.decision == \"GO\")' | wc -l\n# Compare to dashboard GO rate\n\n# Expected:\n# - Dashboard GO rate matches manual count\n# - \u2705 Calculations are correct\n```\n\n**V3: Alerts trigger for critical metrics**\n```bash\n# Test: Simulate low GO rate (add 10 NO-GO events)\n\n# Expected:\n# - Dashboard shows red alert: \"GO rate below 30%\"\n# - Telegram notification sent\n# - \u2705 Alerts work\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_ffd1fe925049",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** Event log \u2192 Aggregator service \u2192 Static HTML dashboard",
+        "description": "**Implementation Approach:** Event log \u2192 Aggregator service \u2192 Static HTML dashboard  **Architecture:**  ``` [Citizens emit events]   \u2193 [/logs/events.json] (append-only log)   \u2193 (read every 5s) [Dashbo",
+        "ko_type": "mechanism",
+        "path": "docs/automation/10_priya_dashboard.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 110,
+        "line_end": 176,
+        "content_length": 1714,
+        "markdown_content": "**Implementation Approach:** Event log \u2192 Aggregator service \u2192 Static HTML dashboard\n\n**Architecture:**\n\n```\n[Citizens emit events]\n  \u2193\n[/logs/events.json] (append-only log)\n  \u2193 (read every 5s)\n[Dashboard Aggregator Service]\n  \u2193 (calculate metrics)\n[Metrics Cache] (in-memory)\n  \u2193 (generate HTML)\n[/dashboard/index.html] (static file)\n  \u2193 (serve via Next.js)\n[Browser] (auto-refresh every 5s)\n```\n\n**Why static HTML:**\n- No database needed (all data from event log)\n- Fast load times (<500ms)\n- Simple deployment (just HTML + CSS + JS)\n- Can serve even if aggregator is down (last known state)\n\n**Metrics Calculated:**\n\n**Acquisition (Emma):**\n- Leads evaluated today/week/month\n- GO rate (GO leads / total leads)\n- Proposals sent today/week\n- Median time: parse \u2192 draft (SLA: <30min)\n\n**Client (Rafael):**\n- Responses sent today/week\n- Response SLA (<2h target)\n- Change Requests opened/closed\n- CR TAT (time to analyze: target <24h)\n- Testimonials collected this month\n\n**Delivery (Daniel):**\n- Evid"
+      }
+    },
+    {
+      "id": "ko_f33f32594dfd",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Structure:**",
+        "description": "### 1. Event Log Format  **Structure:** ```json {   \"type\": \"lead.parsed@1.0\",   \"timestamp\": \"2025-11-02T14:23:00Z\",   \"data\": {     \"platform\": \"Upwork\",     \"title\": \"Build AI chat widget\",     \"de",
+        "ko_type": "algorithm",
+        "path": "docs/automation/10_priya_dashboard.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 177,
+        "line_end": 285,
+        "content_length": 2752,
+        "markdown_content": "### 1. Event Log Format\n\n**Structure:**\n```json\n{\n  \"type\": \"lead.parsed@1.0\",\n  \"timestamp\": \"2025-11-02T14:23:00Z\",\n  \"data\": {\n    \"platform\": \"Upwork\",\n    \"title\": \"Build AI chat widget\",\n    \"decision\": \"GO\",\n    \"urgency\": 8,\n    \"pain\": 7\n  }\n}\n```\n\n**All event types:**\n- `lead.parsed@1.0`: Emma evaluates lead\n- `proposal.sent@1.0`: Emma sends proposal\n- `response.sent@1.0`: Rafael responds to client\n- `change.requested@1.0`: Rafael opens CR\n- `evidence-sprint.tagged@1.0`: Daniel tags Evidence Sprint\n- `ac.green@1.0`: Daniel tags AC green\n- `review.verdict@1.0`: Sofia issues verdict\n- `proof.generated@1.0`: Maya publishes proof\n- `failure.emit@1.0`: Any citizen reports failure\n\n---\n\n### 2. Metric Calculations\n\n**GO Rate:**\n```\ntotal_leads = count(events where type == \"lead.parsed\")\ngo_leads = count(events where type == \"lead.parsed\" AND data.decision == \"GO\")\ngo_rate = (go_leads / total_leads) \u00d7 100\n```\n\n**Response SLA:**\n```\nresponse_events = filter(events, type == \"response.s"
+      }
+    },
+    {
+      "id": "ko_5a956d808e0a",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**File Structure:**",
+        "description": "### Implementation  **File Structure:** ``` /services/   priya-dashboard/     index.js                # Dashboard aggregator service     calculate-metrics.js    # Metric calculation logic     generate",
+        "ko_type": "guide",
+        "path": "docs/automation/10_priya_dashboard.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 286,
+        "line_end": 649,
+        "content_length": 11441,
+        "markdown_content": "### Implementation\n\n**File Structure:**\n```\n/services/\n  priya-dashboard/\n    index.js                # Dashboard aggregator service\n    calculate-metrics.js    # Metric calculation logic\n    generate-html.js        # HTML template generator\n    alerts.js               # Alert rules engine\n  /public/\n    dashboard/\n      index.html            # Generated dashboard HTML\n      styles.css            # Dashboard styles\n      refresh.js            # Auto-refresh script\n```\n\n**1. Dashboard Aggregator**\n\nFile: `services/priya-dashboard/index.js`\n```javascript\nimport fs from 'fs/promises';\nimport { calculateMetrics } from './calculate-metrics.js';\nimport { generateHTML } from './generate-html.js';\nimport { checkAlerts } from './alerts.js';\n\nconst EVENT_LOG = '/home/mind-protocol/scopelock/logs/events.json';\nconst DASHBOARD_HTML = '/home/mind-protocol/scopelock/public/dashboard/index.html';\nconst REFRESH_INTERVAL = 5000; // 5 seconds\n\nasync function readEvents() {\n  const content = await fs.rea"
+      }
+    },
+    {
+      "id": "ko_8e8ec0bcf21b",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Trust emerges from transparency. When clients can self-serve AC status",
+        "description": "**Consciousness Principle:** \"Trust emerges from transparency. When clients can self-serve AC status checks, they don't need to ask\u2014reducing support burden and increasing confidence.\"  **Why:** Manual",
+        "ko_type": "pattern",
+        "path": "docs/automation/11_client_portal.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 9,
+        "line_end": 16,
+        "content_length": 361,
+        "markdown_content": "**Consciousness Principle:** \"Trust emerges from transparency. When clients can self-serve AC status checks, they don't need to ask\u2014reducing support burden and increasing confidence.\"\n\n**Why:** Manual status updates (\"How's my project going?\") consume Rafael's time. Client portal provides 24/7 transparency: test status, proof entries, milestone timeline.\n\n---"
+      }
+    },
+    {
+      "id": "ko_e9188c1e68cf",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow (When Implemented)  ``` Client logs into portal with unique link   \u2193 Portal loads client-specific data:   - AC.md for current milestone   - Test status (X/Y passing)   - Proof entries (",
+        "ko_type": "spec",
+        "path": "docs/automation/11_client_portal.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 17,
+        "line_end": 303,
+        "content_length": 7246,
+        "markdown_content": "### Event Flow (When Implemented)\n\n```\nClient logs into portal with unique link\n  \u2193\nPortal loads client-specific data:\n  - AC.md for current milestone\n  - Test status (X/Y passing)\n  - Proof entries (Evidence Sprint, AC green)\n  - Change Requests (pending, accepted, delivered)\n  - Timeline (baseline \u2192 sprint \u2192 green)\n  \u2193\nClient views real-time progress\n  \u2193\nClient can:\n  - Download proof artifacts (DEMO.md, DELTA.md)\n  - View test results\n  - See milestone timeline\n  - Request changes (opens CR workflow)\n```\n\n### Contract (Future)\n\n**Input:**\n- Client authentication token (magic link or JWT)\n- Client project ID\n\n**Output:**\n- Portal page with:\n  - AC.md display (current milestone)\n  - Test results dashboard (pass/fail counts)\n  - Proof entries (chronological timeline)\n  - CR status (if any)\n  - Download links (AC.md, DEMO.md, DELTA.md, screenshots)\n\n**Events:**\n- `portal.accessed@1.0 { client, timestamp }`\n- `portal.download@1.0 { client, artifact }`\n- `portal.cr_requested@1.0 { client,"
+      }
+    },
+    {
+      "id": "ko_597c6c5eecd0",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "Consciousness design principle explaining *why* this automation matters.",
+        "description": "Consciousness design principle explaining *why* this automation matters.",
+        "ko_type": "pattern",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 63,
+        "line_end": 65,
+        "content_length": 72,
+        "markdown_content": "Consciousness design principle explaining *why* this automation matters."
+      }
+    },
+    {
+      "id": "ko_2286ccfa308f",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "Event flows, contracts, failure modes - *what should happen*.",
+        "description": "Event flows, contracts, failure modes - *what should happen*.",
+        "ko_type": "spec",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 66,
+        "line_end": 68,
+        "content_length": 61,
+        "markdown_content": "Event flows, contracts, failure modes - *what should happen*."
+      }
+    },
+    {
+      "id": "ko_d369a32358f1",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "Acceptance criteria with bash test commands - *how we verify*.",
+        "description": "Acceptance criteria with bash test commands - *how we verify*.",
+        "ko_type": "validation",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 69,
+        "line_end": 71,
+        "content_length": 62,
+        "markdown_content": "Acceptance criteria with bash test commands - *how we verify*."
+      }
+    },
+    {
+      "id": "ko_10805e9f3d94",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "Implementation approach and architecture - *why this solution*.",
+        "description": "Implementation approach and architecture - *why this solution*.",
+        "ko_type": "mechanism",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 72,
+        "line_end": 74,
+        "content_length": 63,
+        "markdown_content": "Implementation approach and architecture - *why this solution*."
+      }
+    },
+    {
+      "id": "ko_a607bc6e0c59",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "Detailed steps, formulas, calculations - **NO pseudocode** (pseudocode goes in GUIDE only).",
+        "description": "Detailed steps, formulas, calculations - **NO pseudocode** (pseudocode goes in GUIDE only).",
+        "ko_type": "algorithm",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 75,
+        "line_end": 77,
+        "content_length": 91,
+        "markdown_content": "Detailed steps, formulas, calculations - **NO pseudocode** (pseudocode goes in GUIDE only)."
+      }
+    },
+    {
+      "id": "ko_d3a968553dc0",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "Implementation code, function names, pseudocode - *how to build it*.",
+        "description": "Implementation code, function names, pseudocode - *how to build it*.  ---  ## Original Consolidated Spec (Archived)  The original SPEC.md contained Features 1-3 in full detail. These have been extract",
+        "ko_type": "guide",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 78,
+        "line_end": 90,
+        "content_length": 368,
+        "markdown_content": "Implementation code, function names, pseudocode - *how to build it*.\n\n---\n\n## Original Consolidated Spec (Archived)\n\nThe original SPEC.md contained Features 1-3 in full detail. These have been extracted to individual files above. The original content below is kept for reference:\n\n---\n\n# Feature 1: Auto-Regenerate Proof Pages (ARCHIVED - See 01_proof_regeneration.md)"
+      }
+    },
+    {
+      "id": "ko_94bfa5038cf7",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Evidence must be immediately visible. When a milestone is tagged, proo",
+        "description": "**Consciousness Principle:** \"Evidence must be immediately visible. When a milestone is tagged, proof pages regenerate automatically\u2014no human memory required.\"  **Why:** Manual regeneration creates ga",
+        "ko_type": "pattern",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 91,
+        "line_end": 98,
+        "content_length": 354,
+        "markdown_content": "**Consciousness Principle:** \"Evidence must be immediately visible. When a milestone is tagged, proof pages regenerate automatically\u2014no human memory required.\"\n\n**Why:** Manual regeneration creates gaps. If Daniel tags `ac-green_feature_2025-11-05` but forgets to run proofgen, clients see outdated `/proof`. Automation eliminates this failure mode.\n\n---"
+      }
+    },
+    {
+      "id": "ko_070b9262b2a9",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow  ``` git tag ac-green_*           \u2192 tag.pushed@1.0   \u2193 Deployment system detects tag   \u2193 Run proofgen (reads tags)     \u2192 proof.generated@1.0   \u2193 Build Next.js with new proof HTML   \u2193 De",
+        "ko_type": "spec",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 99,
+        "line_end": 133,
+        "content_length": 825,
+        "markdown_content": "### Event Flow\n\n```\ngit tag ac-green_*           \u2192 tag.pushed@1.0\n  \u2193\nDeployment system detects tag\n  \u2193\nRun proofgen (reads tags)     \u2192 proof.generated@1.0\n  \u2193\nBuild Next.js with new proof HTML\n  \u2193\nDeploy to production          \u2192 deployment.complete@1.0\n  \u2193\nClient sees updated /proof\n```\n\n### Contract\n\n**Input:**\n- Git tag matching pattern: `evidence-sprint_*`, `ac-green_*`, `change-*`\n- Tag must reference commit with `/proof/AC.md`, `/proof/DEMO.md`, `/proof/DELTA.md`\n\n**Output:**\n- Updated `public/proof/[tag]/index.html`\n- Updated `public/proof/index.html` (index page)\n- Updated `public/proof/index.json` (homepage teaser)\n- Event emitted: `proof.generated@1.0 { tag, entry_count, timestamp }`\n\n**Failure Mode:**\n- Tag pushed but proof files missing \u2192 Generate page with \"Missing files\" chips, don't crash build\n\n---"
+      }
+    },
+    {
+      "id": "ko_be8644cce246",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: Proof regenerates on tag push**",
+        "description": "### Acceptance Criteria  **V1: Proof regenerates on tag push** ```bash # Test: git tag ac-green_test_2025-11-02 git push origin ac-green_test_2025-11-02  # Wait 2 minutes  # Verify: curl https://scope",
+        "ko_type": "validation",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 134,
+        "line_end": 170,
+        "content_length": 848,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: Proof regenerates on tag push**\n```bash\n# Test:\ngit tag ac-green_test_2025-11-02\ngit push origin ac-green_test_2025-11-02\n\n# Wait 2 minutes\n\n# Verify:\ncurl https://scopelock.mindprotocol.ai/proof/ac-green_test_2025-11-02 | grep \"test\"\n# \u2705 Should return 200 with proof page HTML\n```\n\n**V2: Index updates with new entry**\n```bash\n# Verify:\ncurl https://scopelock.mindprotocol.ai/proof/index.json | jq '.entries | length'\n# \u2705 Should show N+1 entries (previous count + new tag)\n```\n\n**V3: Missing proof files handled gracefully**\n```bash\n# Test:\ngit tag ac-green_no-proof_2025-11-02  # Tag without proof/ files\ngit push origin ac-green_no-proof_2025-11-02\n\n# Verify:\ncurl https://scopelock.mindprotocol.ai/proof/ac-green_no-proof_2025-11-02 | grep \"Missing AC.md\"\n# \u2705 Should show \"Missing files\" chips, not crash\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_3bb6eed026b2",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** Integrate proofgen into Vercel build script",
+        "description": "**Implementation Approach:** Integrate proofgen into Vercel build script  **Current Problem:** GitHub Actions would require separate workflow, adds complexity. Simpler: run proofgen during Vercel buil",
+        "ko_type": "mechanism",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 171,
+        "line_end": 198,
+        "content_length": 844,
+        "markdown_content": "**Implementation Approach:** Integrate proofgen into Vercel build script\n\n**Current Problem:** GitHub Actions would require separate workflow, adds complexity. Simpler: run proofgen during Vercel build.\n\n**Solution:**\n```json\n// package.json\n{\n  \"scripts\": {\n    \"build\": \"npm run proofgen && next build\"\n  }\n}\n```\n\n**Why this works:**\n- Vercel fetches tags automatically (no manual `git fetch --tags` needed on main branch deploys)\n- Proofgen runs before Next.js build \u2192 proof HTML available during static generation\n- No additional CI/CD infrastructure needed\n\n**Current Issue (Resolved):**\n- Vercel's shallow clone doesn't fetch tags on branch deploys\n- **Fix:** We now commit generated proof HTML directly (already implemented)\n- **New approach:** On tag push, trigger Vercel deployment hook with `VERCEL_REGENERATE_PROOF=true` env var\n\n---"
+      }
+    },
+    {
+      "id": "ko_5011b4f84ff9",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Step 1: Detect Tag Push**",
+        "description": "### Step-by-Step Execution  **Step 1: Detect Tag Push** ``` IF git push includes tag matching /^(evidence-sprint|ac-green|change)_/ THEN trigger Vercel deployment webhook ```  **Step 2: Vercel Build H",
+        "ko_type": "algorithm",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 199,
+        "line_end": 246,
+        "content_length": 1204,
+        "markdown_content": "### Step-by-Step Execution\n\n**Step 1: Detect Tag Push**\n```\nIF git push includes tag matching /^(evidence-sprint|ac-green|change)_/\nTHEN trigger Vercel deployment webhook\n```\n\n**Step 2: Vercel Build Hook**\n```\nINPUT: Tag name from git push\nPROCESS:\n  1. Fetch all tags: git fetch --tags --force\n  2. List tags matching pattern:\n     tags = git tag --list 'evidence-sprint_*' 'ac-green_*' 'change-*'\n  3. FOR EACH tag IN tags:\n       entry = resolveTagEntry(tag)\n       IF entry has all files (AC, DEMO, DELTA):\n         entries.push(entry)\n       ELSE:\n         entries.push(entry WITH missing_files flags)\n  4. Sort entries by date DESC\n  5. Generate HTML:\n     - public/proof/index.html (index page)\n     - public/proof/[tag]/index.html (detail pages)\n     - public/proof/index.json (API for homepage)\n  6. Emit event: proof.generated@1.0\nOUTPUT: Generated HTML files in public/proof/\n```\n\n**Step 3: Next.js Build**\n```\nINPUT: Generated proof HTML files\nPROCESS: next build (includes public/ direct"
+      }
+    },
+    {
+      "id": "ko_0b0f941be32f",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**File:** `package.json`",
+        "description": "### Implementation Steps  **File:** `package.json` ```json {   \"scripts\": {     \"build\": \"git fetch --tags 2>/dev/null || true && npm run proofgen && next build\",     \"build:local\": \"git fetch --tags",
+        "ko_type": "guide",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 247,
+        "line_end": 317,
+        "content_length": 1897,
+        "markdown_content": "### Implementation Steps\n\n**File:** `package.json`\n```json\n{\n  \"scripts\": {\n    \"build\": \"git fetch --tags 2>/dev/null || true && npm run proofgen && next build\",\n    \"build:local\": \"git fetch --tags 2>/dev/null || true && npm run proofgen && next build\",\n    \"proofgen\": \"node proofgen/index.js\"\n  }\n}\n```\n\n**Explanation:**\n- `git fetch --tags` ensures tags are available (Vercel fetches branches but not always tags)\n- `|| true` prevents build failure if git fetch errors\n- `npm run proofgen` generates proof HTML before Next.js build\n- `next build` includes generated HTML as static assets\n\n**Testing Locally:**\n```bash\n# Simulate tag push\ngit tag ac-green_local-test_2025-11-02\ngit push origin ac-green_local-test_2025-11-02\n\n# Verify proofgen detects it\nnpm run proofgen\n# Should output: \"[proofgen] Generated 1 entry in public/proof\"\n\n# Build and check\nnpm run build:local\nls public/proof/ac-green_local-test_2025-11-02/\n# Should show: index.html\n\n# Commit generated files (current workflow)\ngi"
+      }
+    },
+    {
+      "id": "ko_f36538f95fe8",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Attention allocation is precious. When a client responds, wake the rel",
+        "description": "**Consciousness Principle:** \"Attention allocation is precious. When a client responds, wake the relevant citizen immediately\u2014don't wait for human to check inbox.\"  **Why:** Checking Upwork inbox ever",
+        "ko_type": "pattern",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 318,
+        "line_end": 325,
+        "content_length": 322,
+        "markdown_content": "**Consciousness Principle:** \"Attention allocation is precious. When a client responds, wake the relevant citizen immediately\u2014don't wait for human to check inbox.\"\n\n**Why:** Checking Upwork inbox every 2 hours is manual labor that a machine can do better. Instant notification enables <2h SLA without human vigilance.\n\n---"
+      }
+    },
+    {
+      "id": "ko_e17294995b76",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow (Option B: Citizen Auto-Reply)  ``` Client sends Upwork message   \u2193 Upwork \u2192 Email notification \u2192 Gmail inbox   \u2193 Gmail filter detects \"Upwork message\"   \u2193 Trigger webhook \u2192 Wake Rafael",
+        "ko_type": "spec",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 326,
+        "line_end": 380,
+        "content_length": 1328,
+        "markdown_content": "### Event Flow (Option B: Citizen Auto-Reply)\n\n```\nClient sends Upwork message\n  \u2193\nUpwork \u2192 Email notification \u2192 Gmail inbox\n  \u2193\nGmail filter detects \"Upwork message\"\n  \u2193\nTrigger webhook \u2192 Wake Rafael citizen\n  \u2193\nRafael (Claude Code instance):\n  - Reads message via email integration\n  - Parses client intent (question, acceptance, negotiation)\n  - Drafts response\n  - Sends to approval queue (Telegram)\n  \u2193\nNicolas reviews in Telegram:\n  - \u2705 Approve \u2192 Rafael sends response via Upwork\n  - \u270f\ufe0f Edit \u2192 Modify + approve\n  - \u274c Reject \u2192 Rafael waits for manual response\n```\n\n### Contract\n\n**Input:**\n- Email from Upwork with subject: \"New message from [Client Name]\"\n- Email body contains: client message + job post link\n\n**Output:**\n- Telegram message to Nicolas:\n  ```\n  \ud83d\udd14 NEW RESPONSE: [Client Name]\n  Job: [Job Title]\n  Message: \"[First 100 chars...]\"\n\n  Rafael's draft response:\n  \"[Proposed response text]\"\n\n  [Approve] [Edit] [Reject]\n  ```\n\n**Events:**\n- `response.detected@1.0 { client, job, mess"
+      }
+    },
+    {
+      "id": "ko_deb4170a7248",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: Email triggers Rafael wake-up**",
+        "description": "### Acceptance Criteria  **V1: Email triggers Rafael wake-up** ```bash # Test: Send test email to Gmail # Subject: \"New message from Test Client on Upwork\" # Body: \"Hi, I'm interested in your proposal",
+        "ko_type": "validation",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 381,
+        "line_end": 423,
+        "content_length": 1157,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: Email triggers Rafael wake-up**\n```bash\n# Test: Send test email to Gmail\n# Subject: \"New message from Test Client on Upwork\"\n# Body: \"Hi, I'm interested in your proposal. Can we schedule a call?\"\n\n# Expected:\n# - Rafael citizen wakes up within 60 seconds\n# - Telegram message appears with draft response\n# - \u2705 Latency <60s from email arrival to Telegram notification\n```\n\n**V2: Rafael drafts appropriate response**\n```bash\n# Test cases:\n# 1. Client asks question \u2192 Rafael drafts answer\n# 2. Client accepts proposal \u2192 Rafael drafts kickoff message\n# 3. Client negotiates price \u2192 Rafael drafts negotiation response\n\n# Verify:\n# - Draft tone matches ScopeLock voice (calm, precise, builder-grade)\n# - No \"excited/passionate/thrilled\" language\n# - References AC.md, Evidence Sprint, or proof\n# \u2705 80%+ of drafts require no edits\n```\n\n**V3: Approval flow works**\n```bash\n# Test: Click [Approve] in Telegram\n\n# Expected:\n# - Rafael sends response via Upwork API\n# - Confirmati"
+      }
+    },
+    {
+      "id": "ko_b5a4d437c811",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** Gmail \u2192 Webhook \u2192 Wake Rafael (Claude Code) \u2192 Telegram approval",
+        "description": "**Implementation Approach:** Gmail \u2192 Webhook \u2192 Wake Rafael (Claude Code) \u2192 Telegram approval  **Architecture:**  ``` [Gmail]   \u2193 (Gmail filter + webhook) [Cloud Function / Webhook Endpoint]   \u2193 (HTTP",
+        "ko_type": "mechanism",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 424,
+        "line_end": 465,
+        "content_length": 927,
+        "markdown_content": "**Implementation Approach:** Gmail \u2192 Webhook \u2192 Wake Rafael (Claude Code) \u2192 Telegram approval\n\n**Architecture:**\n\n```\n[Gmail]\n  \u2193 (Gmail filter + webhook)\n[Cloud Function / Webhook Endpoint]\n  \u2193 (HTTP POST)\n[Rafael Citizen Service]\n  \u2193 (Parse email, draft response)\n[Telegram Bot API]\n  \u2193 (Send approval request)\n[Nicolas (Telegram)]\n  \u2193 (Click button)\n[Rafael Citizen Service]\n  \u2193 (Send via Upwork API)\n[Upwork]\n```\n\n**Why this works:**\n- Gmail filters are reliable (99.9% uptime)\n- Cloud Function triggers instantly (<1s)\n- Rafael citizen runs on-demand (no always-on cost)\n- Telegram for approval (mobile-friendly, instant)\n\n**Alternative (Simpler but Higher Latency):**\n```\n[Gmail]\n  \u2193 (IFTTT Gmail trigger)\n[Telegram Bot]\n  \u2193 (Notification with raw message)\n[Nicolas]\n  \u2193 (Manual: Copy message \u2192 Open Rafael \u2192 Get draft \u2192 Send)\n```\n\n**Recommendation:** Start with IFTTT (2h to set up), upgrade to full automation later\n\n---"
+      }
+    },
+    {
+      "id": "ko_668d599033c7",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Step 1: Email Detection ``` INPUT: Gmail inbox PROCESS:   1. Gmail filter:      from:(@upwork.com)      subject:(New message from)      \u2192 Apply label: \"Upwork/Responses\"      \u2192 Forward to webhook:",
+        "ko_type": "algorithm",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 466,
+        "line_end": 586,
+        "content_length": 3217,
+        "markdown_content": "### Step 1: Email Detection\n```\nINPUT: Gmail inbox\nPROCESS:\n  1. Gmail filter:\n     from:(@upwork.com)\n     subject:(New message from)\n     \u2192 Apply label: \"Upwork/Responses\"\n     \u2192 Forward to webhook: https://api.scopelock.mindprotocol.ai/webhook/upwork-response\nOUTPUT: HTTP POST to webhook with email body\n```\n\n### Step 2: Parse Email\n```\nINPUT: Email body (HTML)\nPROCESS:\n  1. Extract client name: regex(subject, /New message from (.+) on Upwork/)\n  2. Extract message text: parse HTML, find <div class=\"message-body\">\n  3. Extract job title: regex(body, /Re: (.+)/)\n  4. Extract job link: regex(body, /upwork\\.com\\/jobs\\/~[a-z0-9]+/)\nOUTPUT: Structured data { client, message, job_title, job_link }\n```\n\n### Step 3: Wake Rafael Citizen\n```\nINPUT: Structured response data\nPROCESS:\n  1. Load Rafael context:\n     - Read /citizens/rafael/CLAUDE.md (system prompt)\n     - Read /citizens/SYNC.md (recent activity)\n     - Read /citizens/emma/proposals/ (find matching proposal)\n  2. Call Claude API:\n "
+      }
+    },
+    {
+      "id": "ko_4afdfa07c882",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Phase 1: IFTTT (Quick Setup)**",
+        "description": "### Implementation Steps  **Phase 1: IFTTT (Quick Setup)**  1. **Create Gmail Filter:**    - Go to Gmail \u2192 Settings \u2192 Filters    - From: `@upwork.com`    - Subject: `New message from`    - Apply label",
+        "ko_type": "guide",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 587,
+        "line_end": 919,
+        "content_length": 9199,
+        "markdown_content": "### Implementation Steps\n\n**Phase 1: IFTTT (Quick Setup)**\n\n1. **Create Gmail Filter:**\n   - Go to Gmail \u2192 Settings \u2192 Filters\n   - From: `@upwork.com`\n   - Subject: `New message from`\n   - Apply label: `Upwork/Responses`\n\n2. **Set up IFTTT:**\n   - New Applet: Gmail (New email in label) \u2192 Telegram (Send message)\n   - Channel: Your Telegram\n   - Message format:\n     ```\n     \ud83d\udd14 UPWORK RESPONSE\n     From: {{Subject}}\n     {{BodyPlain}}\n\n     [Link to Upwork]\n     ```\n\n3. **Test:**\n   - Send test email to yourself with Upwork-like format\n   - Verify Telegram notification arrives <60s\n\n**Time:** 30 minutes\n**Cost:** Free\n**Benefit:** Instant notifications, no inbox checking\n\n---\n\n**Phase 2: Rafael Auto-Draft (Full Automation)**\n\n**File Structure:**\n```\n/services/\n  rafael-responder/\n    index.js          # Express server for webhook\n    parse-email.js    # Email HTML parser\n    draft-response.js # Claude API caller\n    send-upwork.js    # Upwork API integration\n    telegram-bot.js   # Telegr"
+      }
+    },
+    {
+      "id": "ko_020275b2a177",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Consciousness Principle:** \"Metrics emerge from activity, not from manual logging. When Emma evalu",
+        "description": "**Consciousness Principle:** \"Metrics emerge from activity, not from manual logging. When Emma evaluates a lead, the tracker updates itself\u2014no human bookkeeping.\"  **Why:** Manual tracking creates lag",
+        "ko_type": "pattern",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "PATTERN",
+        "line_start": 920,
+        "line_end": 927,
+        "content_length": 324,
+        "markdown_content": "**Consciousness Principle:** \"Metrics emerge from activity, not from manual logging. When Emma evaluates a lead, the tracker updates itself\u2014no human bookkeeping.\"\n\n**Why:** Manual tracking creates lag and errors. Automated tracking is instant, accurate, and enables analytics (GO rate, conversion rate, best job types).\n\n---"
+      }
+    },
+    {
+      "id": "ko_81f31fc2a58b",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Event Flow  ``` Emma evaluates Upwork post   \u2193 Emma outputs: DECISION: GO/NO-GO + REASON   \u2193 Script captures output       \u2192 lead.evaluated@1.0   \u2193 Append to citizens/emma/leads.json   \u2193 Regenerate",
+        "ko_type": "spec",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "BEHAVIOR_SPEC",
+        "line_start": 928,
+        "line_end": 989,
+        "content_length": 1059,
+        "markdown_content": "### Event Flow\n\n```\nEmma evaluates Upwork post\n  \u2193\nEmma outputs: DECISION: GO/NO-GO + REASON\n  \u2193\nScript captures output       \u2192 lead.evaluated@1.0\n  \u2193\nAppend to citizens/emma/leads.json\n  \u2193\nRegenerate leads-tracker.md from JSON\n  \u2193\nHuman sees updated tracker\n```\n\n### Contract\n\n**Input:**\n- Emma's evaluation output (text)\n  ```\n  DECISION: GO\n  REASON: AI chat widget, verified client, $8K budget\n  Urgency: 8/10\n  Pain: 7/10\n\n  [Proposal text follows...]\n  ```\n\n**Output:**\n- JSON entry:\n  ```json\n  {\n    \"timestamp\": \"2025-11-02T14:23:00Z\",\n    \"platform\": \"Upwork\",\n    \"title\": \"Build AI chat widget\",\n    \"budget\": \"$8,000\",\n    \"decision\": \"GO\",\n    \"reason\": \"AI chat widget, verified client, $8K budget\",\n    \"urgency\": 8,\n    \"pain\": 7,\n    \"sent\": false,\n    \"link\": \"https://upwork.com/jobs/~abc123\"\n  }\n  ```\n\n- Markdown update:\n  ```markdown\n  ## Quick Stats\n  - **Evaluated:** 1/20\n  - **GO decisions:** 1 (100%)\n  - **NO-GO decisions:** 0 (0%)\n  - **Proposals sent:** 0\n  ```\n\n**Even"
+      }
+    },
+    {
+      "id": "ko_704febd8a289",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**V1: Tracker updates automatically**",
+        "description": "### Acceptance Criteria  **V1: Tracker updates automatically** ```bash # Test: Paste job post to Emma, get GO decision  # Expected: # - leads.json appends new entry within 1 second # - leads-tracker.m",
+        "ko_type": "validation",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "VALIDATION",
+        "line_start": 990,
+        "line_end": 1032,
+        "content_length": 875,
+        "markdown_content": "### Acceptance Criteria\n\n**V1: Tracker updates automatically**\n```bash\n# Test: Paste job post to Emma, get GO decision\n\n# Expected:\n# - leads.json appends new entry within 1 second\n# - leads-tracker.md regenerates with updated stats\n# \u2705 Manual markdown editing eliminated\n```\n\n**V2: Stats are accurate**\n```bash\n# Test: Evaluate 10 posts (mix of GO/NO-GO)\n\n# Verify:\ncat citizens/emma/leads-tracker.md | grep \"GO rate\"\n# Expected: \"GO rate: 40%\" (if 4 out of 10 were GO)\n# \u2705 Stats match actual decisions\n```\n\n**V3: Script works with Emma workflow**\n```python\n# Test: Run script after Emma evaluation\n\npython scripts/track-lead.py \\\n  --platform \"Upwork\" \\\n  --title \"Build AI chat\" \\\n  --budget \"$8K\" \\\n  --decision \"GO\" \\\n  --reason \"AI + clear budget\"\n\n# Expected:\n# - leads.json updated\n# - leads-tracker.md regenerated\n# \u2705 Integration with Emma workflow seamless\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_77a218650b64",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**Implementation Approach:** Python script parses Emma output, appends JSON, regenerates markdown",
+        "description": "**Implementation Approach:** Python script parses Emma output, appends JSON, regenerates markdown  **Why Python:** - Simple file I/O - JSON parsing built-in - Easy to integrate with Emma (call after e",
+        "ko_type": "mechanism",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "MECHANISM",
+        "line_start": 1033,
+        "line_end": 1067,
+        "content_length": 601,
+        "markdown_content": "**Implementation Approach:** Python script parses Emma output, appends JSON, regenerates markdown\n\n**Why Python:**\n- Simple file I/O\n- JSON parsing built-in\n- Easy to integrate with Emma (call after evaluation)\n\n**Data Flow:**\n```\nEmma output (text)\n  \u2193\nPython script parses:\n  - Extract DECISION\n  - Extract REASON\n  - Extract Urgency/Pain (if present)\n  \u2193\nAppend to leads.json (newline-delimited JSON)\n  \u2193\nRead all leads.json\n  \u2193\nCalculate stats:\n  - Total evaluated\n  - GO count / NO-GO count\n  - GO rate %\n  - Proposals sent count\n  \u2193\nGenerate markdown table\n  \u2193\nWrite to leads-tracker.md\n```\n\n---"
+      }
+    },
+    {
+      "id": "ko_74682d3c1ca6",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "```",
+        "description": "### Parse Emma Output ``` INPUT: Emma's text output PROCESS:   1. Find line starting with \"DECISION:\"      decision = extract_value(line, /DECISION:\\s*(\\w+)/)   2. Find line starting with \"REASON:\"",
+        "ko_type": "algorithm",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "ALGORITHM",
+        "line_start": 1068,
+        "line_end": 1145,
+        "content_length": 2285,
+        "markdown_content": "### Parse Emma Output\n```\nINPUT: Emma's text output\nPROCESS:\n  1. Find line starting with \"DECISION:\"\n     decision = extract_value(line, /DECISION:\\s*(\\w+)/)\n  2. Find line starting with \"REASON:\"\n     reason = extract_value(line, /REASON:\\s*(.+)/)\n  3. Find \"Urgency:\" and \"Pain:\" (optional)\n     urgency = extract_value(text, /Urgency:\\s*(\\d+)/)\n     pain = extract_value(text, /Pain:\\s*(\\d+)/)\nOUTPUT: { decision, reason, urgency, pain }\n```\n\n### Append to JSON Log\n```\nINPUT: { decision, reason, urgency, pain, title, budget, platform }\nPROCESS:\n  1. Create JSON object:\n     entry = {\n       \"timestamp\": current_iso_time(),\n       \"platform\": platform,\n       \"title\": title,\n       \"budget\": budget,\n       \"decision\": decision,\n       \"reason\": reason,\n       \"urgency\": urgency,\n       \"pain\": pain,\n       \"sent\": false,\n       \"link\": null\n     }\n  2. Append to leads.json as newline-delimited JSON:\n     with open(\"citizens/emma/leads.json\", \"a\") as f:\n       f.write(json.dumps(entry) +"
+      }
+    },
+    {
+      "id": "ko_66a619d2dc4f",
+      "type": "U4_Knowledge_Object",
+      "properties": {
+        "name": "**File:** `scripts/track-lead.py`",
+        "description": "### Implementation  **File:** `scripts/track-lead.py`  ```python #!/usr/bin/env python3 import json import argparse from datetime import datetime from pathlib import Path  # Paths BASE_DIR = Path(__fi",
+        "ko_type": "guide",
+        "path": "docs/automation/SPEC.md",
+        "scope_ref": "scopelock",
+        "level": "L2",
+        "section_type": "GUIDE",
+        "line_start": 1146,
+        "line_end": 1401,
+        "content_length": 7254,
+        "markdown_content": "### Implementation\n\n**File:** `scripts/track-lead.py`\n\n```python\n#!/usr/bin/env python3\nimport json\nimport argparse\nfrom datetime import datetime\nfrom pathlib import Path\n\n# Paths\nBASE_DIR = Path(__file__).parent.parent\nLEADS_JSON = BASE_DIR / \"citizens/emma/leads.json\"\nTRACKER_MD = BASE_DIR / \"citizens/emma/leads-tracker.md\"\n\ndef track_lead(platform, title, budget, decision, reason, sent=False, link=None, urgency=None, pain=None):\n    \"\"\"Track a new lead evaluation\"\"\"\n    entry = {\n        \"timestamp\": datetime.utcnow().isoformat() + \"Z\",\n        \"platform\": platform,\n        \"title\": title,\n        \"budget\": budget,\n        \"decision\": decision,\n        \"reason\": reason,\n        \"urgency\": urgency,\n        \"pain\": pain,\n        \"sent\": sent,\n        \"link\": link\n    }\n\n    # Append to JSON log\n    with open(LEADS_JSON, \"a\") as f:\n        f.write(json.dumps(entry) + \"\\n\")\n\n    # Regenerate markdown\n    regenerate_tracker()\n\ndef regenerate_tracker():\n    \"\"\"Regenerate leads-tracker.md "
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_cfbff46d99df",
+      "target": "ko_f50f1db15143",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_4820696af6e8",
+      "target": "ko_cfbff46d99df",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_d436af42dbc3",
+      "target": "ko_4820696af6e8",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_9d13ff9d2108",
+      "target": "ko_d436af42dbc3",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_6053be45d6b0",
+      "target": "ko_9d13ff9d2108",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_dc2fc52ddb9d",
+      "target": "ko_85541a6e8103",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_06ba952b30da",
+      "target": "ko_dc2fc52ddb9d",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_65fb7d7b2234",
+      "target": "ko_06ba952b30da",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_91979722d713",
+      "target": "ko_65fb7d7b2234",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_7d675631e266",
+      "target": "ko_91979722d713",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_737b06ab74f6",
+      "target": "ko_93f11a35440e",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_5868b6962b05",
+      "target": "ko_737b06ab74f6",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_f7b61fff57af",
+      "target": "ko_5868b6962b05",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_67e509ff8060",
+      "target": "ko_f7b61fff57af",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_8367d90cffcb",
+      "target": "ko_67e509ff8060",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_4f9c3dce1c5c",
+      "target": "ko_8059caca0827",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_0906633abcda",
+      "target": "ko_4f9c3dce1c5c",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_46f283e99744",
+      "target": "ko_0906633abcda",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_2a11897135a0",
+      "target": "ko_46f283e99744",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_dd297026dbf9",
+      "target": "ko_2a11897135a0",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_890da6231f1a",
+      "target": "ko_e6964a23f7b7",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_fcb6d3bfc42a",
+      "target": "ko_890da6231f1a",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_e90f633093d9",
+      "target": "ko_fcb6d3bfc42a",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_63f2bd08f146",
+      "target": "ko_e90f633093d9",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_f976e365df69",
+      "target": "ko_63f2bd08f146",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_cd9cd2a399cc",
+      "target": "ko_cd3c953c54bd",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_ff74df70a0fa",
+      "target": "ko_cd9cd2a399cc",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_f64716317399",
+      "target": "ko_ff74df70a0fa",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_4ca2f708ab58",
+      "target": "ko_f64716317399",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_089ac7f155c5",
+      "target": "ko_4ca2f708ab58",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_39699316f31b",
+      "target": "ko_dee4815a9fd1",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_fc9e36534afc",
+      "target": "ko_39699316f31b",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_52889171173a",
+      "target": "ko_fc9e36534afc",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_ed8d0d95f7cc",
+      "target": "ko_52889171173a",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_e2673718b338",
+      "target": "ko_ed8d0d95f7cc",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_335ebaeb5da7",
+      "target": "ko_bf490f46b8b3",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_480b33f9077b",
+      "target": "ko_335ebaeb5da7",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_73275c21993b",
+      "target": "ko_480b33f9077b",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_d3f50899d20e",
+      "target": "ko_73275c21993b",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_8d3bc501da21",
+      "target": "ko_d3f50899d20e",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_aab3eda5b378",
+      "target": "ko_121b721c7930",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_300aa699421e",
+      "target": "ko_aab3eda5b378",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_a12d6f88521f",
+      "target": "ko_300aa699421e",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_ee66b661c387",
+      "target": "ko_a12d6f88521f",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_9b05c7b98b49",
+      "target": "ko_ee66b661c387",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_f24f9ea151fc",
+      "target": "ko_7a1b07acb283",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_1b2a6a48aa39",
+      "target": "ko_f24f9ea151fc",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_ffd1fe925049",
+      "target": "ko_1b2a6a48aa39",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_f33f32594dfd",
+      "target": "ko_ffd1fe925049",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_5a956d808e0a",
+      "target": "ko_f33f32594dfd",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_e9188c1e68cf",
+      "target": "ko_8e8ec0bcf21b",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_2286ccfa308f",
+      "target": "ko_597c6c5eecd0",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_d369a32358f1",
+      "target": "ko_2286ccfa308f",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_10805e9f3d94",
+      "target": "ko_d369a32358f1",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_a607bc6e0c59",
+      "target": "ko_10805e9f3d94",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_d3a968553dc0",
+      "target": "ko_a607bc6e0c59",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_070b9262b2a9",
+      "target": "ko_94bfa5038cf7",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_be8644cce246",
+      "target": "ko_070b9262b2a9",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_3bb6eed026b2",
+      "target": "ko_be8644cce246",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_5011b4f84ff9",
+      "target": "ko_3bb6eed026b2",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_0b0f941be32f",
+      "target": "ko_5011b4f84ff9",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_e17294995b76",
+      "target": "ko_f36538f95fe8",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_deb4170a7248",
+      "target": "ko_e17294995b76",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_b5a4d437c811",
+      "target": "ko_deb4170a7248",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_668d599033c7",
+      "target": "ko_b5a4d437c811",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_4afdfa07c882",
+      "target": "ko_668d599033c7",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_81f31fc2a58b",
+      "target": "ko_020275b2a177",
+      "properties": {
+        "membership_type": "structural",
+        "role": "behavior_spec_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_704febd8a289",
+      "target": "ko_81f31fc2a58b",
+      "properties": {
+        "membership_type": "structural",
+        "role": "validation_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_77a218650b64",
+      "target": "ko_704febd8a289",
+      "properties": {
+        "membership_type": "structural",
+        "role": "mechanism_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_74682d3c1ca6",
+      "target": "ko_77a218650b64",
+      "properties": {
+        "membership_type": "structural",
+        "role": "algorithm_layer",
+        "scope_ref": "scopelock"
+      }
+    },
+    {
+      "type": "U4_MEMBER_OF",
+      "source": "ko_66a619d2dc4f",
+      "target": "ko_74682d3c1ca6",
+      "properties": {
+        "membership_type": "structural",
+        "role": "guide_layer",
+        "scope_ref": "scopelock"
+      }
+    }
+  ]
+}

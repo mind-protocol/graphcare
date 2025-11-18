@@ -1,0 +1,52 @@
+{
+  "version": "1.0",
+  "generated": "2025-11-16T19:15:17.662283",
+  "mappings": [],
+  "documentation_sections": [
+    {
+      "id": "graphcare@U4_Knowledge_Object:docs/team/DOC_CODE_MAPPING_SPEC.md:embedding-strategy",
+      "path": "docs/team/DOC_CODE_MAPPING_SPEC.md",
+      "section": "embedding-strategy",
+      "section_title": "Embedding Strategy",
+      "section_type": "ALGORITHM",
+      "component": "NODE_EMBEDDING",
+      "implemented_by": [
+        "tools/embed_graph_nodes.py#NodeEmbedder",
+        "tools/enrich_graph_properties.py#add_embeddings"
+      ],
+      "governs": [
+        {
+          "target": "tools/query_semantic.py#semantic_search",
+          "relationship": "ENABLES"
+        }
+      ],
+      "governed_by": [
+        {
+          "target": "docs/strategy/GRAPHCARE_ROLE_SPEC.md#service-3-health-monitoring",
+          "level": "PATTERN"
+        },
+        {
+          "target": "docs/operations/VALIDATION_METRICS_SPEC.md#embedding-coverage",
+          "level": "BEHAVIOR_SPEC"
+        }
+      ]
+    },
+    {
+      "id": "graphcare@U4_Knowledge_Object:docs/team/DOC_CODE_MAPPING_SPEC.md:scheduling-algorithm",
+      "path": "docs/team/DOC_CODE_MAPPING_SPEC.md",
+      "section": "scheduling-algorithm",
+      "section_title": "Scheduling Algorithm",
+      "section_type": "ALGORITHM",
+      "component": "SYNC_SCHEDULER",
+      "implemented_by": [
+        "tools/sync/scheduler.py#SyncScheduler"
+      ],
+      "governs": [
+        {
+          "target": "services/sync/daily_sync.py#run_daily_sync",
+          "relationship": "ENABLES"
+        }
+      ]
+    }
+  ]
+}

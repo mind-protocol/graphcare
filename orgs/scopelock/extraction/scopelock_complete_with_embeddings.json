@@ -1,0 +1,1113 @@
+{
+  "graph_name": "scopelock",
+  "export_timestamp": "2025-11-05T07:45:00Z",
+  "nodes": 221,
+  "note": "Complete graph export including embeddings (221 nodes)",
+  "data": [
+    {
+      "id": 0,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/auth.py::generate_webhook_signature, name: generate_webhook_signature, description: Parameters: payload, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259030246, updated_at: 1762259030246, valid_from: 1762259030246, language: python, visibility: public, embedding: [0.049346, -0.060783, 0.037926, -0.055973, -0.002888, 0.018162, 0.047345, -0.033984, 0.068580, -0.053188, -0.041057, 0.027238, -0.008696, 0.071477, 0.000482, 0.00"
+    },
+    {
+      "id": 1,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/auth.py::verify_webhook_signature, name: verify_webhook_signature, description: Parameters: request, x_webhook_signature, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259030102, updated_at: 1762259030102, valid_from: 1762259030102, language: python, visibility: public, embedding: [0.039638, -0.056751, 0.040385, -0.040002, 0.001650, 0.013545, 0.034557, -0.025147, 0.090360, -0.043100, -0.045192, 0.009229, 0.011758, 0.050033,"
+    },
+    {
+      "id": 2,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/browser_automation.py::UpworkProposalSubmitter, name: UpworkProposalSubmitter, description: Class: UpworkProposalSubmitter, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259027653, updated_at: 1762259027653, valid_from: 1762259027653, language: python, visibility: public, kind: Service, embedding: [0.025280, 0.033323, 0.003600, -0.081969, 0.054945, 0.029993, 0.084853, 0.013803, 0.025061, -0.034759, 0.007991, 0.040075, -0.01"
+    },
+    {
+      "id": 3,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/browser_automation.py::UpworkProposalSubmitter::__init__, name: __init__, description: Parameters: self, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259026944, updated_at: 1762259026944, valid_from: 1762259026944, language: python, visibility: public, embedding: [0.024970, 0.004807, 0.002215, -0.083671, 0.054766, 0.031761, 0.093574, 0.013009, 0.028553, -0.030205, -0.001380, 0.038672, -0.005368, 0.046144, -0.007218, 0.0002"
+    },
+    {
+      "id": 4,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/browser_automation.py::UpworkProposalSubmitter::check_login_status, name: check_login_status, description: Parameters: self, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259027335, updated_at: 1762259027335, valid_from: 1762259027335, language: python, visibility: public, kind: Service, embedding: [0.017285, -0.014508, 0.000819, -0.050844, 0.052040, 0.011522, 0.079117, 0.019615, 0.064223, -0.004474, 0.002085, -0.011153, 0."
+    },
+    {
+      "id": 5,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/browser_automation.py::UpworkProposalSubmitter::login_to_upwork, name: login_to_upwork, description: Parameters: self, email, password, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259027502, updated_at: 1762259027502, valid_from: 1762259027502, language: python, visibility: public, kind: Service, embedding: [0.012729, 0.025038, 0.005151, -0.063605, 0.039745, 0.016081, 0.093987, 0.009612, 0.034206, -0.000247, 0.009954, 0.0"
+    },
+    {
+      "id": 6,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/browser_automation.py::UpworkProposalSubmitter::submit_proposal, name: submit_proposal, description: Parameters: self, job_url, proposal_text, bid_amount, connects_to_use, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259027186, updated_at: 1762259027186, valid_from: 1762259027186, language: python, visibility: public, kind: Service, embedding: [0.049612, -0.000127, -0.004735, -0.076531, 0.034161, 0.006606, 0.058850, 0.0165"
+    },
+    {
+      "id": 7,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/config.py::Config, name: Config, description: Class: Config, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259030643, updated_at: 1762259030643, valid_from: 1762259030643, language: python, visibility: public, embedding: [0.023232, -0.030287, 0.005008, -0.027778, 0.056378, 0.039326, 0.077251, -0.026939, -0.005301, -0.005642, -0.013159, 0.050907, -0.021959, 0.033954, 0.013557, 0.023961, 0.016989, -0.004197, -0.028612, 0.0239"
+    },
+    {
+      "id": 8,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/config.py::Settings, name: Settings, description: Inherits from: BaseSettings, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259030498, updated_at: 1762259030498, valid_from: 1762259030498, language: python, visibility: public, embedding: [0.005376, -0.045402, -0.001866, -0.020672, 0.045019, 0.050970, 0.076232, -0.015121, -0.020976, 0.005472, -0.011380, 0.031234, -0.024770, 0.030513, 0.024967, 0.024751, 0.011033, 0.003565, "
+    },
+    {
+      "id": 9,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/config.py::Settings::validate_required, name: validate_required, description: Parameters: self, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259030381, updated_at: 1762259030381, valid_from: 1762259030381, language: python, visibility: public, embedding: [0.022673, -0.030256, 0.037667, -0.051631, 0.079942, 0.025729, 0.068857, -0.019554, 0.011168, 0.008201, 0.036647, -0.001456, 0.009604, -0.001876, -0.000041, 0.028244, 0.00"
+    },
+    {
+      "id": 10,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::ErrorResponse, name: ErrorResponse, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259023619, updated_at: 1762259023619, valid_from: 1762259023619, language: python, visibility: public, kind: Schema, embedding: [0.034558, 0.004534, 0.042235, -0.037069, 0.083814, 0.063416, 0.061204, 0.028796, 0.036864, -0.025001, 0.009573, 0.045532, -0.030760, 0.003079, 0.006668, 0.012635, "
+    },
+    {
+      "id": 11,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::Event, name: Event, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259022205, updated_at: 1762259022205, valid_from: 1762259022205, language: python, visibility: public, kind: Schema, embedding: [0.013526, 0.004853, 0.029718, -0.016557, 0.039457, 0.045431, 0.059526, 0.002086, 0.035564, -0.017609, -0.000113, 0.050489, -0.031998, 0.041930, -0.002850, 0.010040, 0.039494, 0.01"
+    },
+    {
+      "id": 12,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::EventQuery, name: EventQuery, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259022304, updated_at: 1762259022304, valid_from: 1762259022304, language: python, visibility: public, kind: Schema, embedding: [0.011793, 0.022486, 0.024608, -0.005704, 0.030509, 0.038930, 0.065315, 0.008098, 0.061962, 0.007306, -0.003705, 0.052614, -0.046123, 0.044059, -0.020725, 0.006378, 0.033"
+    },
+    {
+      "id": 13,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::EventQueryResult, name: EventQueryResult, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259022415, updated_at: 1762259022415, valid_from: 1762259022415, language: python, visibility: public, kind: Schema, embedding: [0.014982, 0.027073, 0.031855, -0.005444, 0.031837, 0.039425, 0.052580, 0.006450, 0.053312, 0.001199, -0.000811, 0.044523, -0.030369, 0.026793, -0.013949, 0.0"
+    },
+    {
+      "id": 14,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::HealthCheckResult, name: HealthCheckResult, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259022891, updated_at: 1762259022891, valid_from: 1762259022891, language: python, visibility: public, kind: Schema, embedding: [0.027457, 0.000399, 0.023942, -0.052495, 0.049458, 0.051082, 0.028539, 0.020082, 0.082254, -0.005812, 0.001403, 0.039337, 0.002013, 0.039968, 0.022273, 0.0"
+    },
+    {
+      "id": 15,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::LeadEvaluation, name: LeadEvaluation, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259021836, updated_at: 1762259021836, valid_from: 1762259021836, language: python, visibility: public, kind: Schema, embedding: [0.024236, 0.036203, 0.015933, -0.029904, 0.057407, 0.035565, 0.062924, -0.018281, 0.069591, -0.028736, -0.012641, 0.027298, -0.013773, 0.057018, -0.018240, 0.023"
+    },
+    {
+      "id": 16,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::LeadEvaluation::validate_platform, name: validate_platform, description: Parameters: cls, v, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259021124, updated_at: 1762259021124, valid_from: 1762259021124, language: python, visibility: public, kind: Schema, embedding: [0.003132, -0.025841, 0.009422, -0.051136, 0.084751, 0.009606, 0.052028, -0.000543, 0.043891, -0.016726, 0.025746, 0.028354, 0.017013, 0.042703, -"
+    },
+    {
+      "id": 17,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::LeadStats, name: LeadStats, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259021942, updated_at: 1762259021942, valid_from: 1762259021942, language: python, visibility: public, kind: Schema, embedding: [-0.011132, 0.044767, 0.006497, -0.027087, 0.066885, 0.043281, 0.043966, -0.031004, 0.066789, 0.001348, -0.034835, 0.034870, -0.001939, 0.062849, -0.011853, 0.015597, 0.030"
+    },
+    {
+      "id": 18,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::LeadTrackResult, name: LeadTrackResult, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259022099, updated_at: 1762259022099, valid_from: 1762259022099, language: python, visibility: public, kind: Schema, embedding: [0.020114, 0.049716, 0.017666, -0.029714, 0.044287, 0.038055, 0.036772, -0.009477, 0.056725, -0.029572, -0.005691, 0.035232, -0.011472, 0.058977, -0.001516, 0.0"
+    },
+    {
+      "id": 19,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::ResponseDraft, name: ResponseDraft, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259021622, updated_at: 1762259021622, valid_from: 1762259021622, language: python, visibility: public, kind: Schema, embedding: [0.032327, -0.011951, 0.027329, -0.035944, 0.049210, 0.029218, 0.022170, 0.015605, 0.003275, -0.030516, 0.000572, 0.027569, -0.006042, 0.016551, 0.004171, 0.001591,"
+    },
+    {
+      "id": 20,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::ResponseDraftRequest, name: ResponseDraftRequest, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259021480, updated_at: 1762259021480, valid_from: 1762259021480, language: python, visibility: public, kind: Schema, embedding: [0.051904, -0.001731, 0.035542, -0.025763, 0.041777, 0.029973, 0.018785, 0.011202, 0.014864, -0.021638, -0.012474, 0.013278, 0.010152, 0.002876, -0.00"
+    },
+    {
+      "id": 21,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::ResponseDraftResult, name: ResponseDraftResult, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259021730, updated_at: 1762259021730, valid_from: 1762259021730, language: python, visibility: public, kind: Schema, embedding: [0.035434, -0.002697, 0.032400, -0.033954, 0.045264, 0.031989, 0.018078, 0.017074, 0.001453, -0.030653, -0.001931, 0.019325, 0.003564, 0.004525, -0.0031"
+    },
+    {
+      "id": 22,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::ServiceStatus, name: ServiceStatus, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259022751, updated_at: 1762259022751, valid_from: 1762259022751, language: python, visibility: public, kind: Schema, embedding: [0.007398, 0.000076, 0.029208, -0.032505, 0.052095, 0.050939, 0.063779, -0.014720, 0.029693, -0.021465, -0.008151, 0.028548, -0.012217, 0.040561, 0.014168, 0.048128"
+    },
+    {
+      "id": 23,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::TelegramCallback, name: TelegramCallback, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259022520, updated_at: 1762259022520, valid_from: 1762259022520, language: python, visibility: public, kind: Schema, embedding: [0.029481, -0.029554, 0.020243, -0.038359, 0.013569, 0.046332, 0.045997, -0.023450, 0.071579, -0.014630, -0.028793, 0.026016, -0.016165, 0.014329, 0.002641, 0"
+    },
+    {
+      "id": 24,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::TelegramCallbackResult, name: TelegramCallbackResult, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259022642, updated_at: 1762259022642, valid_from: 1762259022642, language: python, visibility: public, kind: Schema, embedding: [0.025368, -0.026291, 0.020271, -0.040154, 0.014904, 0.048649, 0.036268, -0.019703, 0.066081, -0.016851, -0.021862, 0.024449, -0.008544, 0.010946,"
+    },
+    {
+      "id": 25,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/contracts.py::UpworkResponseWebhook, name: UpworkResponseWebhook, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259021347, updated_at: 1762259021347, valid_from: 1762259021347, language: python, visibility: public, kind: Schema, embedding: [0.029463, 0.001301, 0.038270, -0.052137, 0.008416, 0.029752, 0.075017, 0.004066, 0.066321, -0.060021, -0.047862, 0.040830, -0.020070, 0.051286, 0.0"
+    },
+    {
+      "id": 26,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/database.py::Draft, name: Draft, description: Inherits from: Base, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259029796, updated_at: 1762259029796, valid_from: 1762259029796, language: python, visibility: public, kind: Model, embedding: [0.048007, 0.032245, 0.013518, -0.028439, 0.047436, 0.056127, 0.081526, 0.008408, 0.019481, -0.026382, 0.021357, -0.003254, -0.033763, 0.036979, 0.011118, -0.004631, 0.007131, -0.020455, "
+    },
+    {
+      "id": 27,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/database.py::Draft::__repr__, name: __repr__, description: Parameters: self, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259029155, updated_at: 1762259029155, valid_from: 1762259029155, language: python, visibility: public, embedding: [0.041255, 0.022280, 0.017786, -0.034050, 0.055545, 0.051476, 0.074072, -0.003307, 0.013460, -0.022502, 0.008735, 0.020959, -0.023470, 0.033279, 0.005213, -0.010498, 0.015165, -0.015557, -0."
+    },
+    {
+      "id": 28,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/database.py::Event, name: Event, description: Inherits from: Base, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259029679, updated_at: 1762259029679, valid_from: 1762259029679, language: python, visibility: public, kind: Model, embedding: [0.028871, 0.010789, 0.029134, 0.003956, 0.047913, 0.058597, 0.068440, 0.011867, 0.028195, -0.006445, 0.020053, 0.023363, -0.051157, 0.035444, -0.000893, -0.005220, 0.020715, -0.003916, -"
+    },
+    {
+      "id": 29,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/database.py::Event::__repr__, name: __repr__, description: Parameters: self, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259029062, updated_at: 1762259029062, valid_from: 1762259029062, language: python, visibility: public, embedding: [0.022547, 0.009439, 0.032232, -0.008373, 0.052057, 0.049509, 0.063456, 0.002261, 0.029295, -0.003843, 0.009383, 0.042083, -0.040686, 0.032917, -0.007754, -0.008336, 0.025103, -0.003028, -0."
+    },
+    {
+      "id": 30,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/database.py::Lead, name: Lead, description: Inherits from: Base, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259029916, updated_at: 1762259029916, valid_from: 1762259029916, language: python, visibility: public, kind: Model, embedding: [0.033920, 0.034854, 0.003454, -0.012646, 0.052463, 0.051729, 0.067193, -0.005083, 0.057574, -0.018628, -0.007550, 0.024764, -0.028130, 0.068691, -0.006797, 0.000025, 0.018153, -0.030998, -"
+    },
+    {
+      "id": 31,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/database.py::Lead::__repr__, name: __repr__, description: Parameters: self, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259029281, updated_at: 1762259029281, valid_from: 1762259029281, language: python, visibility: public, embedding: [0.026426, 0.027782, 0.018147, -0.018097, 0.062703, 0.048620, 0.067317, -0.010007, 0.042749, -0.013852, -0.007832, 0.045383, -0.016230, 0.050787, -0.005785, -0.007493, 0.020378, -0.025582, 0."
+    },
+    {
+      "id": 32,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/database.py::get_db, name: get_db, description: Function: get_db, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259029522, updated_at: 1762259029522, valid_from: 1762259029522, language: python, visibility: public, embedding: [0.037596, 0.022013, 0.010285, 0.004523, 0.046893, 0.050154, 0.068911, 0.026689, 0.043907, -0.000539, -0.007943, 0.019423, -0.034836, 0.022607, 0.008136, -0.006338, 0.001771, -0.015927, 0.012548, -0.00"
+    },
+    {
+      "id": 33,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/database.py::init_db, name: init_db, description: Function: init_db, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259029417, updated_at: 1762259029417, valid_from: 1762259029417, language: python, visibility: public, embedding: [0.014357, -0.001283, 0.025948, -0.029085, 0.060511, 0.060318, 0.071691, 0.001603, 0.032696, -0.016061, 0.023884, 0.024502, -0.033293, 0.030001, 0.015104, 0.018796, 0.013517, -0.002876, -0.031659, 0"
+    },
+    {
+      "id": 34,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/main.py::global_exception_handler, name: global_exception_handler, description: Parameters: request, exc, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259028705, updated_at: 1762259028705, valid_from: 1762259028705, language: python, visibility: public, embedding: [0.034782, -0.064118, 0.056365, -0.034289, 0.085116, 0.056413, 0.044539, 0.002103, 0.030188, -0.029618, 0.029141, 0.017220, -0.041946, -0.001091, 0.011045, 0.019"
+    },
+    {
+      "id": 35,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/main.py::health_check, name: health_check, description: Function: health_check, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259028828, updated_at: 1762259028828, valid_from: 1762259028828, language: python, visibility: public, kind: Endpoint, embedding: [0.020786, -0.053118, 0.009506, -0.056563, 0.066614, 0.039973, 0.037546, 0.018442, 0.085279, 0.004464, 0.009972, 0.025643, 0.004022, 0.047194, 0.014661, 0.024611, 0.022676"
+    },
+    {
+      "id": 36,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/main.py::lifespan, name: lifespan, description: Parameters: app, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259028596, updated_at: 1762259028596, valid_from: 1762259028596, language: python, visibility: public, embedding: [0.030607, -0.011948, 0.009744, -0.055502, 0.066637, 0.028548, 0.044685, -0.016718, 0.022891, 0.011388, 0.022243, 0.040117, 0.010306, 0.038039, -0.015626, 0.001375, 0.034039, -0.007444, -0.019990, 0.019"
+    },
+    {
+      "id": 37,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/main.py::root, name: root, description: Function: root, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259028948, updated_at: 1762259028948, valid_from: 1762259028948, language: python, visibility: public, kind: Endpoint, embedding: [0.045325, -0.060086, 0.009259, -0.048269, 0.051533, 0.032018, 0.045914, -0.028983, 0.033672, -0.005572, -0.011558, 0.020993, -0.009517, 0.014777, 0.005113, 0.025521, 0.028678, 0.005078, -0.01430"
+    },
+    {
+      "id": 38,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/runner.py::ClaudeRunner, name: ClaudeRunner, description: Class: ClaudeRunner, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259028483, updated_at: 1762259028483, valid_from: 1762259028483, language: python, visibility: public, kind: Service, embedding: [0.006531, 0.010014, -0.002604, 0.010021, 0.057030, -0.003200, 0.051353, 0.013778, -0.030757, -0.036138, 0.015174, 0.084255, -0.047647, -0.000081, 0.000823, -0.033881, 0.026"
+    },
+    {
+      "id": 39,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/runner.py::ClaudeRunner::__init__, name: __init__, description: Parameters: self, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259027823, updated_at: 1762259027823, valid_from: 1762259027823, language: python, visibility: public, embedding: [-0.007629, -0.013861, 0.005176, -0.000219, 0.046957, 0.002907, 0.059887, 0.008778, -0.030678, -0.036175, 0.023292, 0.081374, -0.038632, 0.012781, -0.012956, -0.012377, 0.027107, -0.006"
+    },
+    {
+      "id": 40,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/runner.py::ClaudeRunner::_run_claude, name: _run_claude, description: Parameters: self, prompt, citizen, received_at, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259028392, updated_at: 1762259028392, valid_from: 1762259028392, language: python, visibility: public, kind: Service, embedding: [0.005413, 0.001663, -0.000367, 0.012388, 0.039177, -0.018980, 0.058398, 0.005545, -0.041247, -0.025804, 0.015494, 0.071847, -0.038707"
+    },
+    {
+      "id": 41,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/runner.py::ClaudeRunner::_setup_credentials, name: _setup_credentials, description: Parameters: self, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259027939, updated_at: 1762259027939, valid_from: 1762259027939, language: python, visibility: public, kind: Service, embedding: [-0.010669, 0.012518, 0.022847, 0.000096, 0.046116, -0.000764, 0.079135, -0.027846, -0.012792, -0.004904, 0.007429, 0.052560, -0.016607, 0.003120, -0."
+    },
+    {
+      "id": 42,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/runner.py::ClaudeRunner::run_emma, name: run_emma, description: Parameters: self, job_post, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259028219, updated_at: 1762259028219, valid_from: 1762259028219, language: python, visibility: public, kind: Service, embedding: [-0.000160, 0.000251, 0.003455, -0.003097, 0.043074, 0.003202, 0.050761, 0.000444, -0.015630, 0.003129, 0.036711, 0.105328, -0.046932, 0.039203, -0.026205, 0.01"
+    },
+    {
+      "id": 43,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/runner.py::ClaudeRunner::run_rafael, name: run_rafael, description: Parameters: self, client, message, job_title, job_link, received_at, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259028091, updated_at: 1762259028091, valid_from: 1762259028091, language: python, visibility: public, kind: Service, embedding: [0.004305, 0.044747, -0.003087, 0.019828, 0.043629, -0.020946, 0.038947, 0.024641, -0.053625, -0.014072, 0.023070, "
+    },
+    {
+      "id": 44,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/telegram.py::TelegramBot, name: TelegramBot, description: Class: TelegramBot, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259026785, updated_at: 1762259026785, valid_from: 1762259026785, language: python, visibility: public, kind: Service, embedding: [0.052222, -0.083885, 0.010927, -0.057124, 0.016712, 0.039414, 0.052399, -0.001256, 0.091001, -0.019416, -0.014027, 0.031420, -0.033243, 0.008230, -0.009333, 0.003153, 0.0044"
+    },
+    {
+      "id": 45,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/telegram.py::TelegramBot::__init__, name: __init__, description: Parameters: self, token, chat_id, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259025528, updated_at: 1762259025528, valid_from: 1762259025528, language: python, visibility: public, embedding: [0.036787, -0.096838, 0.014312, -0.060169, 0.008245, 0.042565, 0.052242, -0.002670, 0.080008, -0.010228, -0.021406, 0.026234, -0.009338, 0.021192, -0.010159, 0.015013, "
+    },
+    {
+      "id": 46,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/telegram.py::TelegramBot::answer_callback, name: answer_callback, description: Parameters: self, callback_id, text, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259025973, updated_at: 1762259025973, valid_from: 1762259025973, language: python, visibility: public, kind: Service, embedding: [0.041210, -0.083887, 0.010061, -0.047743, 0.017467, 0.035324, 0.044052, 0.009618, 0.078419, 0.007623, -0.011742, 0.044764, -0.020964, 0"
+    },
+    {
+      "id": 47,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/telegram.py::TelegramBot::edit_message, name: edit_message, description: Parameters: self, message_id, text, reply_markup, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259025846, updated_at: 1762259025846, valid_from: 1762259025846, language: python, visibility: public, kind: Service, embedding: [0.060550, -0.117793, 0.013795, -0.033275, 0.007894, 0.051215, 0.039186, 0.000495, 0.050369, -0.012705, -0.023164, 0.044899, -0.0"
+    },
+    {
+      "id": 48,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/telegram.py::TelegramBot::send_message, name: send_message, description: Parameters: self, text, reply_markup, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259025661, updated_at: 1762259025661, valid_from: 1762259025661, language: python, visibility: public, kind: Service, embedding: [0.037589, -0.125442, 0.015947, -0.027296, 0.005470, 0.054868, 0.035249, 0.018932, 0.071535, -0.014611, -0.005332, 0.039645, -0.021058, 0.019"
+    },
+    {
+      "id": 49,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/telegram.py::handle_approval, name: handle_approval, description: Parameters: draft_id, action, callback_id, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259026697, updated_at: 1762259026697, valid_from: 1762259026697, language: python, visibility: public, kind: Service, embedding: [0.040661, -0.088072, 0.011108, -0.057915, 0.010022, 0.036164, 0.027046, -0.015905, 0.053503, -0.000904, -0.027472, -0.004283, 0.002532, 0.0472"
+    },
+    {
+      "id": 50,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/telegram.py::handle_proposal_action, name: handle_proposal_action, description: Parameters: proposal_id, action, callback_id, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259026508, updated_at: 1762259026508, valid_from: 1762259026508, language: python, visibility: public, kind: Service, embedding: [0.033273, -0.090425, 0.026926, -0.058608, 0.006315, 0.033452, 0.033007, -0.022210, 0.053204, -0.006262, -0.018300, 0.003712, "
+    },
+    {
+      "id": 51,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/telegram.py::send_draft_notification, name: send_draft_notification, description: Parameters: draft_id, client, draft_text, confidence, received_at, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259026134, updated_at: 1762259026134, valid_from: 1762259026134, language: python, visibility: public, kind: Service, embedding: [0.029347, -0.107038, 0.003486, -0.042213, -0.020014, 0.037266, 0.034204, 0.008659, 0.036487, -0.020904"
+    },
+    {
+      "id": 52,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/telegram.py::send_proposal_notification, name: send_proposal_notification, description: Parameters: proposal_id, job_title, job_url, proposal_text, bid_amount, confidence, client_info, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259026352, updated_at: 1762259026352, valid_from: 1762259026352, language: python, visibility: public, kind: Service, embedding: [0.039121, -0.095114, 0.004974, -0.027263, -0.007126, 0.034174, 0.0"
+    },
+    {
+      "id": 53,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/webhooks.py::CloudMailinWebhook, name: CloudMailinWebhook, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259025240, updated_at: 1762259025240, valid_from: 1762259025240, language: python, visibility: public, kind: Endpoint, embedding: [0.048147, -0.027362, 0.017756, -0.003223, 0.000021, 0.049158, 0.088042, -0.039187, 0.103534, -0.018935, -0.051180, 0.028652, -0.029620, 0.072119, -0.003"
+    },
+    {
+      "id": 54,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/webhooks.py::TelegramUpdate, name: TelegramUpdate, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259025101, updated_at: 1762259025101, valid_from: 1762259025101, language: python, visibility: public, kind: Endpoint, embedding: [0.043744, -0.064562, 0.016445, -0.053754, 0.002968, 0.033318, 0.037664, -0.012648, 0.071808, -0.040265, -0.047181, 0.026704, -0.007633, 0.038548, -0.006542, 0.0"
+    },
+    {
+      "id": 55,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/webhooks.py::UpworkWebhookRequest, name: UpworkWebhookRequest, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259024932, updated_at: 1762259024932, valid_from: 1762259024932, language: python, visibility: public, kind: Endpoint, embedding: [0.027595, 0.004823, 0.042289, -0.039165, 0.006349, 0.026236, 0.077520, 0.005590, 0.066850, -0.048225, -0.050644, 0.040211, -0.020555, 0.050648, 0.00"
+    },
+    {
+      "id": 56,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/webhooks.py::VollnaWebhook, name: VollnaWebhook, description: Inherits from: BaseModel, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259025390, updated_at: 1762259025390, valid_from: 1762259025390, language: python, visibility: public, kind: Endpoint, embedding: [0.057254, -0.054185, 0.025034, -0.042075, 0.001874, 0.010002, 0.073391, -0.032309, 0.050374, -0.063144, -0.058470, 0.069480, -0.027743, 0.061964, 0.022627, -0.003"
+    },
+    {
+      "id": 57,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/webhooks.py::cloudmailin_webhook, name: cloudmailin_webhook, description: Parameters: request, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259023836, updated_at: 1762259023836, valid_from: 1762259023836, language: python, visibility: public, kind: Endpoint, embedding: [0.054385, -0.065611, 0.008765, -0.000519, -0.011707, 0.045906, 0.061257, -0.046247, 0.104261, 0.001082, -0.042959, 0.024727, -0.011713, 0.069121, -0.025207"
+    },
+    {
+      "id": 58,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/webhooks.py::notify_draft, name: notify_draft, description: Parameters: draft_id, client, draft_text, confidence, received_at, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259024113, updated_at: 1762259024113, valid_from: 1762259024113, language: python, visibility: public, kind: Endpoint, embedding: [0.055187, -0.051226, 0.012177, -0.065711, -0.003569, 0.015251, 0.074449, -0.001123, 0.050582, -0.044792, -0.039570, 0.00035"
+    },
+    {
+      "id": 59,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/webhooks.py::notify_proposal, name: notify_proposal, description: Parameters: proposal_id, job_title, job_url, proposal_text, bid_amount, confidence, client_spent, client_rating, client_hires, client_payment_verified, client_country, client_rank, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259024426, updated_at: 1762259024426, valid_from: 1762259024426, language: python, visibility: public, kind: Endpoint, embedding: [0.0"
+    },
+    {
+      "id": 60,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/webhooks.py::process_vollna_project, name: process_vollna_project, description: Parameters: project, payload, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259024747, updated_at: 1762259024747, valid_from: 1762259024747, language: python, visibility: public, kind: Endpoint, embedding: [0.049790, -0.055395, 0.016483, -0.051317, 0.024131, 0.018061, 0.052570, -0.036585, 0.037004, -0.037739, -0.026906, 0.071685, -0.020935, 0.09"
+    },
+    {
+      "id": 61,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/webhooks.py::telegram_webhook, name: telegram_webhook, description: Parameters: update, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259023952, updated_at: 1762259023952, valid_from: 1762259023952, language: python, visibility: public, kind: Endpoint, embedding: [0.042189, -0.106554, 0.012259, -0.057773, -0.014358, 0.036998, 0.035145, -0.015248, 0.081728, -0.032740, -0.057855, 0.012290, -0.004507, 0.034742, -0.019300, -0.0"
+    },
+    {
+      "id": 62,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/webhooks.py::upwork_webhook, name: upwork_webhook, description: Parameters: request, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259023720, updated_at: 1762259023720, valid_from: 1762259023720, language: python, visibility: public, kind: Endpoint, embedding: [0.031207, -0.034532, 0.028545, -0.052453, -0.000332, 0.012888, 0.069238, 0.001888, 0.059723, -0.033553, -0.042775, 0.055894, -0.020710, 0.055145, -0.009520, -0.00130"
+    },
+    {
+      "id": 63,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/backend/app/webhooks.py::vollna_webhook, name: vollna_webhook, description: Parameters: request, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762259024571, updated_at: 1762259024571, valid_from: 1762259024571, language: python, visibility: public, kind: Endpoint, embedding: [0.068933, -0.082786, 0.017034, -0.030168, 0.018416, 0.007406, 0.051537, -0.036509, 0.050095, -0.035623, -0.046455, 0.039424, -0.019766, 0.070921, -0.005745, -0.00942"
+    },
+    {
+      "id": 64,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/about/page.tsx::AboutPage, name: AboutPage, description: Function: AboutPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270831426, updated_at: 1762270831426, valid_from: 1762270831426, language: typescript, visibility: public, embedding: [0.065925, -0.049682, -0.016685, -0.042745, 0.040748, 0.020513, 0.022317, 0.011793, -0.010544, -0.003757, 0.022839, 0.013809, 0.054876, 0.049189, 0.008570, -0.044999, 0.019483, 0.069486, "
+    },
+    {
+      "id": 65,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/api/contact/route.ts::POST, name: POST, description: Function: POST(request), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270814480, updated_at: 1762270814480, valid_from: 1762270814480, language: typescript, visibility: public, embedding: [0.024368, -0.011244, -0.007904, -0.032931, 0.033815, -0.017235, 0.024759, -0.017874, 0.027944, 0.012903, -0.022064, 0.034784, 0.050204, 0.051999, 0.014608, 0.003559, -0.023816, 0.017406, 0"
+    },
+    {
+      "id": 66,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/change-control-without-scope-creep/DecisionTree.tsx::DecisionTree, name: DecisionTree, description: Function: DecisionTree(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270833833, updated_at: 1762270833833, valid_from: 1762270833833, language: typescript, visibility: public, embedding: [0.018867, 0.004020, -0.035111, -0.071569, 0.049946, -0.015649, -0.011053, -0.030413, -0.040789, -0.009426, 0.001806, 0.106141, 0.018269"
+    },
+    {
+      "id": 67,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/change-control-without-scope-creep/DecisionTree.tsx::handleExampleSelect, name: handleExampleSelect, description: Function: handleExampleSelect(example), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270834226, updated_at: 1762270834226, valid_from: 1762270834226, language: typescript, visibility: public, embedding: [0.021270, -0.010038, -0.014557, -0.079228, 0.049479, -0.009129, -0.004134, -0.032079, -0.029446, -0.011492,"
+    },
+    {
+      "id": 68,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/change-control-without-scope-creep/DecisionTree.tsx::handleNext, name: handleNext, description: Function: handleNext(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270834951, updated_at: 1762270834951, valid_from: 1762270834951, language: typescript, visibility: public, embedding: [0.025526, 0.013536, -0.013943, -0.070075, 0.039671, -0.007660, -0.001862, -0.030685, -0.027769, -0.005332, 0.004491, 0.096335, 0.015709, 0.05"
+    },
+    {
+      "id": 69,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/change-control-without-scope-creep/DecisionTree.tsx::handleReset, name: handleReset, description: Function: handleReset(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270835269, updated_at: 1762270835269, valid_from: 1762270835269, language: typescript, visibility: public, embedding: [0.028785, 0.005013, -0.017542, -0.060075, 0.042849, -0.010421, 0.009224, -0.018580, -0.013551, -0.012994, -0.004195, 0.095330, 0.008796, 0"
+    },
+    {
+      "id": 70,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/change-control-without-scope-creep/page.tsx::ChangeControlPage, name: ChangeControlPage, description: Function: ChangeControlPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270833187, updated_at: 1762270833187, valid_from: 1762270833187, language: typescript, visibility: public, embedding: [0.036260, -0.024569, -0.020382, -0.052803, 0.013525, 0.002612, 0.051481, -0.001714, -0.003390, -0.003926, -0.011856, 0.058164, 0"
+    },
+    {
+      "id": 71,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/fixed-price-vs-hourly-why-outcome-based-pricing-works/PricingCalculator.tsx::PricingCalculator, name: PricingCalculator, description: Function: PricingCalculator(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270832530, updated_at: 1762270832530, valid_from: 1762270832530, language: typescript, visibility: public, embedding: [-0.012695, -0.024749, -0.032918, -0.050017, -0.001072, 0.008152, 0.055348, -0.024923, -0.062899,"
+    },
+    {
+      "id": 72,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/fixed-price-vs-hourly-why-outcome-based-pricing-works/page.tsx::PricingModelsPage, name: PricingModelsPage, description: Function: PricingModelsPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270832900, updated_at: 1762270832900, valid_from: 1762270832900, language: typescript, visibility: public, embedding: [0.001670, -0.002882, -0.030295, -0.050546, 0.024550, 0.014831, 0.057180, -0.026463, -0.060769, -0.023003, -0."
+    },
+    {
+      "id": 73,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/how-we-deliver-in-1-week-what-agencies-quote-in-8/page.tsx::AgencySpeedPage, name: AgencySpeedPage, description: Function: AgencySpeedPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270836086, updated_at: 1762270836086, valid_from: 1762270836086, language: typescript, visibility: public, embedding: [0.032476, -0.000959, -0.024333, -0.032059, 0.048428, 0.021525, 0.023290, 0.011190, -0.005448, -0.007037, 0.010599, 0.05"
+    },
+    {
+      "id": 74,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/how-we-use-ai-citizens-not-chatgpt-wrappers/page.tsx::AICitizensPage, name: AICitizensPage, description: Function: AICitizensPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270835739, updated_at: 1762270835739, valid_from: 1762270835739, language: typescript, visibility: public, embedding: [0.020037, -0.038265, -0.031370, -0.023629, 0.025588, 0.005175, 0.083809, 0.018083, 0.067635, -0.007490, -0.014672, 0.021700, 0.0"
+    },
+    {
+      "id": 75,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/AnimatedMetricsGrid.tsx::AnimatedMetric, name: AnimatedMetric, description: Function: AnimatedMetric({ label, value, suffix, duration, decimals), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270846745, updated_at: 1762270846745, valid_from: 1762270846745, language: typescript, visibility: public, embedding: [-0.027639, -0.016941, -0.022179, -0.020338, 0.026329, -0.008392, 0.060198, 0.027291, -0.0"
+    },
+    {
+      "id": 76,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/AnimatedMetricsGrid.tsx::AnimatedMetricsGrid, name: AnimatedMetricsGrid, description: Function: AnimatedMetricsGrid(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270847173, updated_at: 1762270847173, valid_from: 1762270847173, language: typescript, visibility: public, embedding: [-0.012621, -0.010331, -0.011978, -0.021853, 0.027909, 0.003196, 0.069213, 0.023521, -0.019524, -0.045511, 0.005610, "
+    },
+    {
+      "id": 77,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/AnimatedMetricsGrid.tsx::animate, name: animate, description: Function: animate(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270846955, updated_at: 1762270846955, valid_from: 1762270846955, language: typescript, visibility: public, embedding: [-0.009661, -0.016693, -0.007868, -0.023594, 0.029719, 0.006481, 0.074992, 0.023915, -0.005537, -0.033728, 0.002734, 0.056620, -0.005870, 0.064410, 0.012"
+    },
+    {
+      "id": 78,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/ArchitectureDiagram.tsx::ArchitectureDiagram, name: ArchitectureDiagram, description: Function: ArchitectureDiagram(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270846475, updated_at: 1762270846475, valid_from: 1762270846475, language: typescript, visibility: public, embedding: [-0.024376, -0.011251, -0.038038, -0.019404, 0.028218, 0.013943, 0.050591, -0.031931, 0.030624, -0.016983, -0.013763,"
+    },
+    {
+      "id": 79,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/EnergyDiffusionVisualization.tsx::EnergyDiffusionVisualization, name: EnergyDiffusionVisualization, description: Function: EnergyDiffusionVisualization(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270840392, updated_at: 1762270840392, valid_from: 1762270840392, language: typescript, visibility: public, embedding: [-0.020217, -0.035571, -0.040520, -0.015592, 0.037401, -0.002138, 0.022334, -0.04"
+    },
+    {
+      "id": 80,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/EnergyDiffusionVisualization.tsx::animate, name: animate, description: Function: animate(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270841414, updated_at: 1762270841414, valid_from: 1762270841414, language: typescript, visibility: public, embedding: [-0.024009, -0.026215, -0.019852, -0.021042, 0.035593, -0.000542, 0.054828, 0.005773, -0.012479, -0.016402, 0.012658, 0.078077, -0.010996, 0.059"
+    },
+    {
+      "id": 81,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/EnergyDiffusionVisualization.tsx::initNodes, name: initNodes, description: Function: initNodes(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270841006, updated_at: 1762270841006, valid_from: 1762270841006, language: typescript, visibility: public, embedding: [-0.025247, -0.053043, -0.027517, -0.027451, 0.048256, 0.002590, 0.032892, -0.032749, -0.020888, 0.004417, 0.016671, 0.085114, 0.022780, 0"
+    },
+    {
+      "id": 82,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/EnergyDiffusionVisualization.tsx::resetDiffusion, name: resetDiffusion, description: Function: resetDiffusion(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270842282, updated_at: 1762270842282, valid_from: 1762270842282, language: typescript, visibility: public, embedding: [-0.041685, -0.047162, -0.041884, -0.016885, 0.016914, -0.032089, 0.015976, -0.027589, -0.028152, 0.016797, 0.005594, 0.079"
+    },
+    {
+      "id": 83,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/EnergyDiffusionVisualization.tsx::resizeCanvas, name: resizeCanvas, description: Function: resizeCanvas(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270840747, updated_at: 1762270840747, valid_from: 1762270840747, language: typescript, visibility: public, embedding: [-0.022083, -0.062036, -0.047279, -0.034527, 0.021577, -0.006115, 0.037898, 0.001972, -0.020713, 0.010529, 0.011553, 0.057321, 0."
+    },
+    {
+      "id": 84,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/EnergyDiffusionVisualization.tsx::startDiffusion, name: startDiffusion, description: Function: startDiffusion(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270841907, updated_at: 1762270841907, valid_from: 1762270841907, language: typescript, visibility: public, embedding: [-0.026716, -0.038178, -0.036652, -0.031929, 0.020872, -0.011347, 0.037500, -0.046977, -0.021059, -0.003303, 0.022748, 0.08"
+    },
+    {
+      "id": 85,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/ParticleNetworkHero.tsx::ParticleNetworkHero, name: ParticleNetworkHero, description: Function: ParticleNetworkHero(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270842855, updated_at: 1762270842855, valid_from: 1762270842855, language: typescript, visibility: public, embedding: [-0.010169, -0.010027, -0.009144, -0.010351, 0.043758, -0.041363, 0.072675, -0.029551, 0.027343, 0.004462, 0.006140, "
+    },
+    {
+      "id": 86,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/ParticleNetworkHero.tsx::animate, name: animate, description: Function: animate(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270843757, updated_at: 1762270843757, valid_from: 1762270843757, language: typescript, visibility: public, embedding: [-0.023513, -0.007452, 0.001600, -0.014885, 0.056290, -0.016691, 0.079844, 0.005804, 0.009613, -0.003268, 0.016032, 0.042733, -0.017606, 0.086715, 0.0104"
+    },
+    {
+      "id": 87,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/ParticleNetworkHero.tsx::initParticles, name: initParticles, description: Function: initParticles(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270843571, updated_at: 1762270843571, valid_from: 1762270843571, language: typescript, visibility: public, embedding: [-0.023883, -0.048284, 0.002352, -0.027022, 0.059602, -0.006679, 0.048168, -0.019595, 0.022130, 0.003010, 0.036759, 0.031079, 0.007562,"
+    },
+    {
+      "id": 88,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/ParticleNetworkHero.tsx::resizeCanvas, name: resizeCanvas, description: Function: resizeCanvas(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270843293, updated_at: 1762270843293, valid_from: 1762270843293, language: typescript, visibility: public, embedding: [-0.025716, -0.046394, -0.029734, -0.021687, 0.041863, -0.033605, 0.047863, 0.011058, -0.000768, 0.032521, 0.027948, 0.023997, 0.020705, 0"
+    },
+    {
+      "id": 89,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/components/TimelineSection.tsx::TimelineSection, name: TimelineSection, description: Function: TimelineSection(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270847416, updated_at: 1762270847416, valid_from: 1762270847416, language: typescript, visibility: public, embedding: [0.008231, 0.016174, -0.029154, -0.023868, 0.001046, 0.005830, 0.060109, -0.002603, 0.008208, 0.012129, 0.040913, 0.043245, 0.046207,"
+    },
+    {
+      "id": 90,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/la-serenissima/page.tsx::LaSerenissimaPage, name: LaSerenissimaPage, description: Function: LaSerenissimaPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270838628, updated_at: 1762270838628, valid_from: 1762270838628, language: typescript, visibility: public, embedding: [0.057923, -0.068805, -0.009270, -0.025265, 0.000405, -0.000944, 0.064629, 0.016081, -0.044153, -0.016622, -0.035557, 0.095800, 0.025681, 0.043556, -"
+    },
+    {
+      "id": 91,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/page.tsx::BlogPage, name: BlogPage, description: Function: BlogPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270832209, updated_at: 1762270832209, valid_from: 1762270832209, language: typescript, visibility: public, embedding: [0.050806, -0.027937, -0.004502, -0.066380, 0.054868, 0.016780, 0.063999, 0.013108, 0.036788, -0.021413, 0.008155, 0.049308, 0.018328, 0.053236, 0.016183, -0.033092, 0.002650, 0.042870, -0.05"
+    },
+    {
+      "id": 92,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/the-evidence-sprint-prove-value-in-90-seconds/page.tsx::EvidenceSprintPage, name: EvidenceSprintPage, description: Function: EvidenceSprintPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270836450, updated_at: 1762270836450, valid_from: 1762270836450, language: typescript, visibility: public, embedding: [0.011815, 0.000136, -0.022941, -0.015587, -0.032470, 0.002768, 0.032616, -0.020500, -0.036861, -0.001356, 0.051022"
+    },
+    {
+      "id": 93,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/blog/why-acceptance-criteria-beat-time-estimates/page.tsx::WhyAcceptanceCriteriaPage, name: WhyAcceptanceCriteriaPage, description: Function: WhyAcceptanceCriteriaPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270837096, updated_at: 1762270837096, valid_from: 1762270837096, language: typescript, visibility: public, embedding: [0.048400, 0.018320, -0.018882, -0.022297, 0.020384, 0.027349, 0.024566, -0.012789, -0.002589, 0"
+    },
+    {
+      "id": 94,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/case-studies/page.tsx::CaseStudiesPage, name: CaseStudiesPage, description: Function: CaseStudiesPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270847615, updated_at: 1762270847615, valid_from: 1762270847615, language: typescript, visibility: public, embedding: [0.022955, -0.023355, -0.026474, -0.033160, 0.005898, 0.018854, 0.076112, -0.007121, -0.027038, -0.040048, 0.015287, 0.048912, 0.040478, 0.051271, 0.008259, 0.000"
+    },
+    {
+      "id": 95,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/contact/page.tsx::ContactPage, name: ContactPage, description: Function: ContactPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270831049, updated_at: 1762270831049, valid_from: 1762270831049, language: typescript, visibility: public, embedding: [0.046865, -0.070467, -0.010166, -0.021638, 0.049913, 0.010995, 0.068977, -0.016795, 0.056655, 0.015469, -0.005873, -0.001279, 0.038534, 0.042911, 0.024738, -0.015202, -0.019433, "
+    },
+    {
+      "id": 96,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/faq/page.tsx::FAQPage, name: FAQPage, description: Function: FAQPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270830861, updated_at: 1762270830861, valid_from: 1762270830861, language: typescript, visibility: public, embedding: [0.037949, -0.056737, -0.027624, -0.013906, 0.036249, 0.042273, 0.050422, -0.004847, 0.006841, -0.008741, -0.012925, 0.010144, 0.047551, 0.042068, 0.010936, -0.009750, 0.009040, 0.020119, -0.0389"
+    },
+    {
+      "id": 97,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/not-found.tsx::NotFound, name: NotFound, description: Function: NotFound(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270826924, updated_at: 1762270826924, valid_from: 1762270826924, language: typescript, visibility: public, embedding: [0.017445, -0.008982, 0.000412, -0.073220, 0.068461, 0.010519, 0.045915, -0.018465, 0.025910, -0.002569, -0.016550, 0.033324, 0.030027, 0.011862, 0.016659, 0.038444, 0.001191, 0.038850, -0.01"
+    },
+    {
+      "id": 98,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/page.tsx::HomePage, name: HomePage, description: Function: HomePage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270825577, updated_at: 1762270825577, valid_from: 1762270825577, language: typescript, visibility: public, embedding: [0.043178, -0.071515, -0.017251, -0.068652, 0.041684, 0.008875, 0.057033, -0.007335, 0.027342, -0.022508, -0.018848, 0.033407, 0.045531, 0.066229, 0.023992, -0.003049, -0.001928, 0.054808, -0.0195"
+    },
+    {
+      "id": 99,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/pricing/page.tsx::PricingPage, name: PricingPage, description: Function: PricingPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270831986, updated_at: 1762270831986, valid_from: 1762270831986, language: typescript, visibility: public, embedding: [0.013795, -0.066498, -0.018094, -0.024522, 0.027956, 0.023554, 0.044775, -0.017212, -0.065516, -0.026073, -0.039424, 0.056848, 0.040165, 0.082867, -0.017182, -0.054359, -0.005840"
+    },
+    {
+      "id": 100,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/privacy/page.tsx::PrivacyPage, name: PrivacyPage, description: Function: PrivacyPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270831811, updated_at: 1762270831811, valid_from: 1762270831811, language: typescript, visibility: public, embedding: [0.042420, 0.003431, -0.033138, -0.042168, 0.019037, -0.007042, 0.065733, -0.024785, 0.037258, 0.004504, -0.025237, -0.000729, 0.042444, 0.033270, 0.003986, -0.019834, 0.008209, 0"
+    },
+    {
+      "id": 101,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/process/page.tsx::ProcessPage, name: ProcessPage, description: Function: ProcessPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270831246, updated_at: 1762270831246, valid_from: 1762270831246, language: typescript, visibility: public, embedding: [0.016270, -0.056983, -0.018856, -0.057314, 0.021824, -0.002287, 0.055670, -0.004853, -0.009100, -0.017504, 0.004528, 0.046848, 0.034771, 0.067506, 0.001180, -0.035896, -0.000857,"
+    },
+    {
+      "id": 102,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/proof/[tag]/page.tsx::ProofDetailPage, name: ProofDetailPage, description: Function: ProofDetailPage({ params }), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270830610, updated_at: 1762270830610, valid_from: 1762270830610, language: typescript, visibility: public, embedding: [0.012486, -0.032651, -0.016446, -0.009962, -0.002039, 0.005192, 0.034808, 0.018027, 0.032166, 0.013615, 0.049267, 0.092191, 0.043667, 0.042393, 0.031156"
+    },
+    {
+      "id": 103,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/proof/[tag]/page.tsx::generateMetadata, name: generateMetadata, description: Function: generateMetadata({ params }), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270830265, updated_at: 1762270830265, valid_from: 1762270830265, language: typescript, visibility: public, embedding: [0.011619, -0.015770, -0.024430, -0.025689, 0.029337, -0.006653, 0.034719, 0.003117, 0.010344, -0.001625, 0.007592, 0.086458, 0.029240, 0.056557, 0.01"
+    },
+    {
+      "id": 104,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/proof/[tag]/page.tsx::generateStaticParams, name: generateStaticParams, description: Function: generateStaticParams(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270829605, updated_at: 1762270829605, valid_from: 1762270829605, language: typescript, visibility: public, embedding: [0.010843, -0.011983, -0.014746, -0.020449, 0.020613, -0.003795, 0.035448, 0.018247, 0.012580, -0.001571, 0.012179, 0.093447, 0.034106, 0.029036, 0."
+    },
+    {
+      "id": 105,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/proof/[tag]/page.tsx::getProofEntries, name: getProofEntries, description: Function: getProofEntries() -> Promise<ProofEntry[]>, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270828720, updated_at: 1762270828720, valid_from: 1762270828720, language: typescript, visibility: public, embedding: [0.013250, 0.023133, -0.007665, -0.004932, -0.005536, -0.007217, 0.027387, -0.011349, 0.035029, 0.022222, 0.014975, 0.071913, 0.037009, 0."
+    },
+    {
+      "id": 106,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/proof/[tag]/page.tsx::getProofEntry, name: getProofEntry, description: Function: getProofEntry(tag) -> Promise<ProofEntry | null>, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270829081, updated_at: 1762270829081, valid_from: 1762270829081, language: typescript, visibility: public, embedding: [0.019294, 0.018786, -0.001085, -0.012002, -0.005251, -0.008485, 0.017774, -0.008774, 0.045343, 0.022715, 0.018815, 0.068114, 0.041990, "
+    },
+    {
+      "id": 107,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/proof/[tag]/page.tsx::readProofHtml, name: readProofHtml, description: Function: readProofHtml(tag) -> Promise<string | null>, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270829310, updated_at: 1762270829310, valid_from: 1762270829310, language: typescript, visibility: public, embedding: [0.017825, -0.009295, -0.005582, -0.017561, 0.034774, -0.013318, 0.015677, 0.013697, 0.077200, -0.000109, -0.006645, 0.042155, 0.046594, 0.0"
+    },
+    {
+      "id": 108,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/proof/page.tsx::ProofIndexPage, name: ProofIndexPage, description: Function: ProofIndexPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270828401, updated_at: 1762270828401, valid_from: 1762270828401, language: typescript, visibility: public, embedding: [0.007943, -0.003624, -0.033073, -0.004806, -0.012272, 0.027744, 0.063330, 0.017800, 0.046116, -0.010948, 0.042525, 0.082104, 0.020768, 0.045235, 0.023708, -0.009700, 0.019"
+    },
+    {
+      "id": 109,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/proof/page.tsx::getProofEntries, name: getProofEntries, description: Function: getProofEntries() -> Promise<ProofEntry[]>, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270828070, updated_at: 1762270828070, valid_from: 1762270828070, language: typescript, visibility: public, embedding: [0.012059, 0.031767, -0.009716, -0.006742, -0.009068, -0.012390, 0.028651, -0.019790, 0.021062, 0.020479, 0.014518, 0.067637, 0.034596, 0.019309"
+    },
+    {
+      "id": 110,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/robots.ts::robots, name: robots, description: Function: robots() -> MetadataRoute.Robots, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270813995, updated_at: 1762270813995, valid_from: 1762270813995, language: typescript, visibility: public, embedding: [0.032678, -0.007104, -0.025880, -0.089487, 0.024638, -0.027636, 0.016572, -0.037626, 0.007123, -0.025404, -0.025623, 0.100196, -0.016292, 0.002389, -0.022791, -0.029952, 0.0323"
+    },
+    {
+      "id": 111,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/sitemap.ts::sitemap, name: sitemap, description: Function: sitemap() -> MetadataRoute.Sitemap, type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270813384, updated_at: 1762270813384, valid_from: 1762270813384, language: typescript, visibility: public, embedding: [0.013466, -0.051833, -0.026897, -0.061529, 0.025336, -0.007455, -0.008219, -0.037697, 0.013677, -0.003342, -0.021561, 0.108047, 0.002109, 0.012487, 0.031451, -0.026775, -0"
+    },
+    {
+      "id": 112,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/app/terms/page.tsx::TermsPage, name: TermsPage, description: Function: TermsPage(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270831616, updated_at: 1762270831616, valid_from: 1762270831616, language: typescript, visibility: public, embedding: [0.055079, -0.055338, -0.014532, -0.031027, 0.043787, -0.012839, 0.061305, 0.002635, -0.009103, -0.038028, -0.012564, -0.006955, 0.028277, 0.081468, -0.000930, -0.036043, -0.004758, 0.038"
+    },
+    {
+      "id": 113,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/AnimatedCommitList.tsx::AnimatedCommitList, name: AnimatedCommitList, description: Function: AnimatedCommitList({ commits }), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270817646, updated_at: 1762270817646, valid_from: 1762270817646, language: typescript, visibility: public, embedding: [0.010698, 0.016863, -0.009927, -0.053318, 0.058550, -0.003175, 0.049728, 0.009385, 0.017105, -0.033405, 0.011109, 0.028171, 0.027222,"
+    },
+    {
+      "id": 114,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/AnimatedCommitList.tsx::handleCollapse, name: handleCollapse, description: Function: handleCollapse(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270818821, updated_at: 1762270818821, valid_from: 1762270818821, language: typescript, visibility: public, embedding: [0.008969, -0.013699, 0.009445, -0.041359, 0.045866, -0.007572, 0.071845, -0.000319, 0.030169, -0.036934, 0.006490, 0.022723, 0.033439, 0.010928, -0.055663, "
+    },
+    {
+      "id": 115,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/AnimatedCommitList.tsx::handleExpand, name: handleExpand, description: Function: handleExpand(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270818126, updated_at: 1762270818126, valid_from: 1762270818126, language: typescript, visibility: public, embedding: [0.006964, -0.036064, 0.007022, -0.055024, 0.053530, 0.004451, 0.047395, -0.001838, 0.021637, -0.029839, -0.008182, 0.016983, 0.027413, 0.023548, -0.027913, -0.036"
+    },
+    {
+      "id": 116,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/BlogFilter.tsx::BlogFilter, name: BlogFilter, description: Function: BlogFilter({ posts }), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270821983, updated_at: 1762270821983, valid_from: 1762270821983, language: typescript, visibility: public, embedding: [0.031557, 0.032268, -0.014580, -0.062096, 0.048227, -0.023704, 0.050595, 0.015738, 0.075480, -0.024145, -0.014240, 0.043700, -0.038066, 0.048069, -0.009879, 0.012935, "
+    },
+    {
+      "id": 117,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/ContactForm.tsx::ContactForm, name: ContactForm, description: Function: ContactForm(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270816221, updated_at: 1762270816221, valid_from: 1762270816221, language: typescript, visibility: public, embedding: [0.008212, -0.072340, 0.008732, -0.025926, 0.035523, -0.010361, 0.072080, -0.033174, 0.051708, -0.002098, -0.005070, -0.028138, 0.045729, 0.058195, 0.014629, -0.009226, -0.0"
+    },
+    {
+      "id": 118,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/ContactForm.tsx::handleChange, name: handleChange, description: Function: handleChange(e), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270817067, updated_at: 1762270817067, valid_from: 1762270817067, language: typescript, visibility: public, embedding: [0.011607, -0.070901, 0.008118, -0.040929, 0.039088, -0.021487, 0.056764, -0.025706, 0.048351, -0.005970, -0.014346, -0.016097, 0.038612, 0.049024, -0.022650, -0.010711,"
+    },
+    {
+      "id": 119,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/ContactForm.tsx::handleSubmit, name: handleSubmit, description: Function: handleSubmit(e), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270816636, updated_at: 1762270816636, valid_from: 1762270816636, language: typescript, visibility: public, embedding: [0.009820, -0.071140, 0.024842, -0.039633, 0.040650, 0.000827, 0.030025, -0.021314, 0.036201, -0.016125, -0.019425, -0.039657, 0.047212, 0.029129, -0.001917, 0.031067, -"
+    },
+    {
+      "id": 120,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/FAQAccordion.tsx::FAQAccordion, name: FAQAccordion, description: Function: FAQAccordion({ sections }), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270815290, updated_at: 1762270815290, valid_from: 1762270815290, language: typescript, visibility: public, embedding: [0.010449, -0.017383, -0.032702, 0.002252, 0.023078, 0.008522, 0.060234, -0.017809, -0.026331, -0.010258, -0.025040, 0.012530, 0.046508, 0.023594, 0.009206, "
+    },
+    {
+      "id": 121,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/FAQAccordion.tsx::toggleSection, name: toggleSection, description: Function: toggleSection(index), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270815724, updated_at: 1762270815724, valid_from: 1762270815724, language: typescript, visibility: public, embedding: [-0.002661, -0.053074, -0.046817, -0.001767, 0.000011, 0.000169, 0.092734, -0.002379, 0.018323, -0.014953, -0.041256, 0.053987, 0.018245, 0.047074, 0.010154, -0."
+    },
+    {
+      "id": 122,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/LiveCommits.tsx::LiveCommits, name: LiveCommits, description: Function: LiveCommits(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270825304, updated_at: 1762270825304, valid_from: 1762270825304, language: typescript, visibility: public, embedding: [0.013901, -0.039304, 0.005371, -0.087028, 0.036574, -0.001884, 0.042118, -0.005366, 0.016974, 0.000095, -0.040137, -0.003463, 0.054290, 0.079446, 0.006410, 0.006577, 0.0190"
+    },
+    {
+      "id": 123,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/PricingTiers.tsx::PricingTiers, name: PricingTiers, description: Function: PricingTiers({ tiers }), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270822679, updated_at: 1762270822679, valid_from: 1762270822679, language: typescript, visibility: public, embedding: [-0.022435, -0.043965, -0.035281, -0.028807, 0.037326, 0.002489, 0.063678, -0.025452, -0.054101, -0.012053, -0.037468, 0.080730, 0.015636, 0.106715, -0.030650, "
+    },
+    {
+      "id": 124,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/ProcessTimeline.tsx::ProcessTimeline, name: ProcessTimeline, description: Function: ProcessTimeline(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270815984, updated_at: 1762270815984, valid_from: 1762270815984, language: typescript, visibility: public, embedding: [-0.009805, -0.014231, -0.030192, -0.055251, -0.011957, -0.007068, 0.074340, -0.048731, -0.012309, 0.007452, 0.056330, 0.068904, 0.024683, 0.055223, -0.05091"
+    },
+    {
+      "id": 125,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/ProofTeaser.tsx::ProofTeaser, name: ProofTeaser, description: Function: ProofTeaser(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270823650, updated_at: 1762270823650, valid_from: 1762270823650, language: typescript, visibility: public, embedding: [0.002871, 0.010013, -0.023020, -0.010268, -0.010219, -0.004870, 0.052663, -0.006798, 0.039886, 0.003263, 0.046443, 0.106188, 0.016399, 0.037760, 0.009277, -0.013103, 0.0233"
+    },
+    {
+      "id": 126,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/ProofTeaser.tsx::getStatusBadge, name: getStatusBadge, description: Function: getStatusBadge(type), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270823375, updated_at: 1762270823375, valid_from: 1762270823375, language: typescript, visibility: public, embedding: [-0.019009, -0.004478, -0.003003, -0.011898, 0.008800, 0.006743, 0.027978, 0.010312, 0.050029, 0.010438, 0.029723, 0.064039, 0.029517, 0.024787, 0.012711, 0.046"
+    },
+    {
+      "id": 127,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/TableOfContents.tsx::TableOfContents, name: TableOfContents, description: Function: TableOfContents({ sections }), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270824196, updated_at: 1762270824196, valid_from: 1762270824196, language: typescript, visibility: public, embedding: [0.030884, -0.039761, -0.037119, -0.022266, 0.033340, 0.021810, 0.016453, 0.024827, 0.021192, 0.027092, -0.020871, 0.040523, 0.075382, 0.006251, "
+    },
+    {
+      "id": 128,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/TableOfContents.tsx::scrollToSection, name: scrollToSection, description: Function: scrollToSection(id), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270824823, updated_at: 1762270824823, valid_from: 1762270824823, language: typescript, visibility: public, embedding: [0.013924, -0.035711, -0.019318, -0.037532, 0.007589, -0.005536, 0.030399, 0.053316, 0.009912, 0.030624, 0.022254, 0.033501, 0.027370, -0.002950, -0.006534"
+    },
+    {
+      "id": 129,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/TeamTools.tsx::TeamTools, name: TeamTools, description: Function: TeamTools(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270814853, updated_at: 1762270814853, valid_from: 1762270814853, language: typescript, visibility: public, embedding: [0.011297, -0.036019, -0.018782, -0.045550, 0.033709, 0.016687, 0.076492, -0.001749, -0.011273, -0.011561, -0.026048, 0.058719, 0.006350, 0.050580, 0.004685, -0.057484, 0.014087, 0."
+    },
+    {
+      "id": 130,
+      "labels": "[U4_Code_Artifact]",
+      "properties_raw": "{path: clients/scopelock/src/components/TimezoneConverter.tsx::TimezoneConverter, name: TimezoneConverter, description: Function: TimezoneConverter(), type_name: U4_Code_Artifact, level: L2, scope_ref: org_scopelock, created_at: 1762270817354, updated_at: 1762270817354, valid_from: 1762270817354, language: typescript, visibility: public, embedding: [-0.006203, -0.000295, -0.014938, -0.054906, -0.016494, -0.011105, 0.058997, -0.027460, -0.023706, 0.023660, 0.009969, 0.035806, 0.012952, 0.019783, "
+    },
+    {
+      "id": 131,
+      "labels": "[Layer]",
+      "properties_raw": "{name: api_layer, embedding: [-0.020189, -0.021199, -0.021102, 0.049964, 0.023677, -0.025287, 0.009977, 0.015084, 0.032621, -0.018249, 0.021347, 0.040920, -0.002729, 0.064567, 0.025888, 0.032815, -0.022845, 0.011345, 0.045454, 0.019938, -0.023393, 0.029514, 0.016213, 0.040715, 0.070040, 0.003224, 0.017046, -0.039314, -0.004685, 0.005197, 0.056749, -0.038269, 0.049136, -0.016878, 0.000002, 0.016743, -0.003222, 0.011859, 0.010667, -0.045138, -0.051311, 0.012427, 0.032524, -0.001605, -0.024954, -0."
+    },
+    {
+      "id": 132,
+      "labels": "[Layer]",
+      "properties_raw": "{name: automation_layer, embedding: [-0.038561, -0.058677, -0.040111, 0.017245, 0.020864, -0.009167, 0.025836, 0.008955, 0.015557, -0.017977, 0.049336, 0.073681, -0.034895, 0.088035, 0.005371, 0.034372, -0.011963, -0.008436, -0.005419, 0.018468, -0.034806, 0.018317, -0.007556, 0.027418, 0.032786, 0.020931, 0.007500, -0.039742, 0.039479, 0.028845, 0.023376, -0.000354, 0.065757, 0.013389, 0.000001, -0.013365, 0.007603, -0.020271, 0.004397, -0.034168, -0.023794, 0.034964, -0.010072, 0.015697, -0.02"
+    },
+    {
+      "id": 133,
+      "labels": "[Layer]",
+      "properties_raw": "{name: notification_layer, embedding: [-0.004782, -0.078244, -0.015154, 0.062794, -0.003281, -0.001297, 0.002657, 0.007229, -0.022653, -0.009196, 0.033498, 0.031190, -0.036791, 0.011128, -0.018227, 0.038620, -0.031915, 0.004799, 0.046578, 0.028230, -0.004336, 0.022584, 0.013571, 0.032437, 0.015688, -0.052531, -0.007209, 0.001557, 0.004119, -0.021028, 0.018434, 0.010829, 0.022103, -0.017650, 0.000001, 0.014938, 0.003154, -0.010610, -0.032121, -0.023066, -0.003120, -0.040171, -0.029263, -0.031005,"
+    },
+    {
+      "id": 134,
+      "labels": "[Layer]",
+      "properties_raw": "{name: orchestration_layer, embedding: [-0.029600, -0.053376, -0.001995, 0.034008, 0.031834, -0.041214, 0.007507, -0.007426, -0.030932, 0.014095, -0.011022, 0.050569, -0.026173, 0.069809, 0.001514, 0.010492, 0.003077, 0.006944, -0.067893, 0.016028, -0.019587, 0.034625, 0.007011, 0.025183, 0.043416, 0.020327, -0.029736, -0.005438, -0.008876, 0.029981, 0.032892, 0.012102, 0.026753, -0.006674, 0.000002, 0.011342, -0.009630, -0.017307, 0.029487, -0.013224, -0.024097, 0.000130, -0.033424, 0.011906, -"
+    },
+    {
+      "id": 135,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_f50f1db15143, name: **Consciousness Principle:** \"Evidence must be immediately visible. When a milestone is tagged, proo, description: **Consciousness Principle:** \"Evidence must be immediately visible. When a milestone is tagged, proof pages regenerate automatically\u2014no human memory required.\"  **Why:** Manual regeneration creates ga, ko_type: pattern, path: docs/automation/01_proof_regeneration.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 9, line_end: 16, cont"
+    },
+    {
+      "id": 136,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_cfbff46d99df, name: ```, description: ### Event Flow  ``` git tag ac-green_*           \u2192 tag.pushed@1.0   \u2193 Deployment system detects tag   \u2193 Run proofgen (reads tags)     \u2192 proof.generated@1.0   \u2193 Build Next.js with new proof HTML   \u2193 De, ko_type: spec, path: docs/automation/01_proof_regeneration.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 17, line_end: 51, content_length: 825, markdown_content: ### Event Flow\n\n```\ngit tag ac-green_*           \u2192 tag.pus"
+    },
+    {
+      "id": 137,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_4820696af6e8, name: **V1: Proof regenerates on tag push**, description: ### Acceptance Criteria  **V1: Proof regenerates on tag push** ```bash # Test: git tag ac-green_test_2025-11-02 git push origin ac-green_test_2025-11-02  # Wait 2 minutes  # Verify: curl https://scope, ko_type: validation, path: docs/automation/01_proof_regeneration.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 52, line_end: 88, content_length: 848, markdown_content: ### Acceptance Criter"
+    },
+    {
+      "id": 138,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_d436af42dbc3, name: **Implementation Approach:** Integrate proofgen into Vercel build script, description: **Implementation Approach:** Integrate proofgen into Vercel build script  **Current Problem:** GitHub Actions would require separate workflow, adds complexity. Simpler: run proofgen during Vercel buil, ko_type: mechanism, path: docs/automation/01_proof_regeneration.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 89, line_end: 116, content_length: 844, markd"
+    },
+    {
+      "id": 139,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_9d13ff9d2108, name: **Step 1: Detect Tag Push**, description: ### Step-by-Step Execution  **Step 1: Detect Tag Push** ``` IF git push includes tag matching /^(evidence-sprint|ac-green|change)_/ THEN trigger Vercel deployment webhook ```  **Step 2: Vercel Build H, ko_type: algorithm, path: docs/automation/01_proof_regeneration.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 117, line_end: 164, content_length: 1204, markdown_content: ### Step-by-Step Execution\n\n**"
+    },
+    {
+      "id": 140,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_6053be45d6b0, name: **File:** `package.json`, description: ### Implementation Steps  **File:** `package.json` ```json {   \"scripts\": {     \"build\": \"git fetch --tags 2>/dev/null || true && npm run proofgen && next build\",     \"build:local\": \"git fetch --tags, ko_type: guide, path: docs/automation/01_proof_regeneration.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 165, line_end: 240, content_length: 2099, markdown_content: ### Implementation Steps\n\n**File:** `packa"
+    },
+    {
+      "id": 141,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_85541a6e8103, name: **Consciousness Principle:** \"Attention allocation is precious. When a client responds, wake the rel, description: **Consciousness Principle:** \"Attention allocation is precious. When a client responds, wake the relevant citizen immediately\u2014don't wait for human to check inbox.\"  **Why:** Checking Upwork inbox ever, ko_type: pattern, path: docs/automation/02_response_monitoring.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 9, line_end: 16, con"
+    },
+    {
+      "id": 142,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_dc2fc52ddb9d, name: ```, description: ### Event Flow (Full Automation)  ``` Client sends Upwork message   \u2193 Upwork \u2192 Email notification \u2192 Gmail inbox   \u2193 Gmail filter detects \"Upwork message\"   \u2193 Trigger webhook \u2192 Wake Rafael citizen   \u2193, ko_type: spec, path: docs/automation/02_response_monitoring.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 17, line_end: 71, content_length: 1315, markdown_content: ### Event Flow (Full Automation)\n\n```\nClient sends Upwork"
+    },
+    {
+      "id": 143,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_06ba952b30da, name: **V1: Email triggers Rafael wake-up**, description: ### Acceptance Criteria  **V1: Email triggers Rafael wake-up** ```bash # Test: Send test email to Gmail # Subject: \"New message from Test Client on Upwork\" # Body: \"Hi, I'm interested in your proposal, ko_type: validation, path: docs/automation/02_response_monitoring.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 72, line_end: 114, content_length: 1157, markdown_content: ### Acceptance Cri"
+    },
+    {
+      "id": 144,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_65fb7d7b2234, name: **Implementation Approach:** Gmail \u2192 Webhook \u2192 Wake Rafael (Claude Code) \u2192 Telegram approval, description: **Implementation Approach:** Gmail \u2192 Webhook \u2192 Wake Rafael (Claude Code) \u2192 Telegram approval  **Architecture:**  ``` [Gmail]   \u2193 (Gmail filter + webhook) [Cloud Function / Webhook Endpoint]   \u2193 (HTTP, ko_type: mechanism, path: docs/automation/02_response_monitoring.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 115, line_end: 156, conte"
+    },
+    {
+      "id": 145,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_91979722d713, name: ```, description: ### Step 1: Email Detection ``` INPUT: Gmail inbox PROCESS:   1. Gmail filter:      from:(@upwork.com)      subject:(New message from)      \u2192 Apply label: \"Upwork/Responses\"      \u2192 Forward to webhook:, ko_type: algorithm, path: docs/automation/02_response_monitoring.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 157, line_end: 277, content_length: 3216, markdown_content: ### Step 1: Email Detection\n```\nINPUT: Gmail inbox\nPR"
+    },
+    {
+      "id": 146,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_7d675631e266, name: **Phase 1: IFTTT (Quick Setup)**, description: ### Implementation Steps  **Phase 1: IFTTT (Quick Setup)**  1. **Create Gmail Filter:**    - Go to Gmail \u2192 Settings \u2192 Filters    - From: `@upwork.com`    - Subject: `New message from`    - Apply label, ko_type: guide, path: docs/automation/02_response_monitoring.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 278, line_end: 615, content_length: 9457, markdown_content: ### Implementation Steps\n\n**Phas"
+    },
+    {
+      "id": 147,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_93f11a35440e, name: **Consciousness Principle:** \"Metrics emerge from activity, not from manual logging. When Emma evalu, description: **Consciousness Principle:** \"Metrics emerge from activity, not from manual logging. When Emma evaluates a lead, the tracker updates itself\u2014no human bookkeeping.\"  **Why:** Manual tracking creates lag, ko_type: pattern, path: docs/automation/03_lead_tracker.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 9, line_end: 16, content_le"
+    },
+    {
+      "id": 148,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_737b06ab74f6, name: ```, description: ### Event Flow  ``` Emma evaluates Upwork post   \u2193 Emma outputs: DECISION: GO/NO-GO + REASON   \u2193 Script captures output       \u2192 lead.evaluated@1.0   \u2193 Append to citizens/emma/leads.json   \u2193 Regenerate, ko_type: spec, path: docs/automation/03_lead_tracker.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 17, line_end: 78, content_length: 1059, markdown_content: ### Event Flow\n\n```\nEmma evaluates Upwork post\n  \u2193\nEmma outputs"
+    },
+    {
+      "id": 149,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_5868b6962b05, name: **V1: Tracker updates automatically**, description: ### Acceptance Criteria  **V1: Tracker updates automatically** ```bash # Test: Paste job post to Emma, get GO decision  # Expected: # - leads.json appends new entry within 1 second # - leads-tracker.m, ko_type: validation, path: docs/automation/03_lead_tracker.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 79, line_end: 121, content_length: 875, markdown_content: ### Acceptance Criteria\n\n*"
+    },
+    {
+      "id": 150,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_f7b61fff57af, name: **Implementation Approach:** Python script parses Emma output, appends JSON, regenerates markdown, description: **Implementation Approach:** Python script parses Emma output, appends JSON, regenerates markdown  **Why Python:** - Simple file I/O - JSON parsing built-in - Easy to integrate with Emma (call after e, ko_type: mechanism, path: docs/automation/03_lead_tracker.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 122, line_end: 156, conten"
+    },
+    {
+      "id": 151,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_67e509ff8060, name: **Input:** Emma's text output (string), description: ### 1. Parse Emma Output  **Input:** Emma's text output (string)  **Steps:** 1. Split text into lines 2. Find line containing \"DECISION:\" substring 3. Extract value after colon and whitespace 4. Find, ko_type: algorithm, path: docs/automation/03_lead_tracker.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 157, line_end: 244, content_length: 2753, markdown_content: ### 1. Parse Emma Output\n\n"
+    },
+    {
+      "id": 152,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_8367d90cffcb, name: **File:** `scripts/track-lead.py`, description: ### Implementation  **File:** `scripts/track-lead.py`  ```python #!/usr/bin/env python3 import json import argparse from datetime import datetime from pathlib import Path  # Paths BASE_DIR = Path(__fi, ko_type: guide, path: docs/automation/03_lead_tracker.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 245, line_end: 494, content_length: 7024, markdown_content: ### Implementation\n\n**File:** `scripts"
+    },
+    {
+      "id": 153,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_8059caca0827, name: **Consciousness Principle:** \"Discovery should be continuous, not episodic. When new leads appear, E, description: **Consciousness Principle:** \"Discovery should be continuous, not episodic. When new leads appear, Emma evaluates them immediately\u2014before humans even see them.\"  **Why:** Manual job board scanning is, ko_type: pattern, path: docs/automation/04_emma_rss_auto_send.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 9, line_end: 16, conte"
+    },
+    {
+      "id": 154,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_4f9c3dce1c5c, name: ```, description: ### Event Flow  ``` New Upwork job posted   \u2193 RSS feed updates   \u2193 Emma scraper detects new post       \u2192 lead.discovered@1.0   \u2193 Emma citizen wakes, evaluates post  \u2192 lead.parsed@1.0   \u2193 Decision: GO, ko_type: spec, path: docs/automation/04_emma_rss_auto_send.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 17, line_end: 72, content_length: 1605, markdown_content: ### Event Flow\n\n```\nNew Upwork job posted\n  \u2193\nRSS feed upd"
+    },
+    {
+      "id": 155,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_0906633abcda, name: **V1: RSS monitoring works continuously**, description: ### Acceptance Criteria  **V1: RSS monitoring works continuously** ```bash # Test: Monitor RSS feed for 1 hour  # Expected: # - Emma checks feed every 5 minutes # - New posts detected within 5min of p, ko_type: validation, path: docs/automation/04_emma_rss_auto_send.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 73, line_end: 120, content_length: 1246, markdown_content: ### Acceptance "
+    },
+    {
+      "id": 156,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_46f283e99744, name: **Implementation Approach:** RSS polling \u2192 Emma citizen wake \u2192 Confidence-based routing \u2192 Auto-send , description: **Implementation Approach:** RSS polling \u2192 Emma citizen wake \u2192 Confidence-based routing \u2192 Auto-send or Telegram  **Architecture:**  ``` [RSS Feed Monitor]   \u2193 (Poll every 5min) [New Post Detector]   \u2193, ko_type: mechanism, path: docs/automation/04_emma_rss_auto_send.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 121, line_end: 15"
+    },
+    {
+      "id": 157,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_2a11897135a0, name: **Input:** RSS feed URL (with security token), description: ### 1. RSS Feed Monitoring  **Input:** RSS feed URL (with security token)  **Steps:** 1. Set polling interval: 5 minutes (300 seconds) 2. Initialize `seen_posts` set (empty) 3. Start infinite loop:, ko_type: algorithm, path: docs/automation/04_emma_rss_auto_send.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 159, line_end: 294, content_length: 4245, markdown_content: ### 1. RSS Feed"
+    },
+    {
+      "id": 158,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_dd297026dbf9, name: **File Structure:**, description: ### Implementation  **File Structure:** ``` /services/   emma-rss/     index.js              # Main RSS monitor     evaluator.js          # Emma citizen caller     confidence.js         # Confidence s, ko_type: guide, path: docs/automation/04_emma_rss_auto_send.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 295, line_end: 713, content_length: 11234, markdown_content: ### Implementation\n\n**File Structure:**\n```\n/"
+    },
+    {
+      "id": 159,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_e6964a23f7b7, name: **Consciousness Principle:** \"Acceptance criteria are the contract. When a client agrees to a milest, description: **Consciousness Principle:** \"Acceptance criteria are the contract. When a client agrees to a milestone, wake Rafael to co-author AC.md\u2014don't wait for human to start the session.\"  **Why:** AC.md draf, ko_type: pattern, path: docs/automation/05_ac_drafting.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 9, line_end: 16, content_len"
+    },
+    {
+      "id": 160,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_890da6231f1a, name: ```, description: ### Event Flow  ``` Client agrees to milestone (Rafael detects via email/Upwork)   \u2193 Rafael marks milestone as \"ready for AC\"   \u2193 Trigger AC drafting workflow            \u2192 ac.draft_requested@1.0   \u2193 W, ko_type: spec, path: docs/automation/05_ac_drafting.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 17, line_end: 75, content_length: 1579, markdown_content: ### Event Flow\n\n```\nClient agrees to milestone (Rafael detects v"
+    },
+    {
+      "id": 161,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_fcb6d3bfc42a, name: **V1: Rafael wakes and drafts AC.md**, description: ### Acceptance Criteria  **V1: Rafael wakes and drafts AC.md** ```bash # Test: Trigger AC drafting for test client  # Expected: # - Rafael citizen wakes within 30s # - AC.md draft generated in <2min #, ko_type: validation, path: docs/automation/05_ac_drafting.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 76, line_end: 114, content_length: 991, markdown_content: ### Acceptance Criteria\n\n**"
+    },
+    {
+      "id": 162,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_e90f633093d9, name: **Implementation Approach:** Wake Rafael citizen via Claude Code instance, not direct Claude API, description: **Implementation Approach:** Wake Rafael citizen via Claude Code instance, not direct Claude API  **Architecture:**  ``` [Trigger: Client milestone ready]   \u2193 [Wake Rafael Service]   \u2193 (Spawn Claude C, ko_type: mechanism, path: docs/automation/05_ac_drafting.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 115, line_end: 149, content_"
+    },
+    {
+      "id": 163,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_63f2bd08f146, name: **Input:** Event source (email, Upwork message, Telegram command), description: ### 1. Trigger Detection  **Input:** Event source (email, Upwork message, Telegram command)  **Steps:** 1. Monitor Rafael's inbox for keywords: \"let's proceed\", \"ready to start\", \"kick off\" 2. Parse c, ko_type: algorithm, path: docs/automation/05_ac_drafting.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 150, line_end: 252, content_length: 2794, markdown_content:"
+    },
+    {
+      "id": 164,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_f976e365df69, name: **File Structure:**, description: ### Implementation  **File Structure:** ``` /services/   ac-drafter/     index.js          # Trigger detector + citizen waker     wake-citizen.js   # Claude Code instance spawner     templates/, ko_type: guide, path: docs/automation/05_ac_drafting.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 253, line_end: 599, content_length: 8261, markdown_content: ### Implementation\n\n**File Structure:**\n```\n/services/\n  ac-"
+    },
+    {
+      "id": 165,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_cd3c953c54bd, name: **Consciousness Principle:** \"If it's not tested, it's not built. When AC.md is finalized, generate , description: **Consciousness Principle:** \"If it's not tested, it's not built. When AC.md is finalized, generate acceptance tests automatically\u2014don't wait for human to write boilerplate.\"  **Why:** Test writing is, ko_type: pattern, path: docs/automation/06_test_generation.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 9, line_end: 16, content"
+    },
+    {
+      "id": 166,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_cd9cd2a399cc, name: ```, description: ### Event Flow  ``` AC.md finalized and tagged as ac-baseline_*   \u2193 Trigger test generation workflow       \u2192 test.generation_requested@1.0   \u2193 Wake Daniel citizen (Claude Code)   \u2193 Daniel reads AC.md:, ko_type: spec, path: docs/automation/06_test_generation.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 17, line_end: 76, content_length: 1741, markdown_content: ### Event Flow\n\n```\nAC.md finalized and tagged as ac-baselin"
+    },
+    {
+      "id": 167,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_ff74df70a0fa, name: **V1: Tests generated from AC.md**, description: ### Acceptance Criteria  **V1: Tests generated from AC.md** ```bash # Test: Tag AC.md as baseline, trigger test generation  git tag ac-baseline_test_2025-11-02 # Trigger test generation (manual or web, ko_type: validation, path: docs/automation/06_test_generation.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 77, line_end: 119, content_length: 964, markdown_content: ### Acceptance Criteria\n\n*"
+    },
+    {
+      "id": 168,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_f64716317399, name: **Implementation Approach:** Wake Daniel citizen, read AC.md, generate Playwright/PyTest tests, description: **Implementation Approach:** Wake Daniel citizen, read AC.md, generate Playwright/PyTest tests  **Architecture:**  ``` [Trigger: ac-baseline_* tag pushed]   \u2193 [Test Generation Service]   \u2193 (Wake Danie, ko_type: mechanism, path: docs/automation/06_test_generation.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 120, line_end: 152, conten"
+    },
+    {
+      "id": 169,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_4ca2f708ab58, name: **Input:** Git tag matching `ac-baseline_*`, description: ### 1. Trigger Detection  **Input:** Git tag matching `ac-baseline_*`  **Steps:** 1. Listen for git push events (webhook or git hooks) 2. Filter for tags matching regex: `^ac-baseline_` 3. Extract mil, ko_type: algorithm, path: docs/automation/06_test_generation.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 153, line_end: 313, content_length: 4415, markdown_content: ### 1. Trigger De"
+    },
+    {
+      "id": 170,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_089ac7f155c5, name: **File Structure:**, description: ### Implementation  **File Structure:** ``` /services/   test-generator/     index.js              # Git webhook listener     wake-daniel.js        # Daniel citizen spawner     templates/       playwr, ko_type: guide, path: docs/automation/06_test_generation.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 314, line_end: 675, content_length: 10059, markdown_content: ### Implementation\n\n**File Structure:**\n```\n/ser"
+    },
+    {
+      "id": 171,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_dee4815a9fd1, name: **Consciousness Principle:** \"Evidence emerges from measurement, not description. When a feature is , description: **Consciousness Principle:** \"Evidence emerges from measurement, not description. When a feature is built, capture demo URL + quantified deltas automatically\u2014don't rely on human memory.\"  **Why:** Man, ko_type: pattern, path: docs/automation/07_demo_delta_generation.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 9, line_end: 16, c"
+    },
+    {
+      "id": 172,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_39699316f31b, name: ```, description: ### Event Flow  ``` Developer tags evidence-sprint_* or ac-green_*   \u2193 Trigger demo/delta generation           \u2192 demo.generation_requested@1.0   \u2193 Wake Maya citizen (Claude Code)   \u2193 Maya captures:, ko_type: spec, path: docs/automation/07_demo_delta_generation.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 17, line_end: 94, content_length: 1749, markdown_content: ### Event Flow\n\n```\nDeveloper tags evidence-sprint_* or a"
+    },
+    {
+      "id": 173,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_fc9e36534afc, name: **V1: DEMO.md generated from tag**, description: ### Acceptance Criteria  **V1: DEMO.md generated from tag** ```bash # Test: Tag feature, trigger generation  git tag evidence-sprint_signup_2025-11-02 # Trigger Maya  # Expected: # - /proof/DEMO.md ex, ko_type: validation, path: docs/automation/07_demo_delta_generation.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 95, line_end: 138, content_length: 870, markdown_content: ### Acceptance Crite"
+    },
+    {
+      "id": 174,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_52889171173a, name: **Implementation Approach:** Wake Maya citizen, capture demo via Playwright, measure deltas, generat, description: **Implementation Approach:** Wake Maya citizen, capture demo via Playwright, measure deltas, generate markdown  **Architecture:**  ``` [Tag: evidence-sprint_* or ac-green_*]   \u2193 [Demo Generator Servic, ko_type: mechanism, path: docs/automation/07_demo_delta_generation.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 139, line_end:"
+    },
+    {
+      "id": 175,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_ed8d0d95f7cc, name: **Input:** Git tag matching `evidence-sprint_*` or `ac-green_*`, description: ### 1. Trigger Detection  **Input:** Git tag matching `evidence-sprint_*` or `ac-green_*`  **Steps:** 1. Parse tag name to extract feature name 2. Find baseline tag: Search for most recent `ac-baselin, ko_type: algorithm, path: docs/automation/07_demo_delta_generation.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 173, line_end: 335, content_length: 4090, markdown_"
+    },
+    {
+      "id": 176,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_e2673718b338, name: **File Structure:**, description: ### Implementation  **File Structure:** ``` /services/   demo-delta-gen/     index.js              # Git webhook listener     wake-maya.js          # Maya citizen spawner     capture-demo.js       # P, ko_type: guide, path: docs/automation/07_demo_delta_generation.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 336, line_end: 633, content_length: 9207, markdown_content: ### Implementation\n\n**File Structure:**\n```"
+    },
+    {
+      "id": 177,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_bf490f46b8b3, name: **Consciousness Principle:** \"Autonomy requires judgment. When Emma evaluates a lead, she decides wh, description: **Consciousness Principle:** \"Autonomy requires judgment. When Emma evaluates a lead, she decides whether to proceed independently or request human oversight\u2014based on confidence in her assessment.\"  *, ko_type: pattern, path: docs/automation/08_emma_autonomous.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 9, line_end: 16, content"
+    },
+    {
+      "id": 178,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_335ebaeb5da7, name: ```, description: ### Event Flow  ``` Emma evaluates lead via RSS scraper   \u2193 Emma outputs: DECISION + REASON + PROPOSAL   \u2193 Calculate confidence score (0-100)     \u2192 confidence.calculated@1.0   \u2193 IF confidence \u2265 80%:, ko_type: spec, path: docs/automation/08_emma_autonomous.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 17, line_end: 64, content_length: 1532, markdown_content: ### Event Flow\n\n```\nEmma evaluates lead via RSS scraper\n  \u2193\nEm"
+    },
+    {
+      "id": 179,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_480b33f9077b, name: **V1: High-confidence proposals auto-sent**, description: ### Acceptance Criteria  **V1: High-confidence proposals auto-sent** ```bash # Test: Emma evaluates simple, clear job post (verified client, clear budget, AI domain)  # Expected: # - Confidence \u2265 80%, ko_type: validation, path: docs/automation/08_emma_autonomous.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 65, line_end: 103, content_length: 952, markdown_content: ### Acceptance Cri"
+    },
+    {
+      "id": 180,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_73275c21993b, name: **Implementation Approach:** Confidence calculator with tunable thresholds + routing logic, description: **Implementation Approach:** Confidence calculator with tunable thresholds + routing logic  **Architecture:**  ``` [Emma Evaluation]   \u2193 [Confidence Calculator]   \u2193 (score 0-100) [Router]   \u251c\u2500 \u226580% \u2192, ko_type: mechanism, path: docs/automation/08_emma_autonomous.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 104, line_end: 140, content_len"
+    },
+    {
+      "id": 181,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_d3f50899d20e, name: **Input:** `{ job_post, proposal, urgency_score }`, description: ### 1. Confidence Calculation (Detailed)  **Input:** `{ job_post, proposal, urgency_score }`  **Formula breakdown:**  **Base score:** 100  **Penalty 1: Job complexity (word count)** ``` word_count = c, ko_type: algorithm, path: docs/automation/08_emma_autonomous.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 141, line_end: 275, content_length: 3203, markdown_content: ### 1. Con"
+    },
+    {
+      "id": 182,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_8d3bc501da21, name: This feature is a **logic layer on top of Feature 4 (Emma RSS Auto-Send)**., description: ### Implementation  This feature is a **logic layer on top of Feature 4 (Emma RSS Auto-Send)**.  **File:** `services/emma-rss/confidence.js` (already exists from Feature 4)  **Enhancements:**  Add con, ko_type: guide, path: docs/automation/08_emma_autonomous.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 276, line_end: 512, content_length: 6382, markdown_co"
+    },
+    {
+      "id": 183,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_121b721c7930, name: **Consciousness Principle:** \"Quality gates must be instant and deterministic. When code is pushed, , description: **Consciousness Principle:** \"Quality gates must be instant and deterministic. When code is pushed, Sofia reviews automatically\u2014before humans even see the PR.\"  **Why:** Manual code review is slow and, ko_type: pattern, path: docs/automation/09_sofia_auto_review.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 9, line_end: 16, conte"
+    },
+    {
+      "id": 184,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_aab3eda5b378, name: ```, description: ### Event Flow  ``` Developer pushes commit to GitHub   \u2193 GitHub webhook triggers Sofia                \u2192 review.requested@1.0   \u2193 Sofia citizen wakes (Claude Code)   \u2193 Sofia analyzes diff:   - Check f, ko_type: spec, path: docs/automation/09_sofia_auto_review.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 17, line_end: 73, content_length: 1736, markdown_content: ### Event Flow\n\n```\nDeveloper pushes commit to GitHub\n  \u2193\n"
+    },
+    {
+      "id": 185,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_300aa699421e, name: **V1: Silent fallbacks detected**, description: ### Acceptance Criteria  **V1: Silent fallbacks detected** ```bash # Test: Push commit with try/catch without rethrow  git add -A git commit -m \"test: silent fallback\" git push origin feature-branch, ko_type: validation, path: docs/automation/09_sofia_auto_review.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 74, line_end: 115, content_length: 854, markdown_content: ### Acceptance Criteria\n\n**"
+    },
+    {
+      "id": 186,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_a12d6f88521f, name: **Implementation Approach:** GitHub webhook \u2192 Sofia citizen \u2192 Policy checks \u2192 GitHub status API, description: **Implementation Approach:** GitHub webhook \u2192 Sofia citizen \u2192 Policy checks \u2192 GitHub status API  **Architecture:**  ``` [GitHub Push]   \u2193 (webhook) [Sofia Review Service]   \u2193 (Wake Sofia citizen) [Sof, ko_type: mechanism, path: docs/automation/09_sofia_auto_review.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 116, line_end: 152, con"
+    },
+    {
+      "id": 187,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_ee66b661c387, name: **Input:** GitHub webhook payload, description: ### 1. Webhook Handler  **Input:** GitHub webhook payload  **Steps:** 1. Extract commit SHA, branch name, author 2. Fetch diff via GitHub API: `GET /repos/:owner/:repo/compare/{base}...{head}` 3. Pars, ko_type: algorithm, path: docs/automation/09_sofia_auto_review.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 153, line_end: 263, content_length: 2629, markdown_content: ### 1. Webhook Handler\n\n*"
+    },
+    {
+      "id": 188,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_9b05c7b98b49, name: **File Structure:**, description: ### Implementation  **File Structure:** ``` /services/   sofia-reviewer/     index.js          # GitHub webhook handler     wake-sofia.js     # Sofia citizen spawner     policies/       fail-loud.js, ko_type: guide, path: docs/automation/09_sofia_auto_review.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 264, line_end: 535, content_length: 6950, markdown_content: ### Implementation\n\n**File Structure:**\n```\n/serv"
+    },
+    {
+      "id": 189,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_7a1b07acb283, name: **Consciousness Principle:** \"Operations are observable. When systems run, metrics emit continuously, description: **Consciousness Principle:** \"Operations are observable. When systems run, metrics emit continuously\u2014surfaced in a single pane of glass for instant health checks.\"  **Why:** Manual metric collection (, ko_type: pattern, path: docs/automation/10_priya_dashboard.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 9, line_end: 16, content"
+    },
+    {
+      "id": 190,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_f24f9ea151fc, name: ```, description: ### Event Flow  ``` Citizens emit events during operation:   - lead.parsed@1.0 (Emma)   - proposal.sent@1.0 (Emma)   - response.sent@1.0 (Rafael)   - review.verdict@1.0 (Sofia)   - proof.generated@1.0, ko_type: spec, path: docs/automation/10_priya_dashboard.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 17, line_end: 70, content_length: 1438, markdown_content: ### Event Flow\n\n```\nCitizens emit events during operation:\n "
+    },
+    {
+      "id": 191,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_1b2a6a48aa39, name: **V1: Dashboard loads and shows metrics**, description: ### Acceptance Criteria  **V1: Dashboard loads and shows metrics** ```bash # Test: Open /dashboard in browser  # Expected: # - Dashboard loads <2s # - Shows metrics for all categories (Acquisition, Cl, ko_type: validation, path: docs/automation/10_priya_dashboard.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 71, line_end: 109, content_length: 828, markdown_content: ### Acceptance Crit"
+    },
+    {
+      "id": 192,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_ffd1fe925049, name: **Implementation Approach:** Event log \u2192 Aggregator service \u2192 Static HTML dashboard, description: **Implementation Approach:** Event log \u2192 Aggregator service \u2192 Static HTML dashboard  **Architecture:**  ``` [Citizens emit events]   \u2193 [/logs/events.json] (append-only log)   \u2193 (read every 5s) [Dashbo, ko_type: mechanism, path: docs/automation/10_priya_dashboard.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 110, line_end: 176, content_length: 1"
+    },
+    {
+      "id": 193,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_f33f32594dfd, name: **Structure:**, description: ### 1. Event Log Format  **Structure:** ```json {   \"type\": \"lead.parsed@1.0\",   \"timestamp\": \"2025-11-02T14:23:00Z\",   \"data\": {     \"platform\": \"Upwork\",     \"title\": \"Build AI chat widget\",     \"de, ko_type: algorithm, path: docs/automation/10_priya_dashboard.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 177, line_end: 285, content_length: 2752, markdown_content: ### 1. Event Log Format\n\n**Structure:**\n```jso"
+    },
+    {
+      "id": 194,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_5a956d808e0a, name: **File Structure:**, description: ### Implementation  **File Structure:** ``` /services/   priya-dashboard/     index.js                # Dashboard aggregator service     calculate-metrics.js    # Metric calculation logic     generate, ko_type: guide, path: docs/automation/10_priya_dashboard.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 286, line_end: 649, content_length: 11441, markdown_content: ### Implementation\n\n**File Structure:**\n```\n/ser"
+    },
+    {
+      "id": 195,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_8e8ec0bcf21b, name: **Consciousness Principle:** \"Trust emerges from transparency. When clients can self-serve AC status, description: **Consciousness Principle:** \"Trust emerges from transparency. When clients can self-serve AC status checks, they don't need to ask\u2014reducing support burden and increasing confidence.\"  **Why:** Manual, ko_type: pattern, path: docs/automation/11_client_portal.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 9, line_end: 16, content_l"
+    },
+    {
+      "id": 196,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_e9188c1e68cf, name: ```, description: ### Event Flow (When Implemented)  ``` Client logs into portal with unique link   \u2193 Portal loads client-specific data:   - AC.md for current milestone   - Test status (X/Y passing)   - Proof entries (, ko_type: spec, path: docs/automation/11_client_portal.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 17, line_end: 303, content_length: 7246, markdown_content: ### Event Flow (When Implemented)\n\n```\nClient logs into porta"
+    },
+    {
+      "id": 197,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_597c6c5eecd0, name: Consciousness design principle explaining *why* this automation matters., description: Consciousness design principle explaining *why* this automation matters., ko_type: pattern, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 63, line_end: 65, content_length: 72, markdown_content: Consciousness design principle explaining *why* this automation matters., embedding: [0.036071, -0.016196, -0.007865, 0.008671, -0.001498,"
+    },
+    {
+      "id": 198,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_2286ccfa308f, name: Event flows, contracts, failure modes - *what should happen*., description: Event flows, contracts, failure modes - *what should happen*., ko_type: spec, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 66, line_end: 68, content_length: 61, markdown_content: Event flows, contracts, failure modes - *what should happen*., embedding: [0.003465, -0.057789, 0.009224, 0.002643, 0.008379, -0.001118, 0.011143, 0.010157, "
+    },
+    {
+      "id": 199,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_d369a32358f1, name: Acceptance criteria with bash test commands - *how we verify*., description: Acceptance criteria with bash test commands - *how we verify*., ko_type: validation, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 69, line_end: 71, content_length: 62, markdown_content: Acceptance criteria with bash test commands - *how we verify*., embedding: [0.027271, -0.075620, 0.009188, -0.024409, 0.019319, -0.006336, 0.016575, 0.0"
+    },
+    {
+      "id": 200,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_10805e9f3d94, name: Implementation approach and architecture - *why this solution*., description: Implementation approach and architecture - *why this solution*., ko_type: mechanism, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 72, line_end: 74, content_length: 63, markdown_content: Implementation approach and architecture - *why this solution*., embedding: [0.028954, -0.040404, 0.003481, 0.018046, -0.005537, 0.001748, 0.027218, -0."
+    },
+    {
+      "id": 201,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_a607bc6e0c59, name: Detailed steps, formulas, calculations - **NO pseudocode** (pseudocode goes in GUIDE only)., description: Detailed steps, formulas, calculations - **NO pseudocode** (pseudocode goes in GUIDE only)., ko_type: algorithm, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 75, line_end: 77, content_length: 91, markdown_content: Detailed steps, formulas, calculations - **NO pseudocode** (pseudocode goes in GUIDE only)., emb"
+    },
+    {
+      "id": 202,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_d3a968553dc0, name: Implementation code, function names, pseudocode - *how to build it*., description: Implementation code, function names, pseudocode - *how to build it*.  ---  ## Original Consolidated Spec (Archived)  The original SPEC.md contained Features 1-3 in full detail. These have been extract, ko_type: guide, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 78, line_end: 90, content_length: 368, markdown_content: Implementation co"
+    },
+    {
+      "id": 203,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_94bfa5038cf7, name: **Consciousness Principle:** \"Evidence must be immediately visible. When a milestone is tagged, proo, description: **Consciousness Principle:** \"Evidence must be immediately visible. When a milestone is tagged, proof pages regenerate automatically\u2014no human memory required.\"  **Why:** Manual regeneration creates ga, ko_type: pattern, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 91, line_end: 98, content_length: 354,"
+    },
+    {
+      "id": 204,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_070b9262b2a9, name: ```, description: ### Event Flow  ``` git tag ac-green_*           \u2192 tag.pushed@1.0   \u2193 Deployment system detects tag   \u2193 Run proofgen (reads tags)     \u2192 proof.generated@1.0   \u2193 Build Next.js with new proof HTML   \u2193 De, ko_type: spec, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 99, line_end: 133, content_length: 825, markdown_content: ### Event Flow\n\n```\ngit tag ac-green_*           \u2192 tag.pushed@1.0\n  \u2193\nDepl"
+    },
+    {
+      "id": 205,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_be8644cce246, name: **V1: Proof regenerates on tag push**, description: ### Acceptance Criteria  **V1: Proof regenerates on tag push** ```bash # Test: git tag ac-green_test_2025-11-02 git push origin ac-green_test_2025-11-02  # Wait 2 minutes  # Verify: curl https://scope, ko_type: validation, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 134, line_end: 170, content_length: 848, markdown_content: ### Acceptance Criteria\n\n**V1: Proof"
+    },
+    {
+      "id": 206,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_3bb6eed026b2, name: **Implementation Approach:** Integrate proofgen into Vercel build script, description: **Implementation Approach:** Integrate proofgen into Vercel build script  **Current Problem:** GitHub Actions would require separate workflow, adds complexity. Simpler: run proofgen during Vercel buil, ko_type: mechanism, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 171, line_end: 198, content_length: 844, markdown_content: **I"
+    },
+    {
+      "id": 207,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_5011b4f84ff9, name: **Step 1: Detect Tag Push**, description: ### Step-by-Step Execution  **Step 1: Detect Tag Push** ``` IF git push includes tag matching /^(evidence-sprint|ac-green|change)_/ THEN trigger Vercel deployment webhook ```  **Step 2: Vercel Build H, ko_type: algorithm, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 199, line_end: 246, content_length: 1204, markdown_content: ### Step-by-Step Execution\n\n**Step 1: Detect Ta"
+    },
+    {
+      "id": 208,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_0b0f941be32f, name: **File:** `package.json`, description: ### Implementation Steps  **File:** `package.json` ```json {   \"scripts\": {     \"build\": \"git fetch --tags 2>/dev/null || true && npm run proofgen && next build\",     \"build:local\": \"git fetch --tags, ko_type: guide, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 247, line_end: 317, content_length: 1897, markdown_content: ### Implementation Steps\n\n**File:** `package.json`\n```json\n"
+    },
+    {
+      "id": 209,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_f36538f95fe8, name: **Consciousness Principle:** \"Attention allocation is precious. When a client responds, wake the rel, description: **Consciousness Principle:** \"Attention allocation is precious. When a client responds, wake the relevant citizen immediately\u2014don't wait for human to check inbox.\"  **Why:** Checking Upwork inbox ever, ko_type: pattern, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 318, line_end: 325, content_length: 32"
+    },
+    {
+      "id": 210,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_e17294995b76, name: ```, description: ### Event Flow (Option B: Citizen Auto-Reply)  ``` Client sends Upwork message   \u2193 Upwork \u2192 Email notification \u2192 Gmail inbox   \u2193 Gmail filter detects \"Upwork message\"   \u2193 Trigger webhook \u2192 Wake Rafael, ko_type: spec, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 326, line_end: 380, content_length: 1328, markdown_content: ### Event Flow (Option B: Citizen Auto-Reply)\n\n```\nClient sends Upwork m"
+    },
+    {
+      "id": 211,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_deb4170a7248, name: **V1: Email triggers Rafael wake-up**, description: ### Acceptance Criteria  **V1: Email triggers Rafael wake-up** ```bash # Test: Send test email to Gmail # Subject: \"New message from Test Client on Upwork\" # Body: \"Hi, I'm interested in your proposal, ko_type: validation, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 381, line_end: 423, content_length: 1157, markdown_content: ### Acceptance Criteria\n\n**V1: Emai"
+    },
+    {
+      "id": 212,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_b5a4d437c811, name: **Implementation Approach:** Gmail \u2192 Webhook \u2192 Wake Rafael (Claude Code) \u2192 Telegram approval, description: **Implementation Approach:** Gmail \u2192 Webhook \u2192 Wake Rafael (Claude Code) \u2192 Telegram approval  **Architecture:**  ``` [Gmail]   \u2193 (Gmail filter + webhook) [Cloud Function / Webhook Endpoint]   \u2193 (HTTP, ko_type: mechanism, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 424, line_end: 465, content_length: 927, ma"
+    },
+    {
+      "id": 213,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_668d599033c7, name: ```, description: ### Step 1: Email Detection ``` INPUT: Gmail inbox PROCESS:   1. Gmail filter:      from:(@upwork.com)      subject:(New message from)      \u2192 Apply label: \"Upwork/Responses\"      \u2192 Forward to webhook:, ko_type: algorithm, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 466, line_end: 586, content_length: 3217, markdown_content: ### Step 1: Email Detection\n```\nINPUT: Gmail inbox\nPROCESS:\n  1. Gmail "
+    },
+    {
+      "id": 214,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_4afdfa07c882, name: **Phase 1: IFTTT (Quick Setup)**, description: ### Implementation Steps  **Phase 1: IFTTT (Quick Setup)**  1. **Create Gmail Filter:**    - Go to Gmail \u2192 Settings \u2192 Filters    - From: `@upwork.com`    - Subject: `New message from`    - Apply label, ko_type: guide, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 587, line_end: 919, content_length: 9199, markdown_content: ### Implementation Steps\n\n**Phase 1: IFTTT (Quick "
+    },
+    {
+      "id": 215,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_020275b2a177, name: **Consciousness Principle:** \"Metrics emerge from activity, not from manual logging. When Emma evalu, description: **Consciousness Principle:** \"Metrics emerge from activity, not from manual logging. When Emma evaluates a lead, the tracker updates itself\u2014no human bookkeeping.\"  **Why:** Manual tracking creates lag, ko_type: pattern, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: PATTERN, line_start: 920, line_end: 927, content_length: 32"
+    },
+    {
+      "id": 216,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_81f31fc2a58b, name: ```, description: ### Event Flow  ``` Emma evaluates Upwork post   \u2193 Emma outputs: DECISION: GO/NO-GO + REASON   \u2193 Script captures output       \u2192 lead.evaluated@1.0   \u2193 Append to citizens/emma/leads.json   \u2193 Regenerate, ko_type: spec, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: BEHAVIOR_SPEC, line_start: 928, line_end: 989, content_length: 1059, markdown_content: ### Event Flow\n\n```\nEmma evaluates Upwork post\n  \u2193\nEmma outputs: DECISIO"
+    },
+    {
+      "id": 217,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_704febd8a289, name: **V1: Tracker updates automatically**, description: ### Acceptance Criteria  **V1: Tracker updates automatically** ```bash # Test: Paste job post to Emma, get GO decision  # Expected: # - leads.json appends new entry within 1 second # - leads-tracker.m, ko_type: validation, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: VALIDATION, line_start: 990, line_end: 1032, content_length: 875, markdown_content: ### Acceptance Criteria\n\n**V1: Trac"
+    },
+    {
+      "id": 218,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_77a218650b64, name: **Implementation Approach:** Python script parses Emma output, appends JSON, regenerates markdown, description: **Implementation Approach:** Python script parses Emma output, appends JSON, regenerates markdown  **Why Python:** - Simple file I/O - JSON parsing built-in - Easy to integrate with Emma (call after e, ko_type: mechanism, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: MECHANISM, line_start: 1033, line_end: 1067, content_length:"
+    },
+    {
+      "id": 219,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_74682d3c1ca6, name: ```, description: ### Parse Emma Output ``` INPUT: Emma's text output PROCESS:   1. Find line starting with \"DECISION:\"      decision = extract_value(line, /DECISION:\\s*(\\w+)/)   2. Find line starting with \"REASON:\", ko_type: algorithm, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: ALGORITHM, line_start: 1068, line_end: 1145, content_length: 2285, markdown_content: ### Parse Emma Output\n```\nINPUT: Emma's text output\nPROCESS:\n  1. Find l"
+    },
+    {
+      "id": 220,
+      "labels": "[U4_Knowledge_Object]",
+      "properties_raw": "{id: ko_66a619d2dc4f, name: **File:** `scripts/track-lead.py`, description: ### Implementation  **File:** `scripts/track-lead.py`  ```python #!/usr/bin/env python3 import json import argparse from datetime import datetime from pathlib import Path  # Paths BASE_DIR = Path(__fi, ko_type: guide, path: docs/automation/SPEC.md, scope_ref: scopelock, level: L2, section_type: GUIDE, line_start: 1146, line_end: 1401, content_length: 7254, markdown_content: ### Implementation\n\n**File:** `scripts/track-le"
+    }
+  ]
+}

@@ -1,0 +1,1896 @@
+{
+  "repo_path": "clients/scopelock/src",
+  "summary": {
+    "total_files": 43,
+    "total_functions": 67,
+    "total_components": 0,
+    "total_classes": 0,
+    "total_imports": 85
+  },
+  "files": {
+    "clients/scopelock/src/app/sitemap.ts": {
+      "functions": [
+        {
+          "name": "sitemap",
+          "line_number": 5,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": "MetadataRoute.Sitemap",
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 44
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next",
+          "imports": [
+            "MetadataRoute"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/robots.ts": {
+      "functions": [
+        {
+          "name": "robots",
+          "line_number": 3,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": "MetadataRoute.Robots",
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 10
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next",
+          "imports": [
+            "MetadataRoute"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/api/contact/route.ts": {
+      "functions": [
+        {
+          "name": "POST",
+          "line_number": 3,
+          "function_type": "function",
+          "parameters": [
+            "request"
+          ],
+          "return_type": null,
+          "is_async": true,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 73
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/server",
+          "imports": [
+            "NextResponse"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/components/TeamTools.tsx": {
+      "functions": [
+        {
+          "name": "TeamTools",
+          "line_number": 98,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 60
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/components/FAQAccordion.tsx": {
+      "functions": [
+        {
+          "name": "FAQAccordion",
+          "line_number": 18,
+          "function_type": "function",
+          "parameters": [
+            "{ sections }"
+          ],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 45
+        },
+        {
+          "name": "toggleSection",
+          "line_number": 21,
+          "function_type": "arrow",
+          "parameters": [
+            "index"
+          ],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 11
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useState"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/components/ProcessTimeline.tsx": {
+      "functions": [
+        {
+          "name": "ProcessTimeline",
+          "line_number": 77,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 58
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/components/ContactForm.tsx": {
+      "functions": [
+        {
+          "name": "ContactForm",
+          "line_number": 6,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 104
+        },
+        {
+          "name": "handleSubmit",
+          "line_number": 14,
+          "function_type": "arrow",
+          "parameters": [
+            "e"
+          ],
+          "return_type": null,
+          "is_async": true,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 22
+        },
+        {
+          "name": "handleChange",
+          "line_number": 37,
+          "function_type": "arrow",
+          "parameters": [
+            "e"
+          ],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 6
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useState"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/components/TimezoneConverter.tsx": {
+      "functions": [
+        {
+          "name": "TimezoneConverter",
+          "line_number": 6,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 79
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useEffect",
+            "useState"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/components/AnimatedCommitList.tsx": {
+      "functions": [
+        {
+          "name": "AnimatedCommitList",
+          "line_number": 18,
+          "function_type": "function",
+          "parameters": [
+            "{ commits }"
+          ],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 62
+        },
+        {
+          "name": "handleExpand",
+          "line_number": 32,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 3
+        },
+        {
+          "name": "handleCollapse",
+          "line_number": 36,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 4
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useEffect",
+            "useState"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/components/BlogFilter.tsx": {
+      "functions": [
+        {
+          "name": "BlogFilter",
+          "line_number": 22,
+          "function_type": "function",
+          "parameters": [
+            "{ posts }"
+          ],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 131
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useState",
+            "useMemo"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        },
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 4,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/components/PricingTiers.tsx": {
+      "functions": [
+        {
+          "name": "PricingTiers",
+          "line_number": 19,
+          "function_type": "function",
+          "parameters": [
+            "{ tiers }"
+          ],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 42
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/components/ProofTeaser.tsx": {
+      "functions": [
+        {
+          "name": "getStatusBadge",
+          "line_number": 25,
+          "function_type": "arrow",
+          "parameters": [
+            "type"
+          ],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 12
+        },
+        {
+          "name": "ProofTeaser",
+          "line_number": 38,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": true,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 91
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "fs/promises",
+          "imports": [
+            "readFile"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": false
+        },
+        {
+          "module": "path",
+          "imports": [
+            "join"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/components/TableOfContents.tsx": {
+      "functions": [
+        {
+          "name": "TableOfContents",
+          "line_number": 16,
+          "function_type": "function",
+          "parameters": [
+            "{ sections }"
+          ],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 50
+        },
+        {
+          "name": "scrollToSection",
+          "line_number": 39,
+          "function_type": "arrow",
+          "parameters": [
+            "id"
+          ],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 8
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useEffect",
+            "useState"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/components/LiveCommits.tsx": {
+      "functions": [
+        {
+          "name": "LiveCommits",
+          "line_number": 57,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": true,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 33
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "cache"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "./AnimatedCommitList",
+          "imports": [
+            "AnimatedCommitList"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/layout.tsx": {
+      "functions": [],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": true
+        },
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 2,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/page.tsx": {
+      "functions": [
+        {
+          "name": "HomePage",
+          "line_number": 7,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 261
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "react",
+          "imports": [
+            "Suspense"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": false
+        },
+        {
+          "module": "../components/LiveCommits",
+          "imports": [
+            "LiveCommits"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        },
+        {
+          "module": "../components/ProofTeaser",
+          "imports": [
+            "ProofTeaser"
+          ],
+          "default_import": null,
+          "line_number": 4,
+          "is_type_import": false
+        },
+        {
+          "module": "../components/ContactForm",
+          "imports": [
+            "ContactForm"
+          ],
+          "default_import": null,
+          "line_number": 5,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/not-found.tsx": {
+      "functions": [
+        {
+          "name": "NotFound",
+          "line_number": 9,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 49
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": true
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/proof/page.tsx": {
+      "functions": [
+        {
+          "name": "getProofEntries",
+          "line_number": 21,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": "Promise<ProofEntry[]>",
+          "is_async": true,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 12
+        },
+        {
+          "name": "ProofIndexPage",
+          "line_number": 34,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": true,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 52
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "fs",
+          "imports": [
+            "promises as fs"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/proof/[tag]/page.tsx": {
+      "functions": [
+        {
+          "name": "getProofEntries",
+          "line_number": 21,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": "Promise<ProofEntry[]>",
+          "is_async": true,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 11
+        },
+        {
+          "name": "getProofEntry",
+          "line_number": 33,
+          "function_type": "function",
+          "parameters": [
+            "tag"
+          ],
+          "return_type": "Promise<ProofEntry | null>",
+          "is_async": true,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 4
+        },
+        {
+          "name": "readProofHtml",
+          "line_number": 38,
+          "function_type": "function",
+          "parameters": [
+            "tag"
+          ],
+          "return_type": "Promise<string | null>",
+          "is_async": true,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 16
+        },
+        {
+          "name": "generateStaticParams",
+          "line_number": 57,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": true,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 6
+        },
+        {
+          "name": "generateMetadata",
+          "line_number": 64,
+          "function_type": "function",
+          "parameters": [
+            "{ params }"
+          ],
+          "return_type": null,
+          "is_async": true,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 17
+        },
+        {
+          "name": "ProofDetailPage",
+          "line_number": 82,
+          "function_type": "function",
+          "parameters": [
+            "{ params }"
+          ],
+          "return_type": null,
+          "is_async": true,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 29
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "fs",
+          "imports": [
+            "promises as fs"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": false
+        },
+        {
+          "module": "next/navigation",
+          "imports": [
+            "notFound"
+          ],
+          "default_import": null,
+          "line_number": 4,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/faq/page.tsx": {
+      "functions": [
+        {
+          "name": "FAQPage",
+          "line_number": 259,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 26
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": true
+        },
+        {
+          "module": "../../components/FAQAccordion",
+          "imports": [
+            "FAQAccordion"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/contact/page.tsx": {
+      "functions": [
+        {
+          "name": "ContactPage",
+          "line_number": 11,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 94
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": true
+        },
+        {
+          "module": "../../components/ContactForm",
+          "imports": [
+            "ContactForm"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        },
+        {
+          "module": "../../components/TimezoneConverter",
+          "imports": [
+            "TimezoneConverter"
+          ],
+          "default_import": null,
+          "line_number": 4,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/process/page.tsx": {
+      "functions": [
+        {
+          "name": "ProcessPage",
+          "line_number": 10,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 199
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": true
+        },
+        {
+          "module": "../../components/ProcessTimeline",
+          "imports": [
+            "ProcessTimeline"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/about/page.tsx": {
+      "functions": [
+        {
+          "name": "AboutPage",
+          "line_number": 10,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 109
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": true
+        },
+        {
+          "module": "../../components/TeamTools",
+          "imports": [
+            "TeamTools"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/terms/page.tsx": {
+      "functions": [
+        {
+          "name": "TermsPage",
+          "line_number": 9,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 159
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": true
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/privacy/page.tsx": {
+      "functions": [
+        {
+          "name": "PrivacyPage",
+          "line_number": 9,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 143
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": true
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/pricing/page.tsx": {
+      "functions": [
+        {
+          "name": "PricingPage",
+          "line_number": 56,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 136
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": true
+        },
+        {
+          "module": "../../components/PricingTiers",
+          "imports": [
+            "PricingTiers"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/page.tsx": {
+      "functions": [
+        {
+          "name": "BlogPage",
+          "line_number": 88,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 30
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": true
+        },
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 2,
+          "is_type_import": false
+        },
+        {
+          "module": "../../components/BlogFilter",
+          "imports": [
+            "BlogFilter",
+            "type BlogPost"
+          ],
+          "default_import": null,
+          "line_number": 4,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/fixed-price-vs-hourly-why-outcome-based-pricing-works/PricingCalculator.tsx": {
+      "functions": [
+        {
+          "name": "PricingCalculator",
+          "line_number": 6,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 133
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useState"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/fixed-price-vs-hourly-why-outcome-based-pricing-works/page.tsx": {
+      "functions": [
+        {
+          "name": "PricingModelsPage",
+          "line_number": 12,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 525
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": true
+        },
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 2,
+          "is_type_import": false
+        },
+        {
+          "module": "./PricingCalculator",
+          "imports": [
+            "PricingCalculator"
+          ],
+          "default_import": null,
+          "line_number": 4,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/change-control-without-scope-creep/page.tsx": {
+      "functions": [
+        {
+          "name": "ChangeControlPage",
+          "line_number": 12,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 601
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": true
+        },
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 2,
+          "is_type_import": false
+        },
+        {
+          "module": "./DecisionTree",
+          "imports": [
+            "DecisionTree"
+          ],
+          "default_import": null,
+          "line_number": 4,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/change-control-without-scope-creep/DecisionTree.tsx": {
+      "functions": [
+        {
+          "name": "DecisionTree",
+          "line_number": 55,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 168
+        },
+        {
+          "name": "handleExampleSelect",
+          "line_number": 59,
+          "function_type": "arrow",
+          "parameters": [
+            "example"
+          ],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 4
+        },
+        {
+          "name": "handleNext",
+          "line_number": 64,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 5
+        },
+        {
+          "name": "handleReset",
+          "line_number": 70,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 4
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useState"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/how-we-use-ai-citizens-not-chatgpt-wrappers/page.tsx": {
+      "functions": [
+        {
+          "name": "AICitizensPage",
+          "line_number": 11,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 973
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": true
+        },
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 2,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/how-we-deliver-in-1-week-what-agencies-quote-in-8/page.tsx": {
+      "functions": [
+        {
+          "name": "AgencySpeedPage",
+          "line_number": 11,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 603
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": true
+        },
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 2,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/the-evidence-sprint-prove-value-in-90-seconds/page.tsx": {
+      "functions": [
+        {
+          "name": "EvidenceSprintPage",
+          "line_number": 11,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 631
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": true
+        },
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 2,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/why-acceptance-criteria-beat-time-estimates/page.tsx": {
+      "functions": [
+        {
+          "name": "WhyAcceptanceCriteriaPage",
+          "line_number": 12,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 500
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": true
+        },
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 2,
+          "is_type_import": false
+        },
+        {
+          "module": "../../../components/TableOfContents",
+          "imports": [
+            "TableOfContents"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/la-serenissima/page.tsx": {
+      "functions": [
+        {
+          "name": "LaSerenissimaPage",
+          "line_number": 17,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 376
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 1,
+          "is_type_import": true
+        },
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 2,
+          "is_type_import": false
+        },
+        {
+          "module": "./components/ParticleNetworkHero",
+          "imports": [
+            "ParticleNetworkHero"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        },
+        {
+          "module": "./components/AnimatedMetricsGrid",
+          "imports": [
+            "AnimatedMetricsGrid"
+          ],
+          "default_import": null,
+          "line_number": 4,
+          "is_type_import": false
+        },
+        {
+          "module": "./components/ArchitectureDiagram",
+          "imports": [
+            "ArchitectureDiagram"
+          ],
+          "default_import": null,
+          "line_number": 5,
+          "is_type_import": false
+        },
+        {
+          "module": "./components/CodeComparison",
+          "imports": [
+            "CodeComparison"
+          ],
+          "default_import": null,
+          "line_number": 6,
+          "is_type_import": false
+        },
+        {
+          "module": "./components/EnergyDiffusionVisualization",
+          "imports": [
+            "EnergyDiffusionVisualization"
+          ],
+          "default_import": null,
+          "line_number": 7,
+          "is_type_import": false
+        },
+        {
+          "module": "./components/TimelineSection",
+          "imports": [
+            "TimelineSection"
+          ],
+          "default_import": null,
+          "line_number": 8,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/la-serenissima/components/CodeComparison.tsx": {
+      "functions": [],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useState"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/la-serenissima/components/EnergyDiffusionVisualization.tsx": {
+      "functions": [
+        {
+          "name": "EnergyDiffusionVisualization",
+          "line_number": 14,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 190
+        },
+        {
+          "name": "resizeCanvas",
+          "line_number": 28,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 4
+        },
+        {
+          "name": "initNodes",
+          "line_number": 36,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 27
+        },
+        {
+          "name": "animate",
+          "line_number": 66,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 64
+        },
+        {
+          "name": "startDiffusion",
+          "line_number": 140,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 17
+        },
+        {
+          "name": "resetDiffusion",
+          "line_number": 158,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 7
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useEffect",
+            "useRef",
+            "useState"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/la-serenissima/components/ParticleNetworkHero.tsx": {
+      "functions": [
+        {
+          "name": "ParticleNetworkHero",
+          "line_number": 14,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 105
+        },
+        {
+          "name": "resizeCanvas",
+          "line_number": 27,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 4
+        },
+        {
+          "name": "initParticles",
+          "line_number": 35,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 12
+        },
+        {
+          "name": "animate",
+          "line_number": 50,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 45
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useEffect",
+            "useRef"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/la-serenissima/components/ArchitectureDiagram.tsx": {
+      "functions": [
+        {
+          "name": "ArchitectureDiagram",
+          "line_number": 49,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 44
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useState"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/la-serenissima/components/AnimatedMetricsGrid.tsx": {
+      "functions": [
+        {
+          "name": "AnimatedMetric",
+          "line_number": 23,
+          "function_type": "function",
+          "parameters": [
+            "{ label",
+            "value",
+            "suffix",
+            "duration",
+            "decimals"
+          ],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 54
+        },
+        {
+          "name": "animate",
+          "line_number": 37,
+          "function_type": "arrow",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": false,
+          "is_default_export": false,
+          "body_lines": 12
+        },
+        {
+          "name": "AnimatedMetricsGrid",
+          "line_number": 78,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 12
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "react",
+          "imports": [
+            "useEffect",
+            "useRef",
+            "useState"
+          ],
+          "default_import": null,
+          "line_number": 3,
+          "is_type_import": false
+        }
+      ],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/blog/la-serenissima/components/TimelineSection.tsx": {
+      "functions": [
+        {
+          "name": "TimelineSection",
+          "line_number": 44,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": false,
+          "body_lines": 29
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [],
+      "parse_errors": []
+    },
+    "clients/scopelock/src/app/case-studies/page.tsx": {
+      "functions": [
+        {
+          "name": "CaseStudiesPage",
+          "line_number": 9,
+          "function_type": "function",
+          "parameters": [],
+          "return_type": null,
+          "is_async": false,
+          "is_exported": true,
+          "is_default_export": true,
+          "body_lines": 235
+        }
+      ],
+      "components": [],
+      "classes": [],
+      "imports": [
+        {
+          "module": "next/link",
+          "imports": [],
+          "default_import": "Link",
+          "line_number": 1,
+          "is_type_import": false
+        },
+        {
+          "module": "next",
+          "imports": [
+            "Metadata"
+          ],
+          "default_import": null,
+          "line_number": 2,
+          "is_type_import": true
+        }
+      ],
+      "parse_errors": []
+    }
+  }
+}
