@@ -1,0 +1,12 @@
+client_org: ""
+representative_name: ""
+representative_email: ""
+consent_signed_at_utc: ""
+processing_scope:
+  graph_name: ""
+  data_categories: []
+  retention_policy: ""
+revocation_contact: ""
+evidence_uri: ""
+validated_by: ""
+validated_at_utc: ""
