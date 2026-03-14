@@ -93,6 +93,9 @@
 |------|---------------|
 | `operations/VALIDATION_METRICS_SPEC.md` | Quality metrics, acceptance criteria |
 | `operations/GRAPHCARE_SELECTORS_GUIDE.md` | Graph query patterns |
+| `operations/SHIP_HOLD_SECURITY_GATE.md` | Production security gate decision and exit criteria |
+| `operations/GRAPH_ACCESS_CONTROLS.md` | Access control policy for graph query surfaces |
+| `operations/GDPR_CONSENT_VALIDATION.md` | Consent evidence and GDPR validation gate |
 | `team/STARTUP_GUIDE.md` | Onboarding new citizens |
 
 ### Personality & Culture
@@ -302,10 +305,10 @@ These are **protocol-level laws** that govern all ecosystem participants:
 
 ### GraphCare Services
 
-- [ ] **Service 2: Ongoing Sync Workflow** - How to run daily/weekly/real-time sync
-- [ ] **Service 3: Health Monitoring Guide** - 10-metric dashboard setup and interpretation
+- [x] **Service 2: Ongoing Sync Workflow** - How to run daily/weekly/real-time sync (`operations/ONGOING_SYNC_WORKFLOW.md`)
+- [x] **Service 3: Health Monitoring Guide** - 10-metric dashboard setup and interpretation (`operations/HEALTH_MONITORING_GUIDE.md`)
 - [ ] **Service 4: Performance Optimization Playbook** - Query optimization, storage tuning
-- [ ] **Service 5: Emergency Response Protocols** - Incident handling, specialist assignment
+- [x] **Service 5: Emergency Response Protocols** - Incident handling, specialist assignment (`operations/EMERGENCY_RESPONSE_PROTOCOLS.md`)
 
 ### Updated Marketing
 

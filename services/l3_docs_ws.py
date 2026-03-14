@@ -7,8 +7,10 @@ Uses Mind Protocol WebSocket event system (membrane-native).
 """
 
 import asyncio
+import hashlib
 import json
-from datetime import datetime
+import os
+from datetime import datetime, timezone
 from typing import Dict, List, Any
 import websockets
 from websockets.server import WebSocketServerProtocol
@@ -19,8 +21,71 @@ VIEW_CACHE: Dict[str, tuple[datetime, Any]] = {}
 # Connected clients (org -> set of websockets)
 SUBSCRIBERS: Dict[str, set[WebSocketServerProtocol]] = {}
 
-# FalkorDB connection (for Cypher queries)
-FALKORDB_WS = "ws://mindprotocol.onrender.com:8000/ws"
+# Membrane bus connection (for graph delta invalidation events)
+FALKORDB_WS = os.getenv("GRAPH_EVENTS_WS", "ws://localhost:8000/api/ws")
+EVENT_SUBSCRIPTION = {"type": "subscribe", "channel": "graph.delta.*"}
+
+
+def emit_query_audit(org: str, query: str, status: str, detail: str = "") -> None:
+    """Emit a structured audit log line for every graph query attempt."""
+    digest = hashlib.sha256(query.encode("utf-8")).hexdigest()[:12]
+    event = {
+        "type": "graph.query.audit",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "org": org,
+        "query_digest": digest,
+        "status": status,
+        "detail": detail,
+    }
+    print(json.dumps(event))
+
+
+def parse_graph_event(raw: str) -> dict | None:
+    """Parse and filter graph.delta.* events from a raw websocket payload."""
+    try:
+        event = json.loads(raw)
+    except json.JSONDecodeError:
+        print("⚠️ Ignored non-JSON graph event payload")
+        return None
+
+    event_type = event.get("type", "")
+    if not isinstance(event_type, str) or not event_type.startswith("graph.delta."):
+        return None
+
+    return event
+
+
+
+def _extract_quote_expiry(msg: dict) -> str | None:
+    """Extract quote expiry timestamp from supported payload shapes."""
+    if isinstance(msg.get("quote_expires_at"), str):
+        return msg["quote_expires_at"]
+
+    quote = msg.get("quote")
+    if isinstance(quote, dict) and isinstance(quote.get("expires_at"), str):
+        return quote["expires_at"]
+
+    return None
+
+
+def is_quote_expired(msg: dict, now: datetime | None = None) -> bool:
+    """Return True when the request quote has passed its expiry timestamp."""
+    expiry_raw = _extract_quote_expiry(msg)
+    if not expiry_raw:
+        return False
+
+    try:
+        expiry_dt = datetime.fromisoformat(expiry_raw.replace("Z", "+00:00"))
+    except ValueError:
+        print("⚠️ Invalid quote expiry timestamp format")
+        return True
+
+    now_dt = now or datetime.now(timezone.utc)
+    if expiry_dt.tzinfo is None:
+        expiry_dt = expiry_dt.replace(tzinfo=timezone.utc)
+
+    return now_dt >= expiry_dt
+
 
 
 # ============================================================================
@@ -111,19 +176,23 @@ async def execute_cypher(org: str, query: str, params: dict = None) -> List[Dict
         # Parse FalkorDB result format
         # result = {"result": [["col1", "col2"], [[val1, val2]], [metadata]]}
         if "result" not in result:
+            emit_query_audit(org, query, "error", "missing_result")
             return []
 
         data = result["result"]
         if len(data) < 2:
+            emit_query_audit(org, query, "error", "invalid_result_shape")
             return []
 
         columns = data[0]
         rows = data[1]
 
         # Convert to list of dicts
+        emit_query_audit(org, query, "ok", f"rows={len(rows)}")
         return [dict(zip(columns, row)) for row in rows]
 
     except Exception as e:
+        emit_query_audit(org, query, "error", str(e))
         print(f"❌ Cypher query failed: {e}")
         return []
 
@@ -183,6 +252,14 @@ async def handle_view_request(ws: WebSocketServerProtocol, msg: dict):
             "type": "error",
             "request_id": request_id,
             "message": "Missing 'org' parameter"
+        }))
+        return
+
+    if is_quote_expired(msg):
+        await ws.send(json.dumps({
+            "type": "error",
+            "request_id": request_id,
+            "message": "Quote expired"
         }))
         return
 
@@ -305,17 +382,52 @@ async def handle_client(websocket: WebSocketServerProtocol, path: str):
         print(f"🔌 Client disconnected: {websocket.remote_address}")
 
 
-async def subscribe_to_falkordb_events():
-    """Subscribe to FalkorDB graph events (future)"""
-    # TODO: Connect to FalkorDB WebSocket and subscribe to graph.delta.*
-    # For now, we rely on cache TTL
-    print("⏳ FalkorDB event subscription not implemented yet (using cache TTL)")
-    pass
+async def subscribe_to_falkordb_events(
+    ws_url: str | None = None,
+    reconnect_delay_seconds: int = 2,
+    max_retries: int | None = None,
+):
+    """Subscribe to graph delta events and invalidate cached views."""
+    target_ws_url = ws_url or FALKORDB_WS
+    retries = 0
+
+    while True:
+        if max_retries is not None and retries >= max_retries:
+            print("🛑 Reached max retries for graph event subscription loop")
+            return
+
+        try:
+            print(f"🔌 Connecting to graph event bus: {target_ws_url}")
+            async with websockets.connect(target_ws_url, ping_interval=20, ping_timeout=20) as ws:
+                await ws.send(json.dumps(EVENT_SUBSCRIPTION))
+                print(f"✅ Subscribed to graph updates: {EVENT_SUBSCRIPTION['channel']}")
+
+                async for raw in ws:
+                    event = parse_graph_event(raw)
+                    if event is not None:
+                        await handle_graph_update(event)
+
+        except asyncio.CancelledError:
+            raise
+        except Exception as exc:
+            print(f"⚠️ Graph event subscription dropped: {exc}")
+
+        retries += 1
+        print(f"🔁 Reconnecting to graph event bus in {reconnect_delay_seconds}s")
+        await asyncio.sleep(reconnect_delay_seconds)
+
+
+async def start_background_tasks() -> None:
+    """Start non-blocking background tasks required by the L3 service."""
+    asyncio.create_task(subscribe_to_falkordb_events())
+    print("✅ Started graph event observer task")
 
 
 async def main():
     """Start L3 Docs View Service"""
     print("🚀 Starting L3 Docs View Service (WebSocket)")
+
+    await start_background_tasks()
 
     # Start WebSocket server
     server = await websockets.serve(
@@ -326,9 +438,6 @@ async def main():
     )
 
     print("✅ WebSocket server listening on ws://0.0.0.0:8003")
-
-    # Subscribe to FalkorDB events (future)
-    asyncio.create_task(subscribe_to_falkordb_events())
 
     await server.wait_closed()
 

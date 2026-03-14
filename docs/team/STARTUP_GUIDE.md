@@ -31,7 +31,7 @@ python orchestration/adapters/ws/websocket_server.py
 ```
 
 **IMPORTANT:** Start the background observer task `observe_bus_and_fanout()` in the WebSocket server.
-**TODO:** Wire this into websocket_server.py startup (see below).
+**Status:** Implemented in `services/l3_docs_ws.py` startup via `start_background_tasks()`.
 
 ---
 
@@ -169,9 +169,9 @@ asyncio.run(test_docs_view())
 
 ---
 
-## TODO: Wire L3 Observer into WebSocket Server
+## L3 Observer Wiring (Implemented in this repo)
 
-**File:** `/orchestration/adapters/ws/websocket_server.py`
+**File:** `services/l3_docs_ws.py`
 
 **Add to startup** (around line 300-400 where engines are started):
 
