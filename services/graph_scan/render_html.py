@@ -306,8 +306,8 @@ function updateHover() {{
     hoverInfo.innerHTML = `
       <strong style="color:${{c}}">${{n.node_type}}</strong> ${{n.label}}<br>
       <span style="color:#777">
-        W=${{n.weight.toFixed(2)}} E=${{n.energy.toFixed(2)}} S=${{n.stability.toFixed(2)}}
-        self=${{n.self_relevance.toFixed(2)}} goal=${{n.goal_relevance.toFixed(2)}}
+        W=${{(n.weight||0).toFixed(2)}} E=${{(n.energy||0).toFixed(2)}} S=${{(n.stability||0).toFixed(2)}}
+        ${{n.self_relevance != null ? 'self=' + n.self_relevance.toFixed(2) : ''}} ${{n.goal_relevance != null ? 'goal=' + n.goal_relevance.toFixed(2) : ''}}
       </span>`;
   }} else {{
     hoverInfo.style.display = 'none';
