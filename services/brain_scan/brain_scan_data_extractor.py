@@ -40,7 +40,7 @@ FALKORDB_PORT = 6379
 # ── Visual mapping functions (from physics_visual_mapping.py) ────────────
 
 def _node_radius(weight: float) -> float:
-    return 0.7 + 2.0 * math.log1p(weight * 5.0)
+    return 0.4 + 1.0 * math.log1p(weight * 3.0)
 
 def _node_glow(energy: float) -> float:
     if energy < 0.1:
@@ -231,26 +231,47 @@ def _compute_semantic_positions(nodes: list[dict], graph) -> list[tuple]:
         from sklearn.feature_extraction.text import TfidfVectorizer
         import umap
 
-        # TF-IDF on content
+        # TF-IDF on content (exclude type prefix to avoid type-clustering)
+        clean_contents = []
+        for nd, text in zip(nodes, contents):
+            # Remove the type name from content so UMAP doesn't cluster by type
+            clean = text.replace(nd["type"], "").replace(":", " ").strip()
+            clean_contents.append(clean if clean else text)
+
         tfidf = TfidfVectorizer(max_features=200, stop_words='english')
-        X = tfidf.fit_transform(contents)
+        X = tfidf.fit_transform(clean_contents).toarray()
+
+        # Subtract per-type centroid so all types share the same center of gravity
+        type_indices: dict[str, list[int]] = {}
+        for i, nd in enumerate(nodes):
+            t = nd["type"]
+            if t not in type_indices:
+                type_indices[t] = []
+            type_indices[t].append(i)
+
+        for t, indices in type_indices.items():
+            if len(indices) > 1:
+                centroid = np.mean(X[indices], axis=0)
+                for idx in indices:
+                    X[idx] -= centroid
 
         # UMAP to 3D
         reducer = umap.UMAP(
             n_components=3,
-            n_neighbors=min(15, len(contents) - 1),
-            min_dist=0.1,
+            n_neighbors=min(20, len(contents) - 1),
+            min_dist=0.05,
+            spread=0.8,
             metric='cosine',
             random_state=42,
         )
-        coords = reducer.fit_transform(X.toarray())
+        coords = reducer.fit_transform(X)
 
-        # Normalize to [-0.6, 0.6] range
+        # Normalize to [-0.4, 0.4] range (compact, brain-like)
         for dim in range(3):
             col = coords[:, dim]
             mn, mx = col.min(), col.max()
             if mx - mn > 0:
-                coords[:, dim] = (col - mn) / (mx - mn) * 1.2 - 0.6
+                coords[:, dim] = (col - mn) / (mx - mn) * 0.8 - 0.4
 
         # Weight and self_relevance pull toward center
         positions = []

@@ -1,19 +1,8 @@
 """
-Brain Scan 3D Renderer v2 — all 9 visual layers, static, interactive.
+Brain Scan 3D Renderer v3 — organic, brain-like visualization.
 
-DOCS: docs/care/brain_scan/PATTERNS_Brain_Scan.md
-
-Generates standalone HTML with Three.js. No auto-rotate (static by default).
-All visual properties pre-computed by the extractor — renderer just displays.
-
-Visual layers implemented:
-  1. Node base: color (type), radius (weight), glow (energy), opacity (stability)
-  2. Node affinity: inner halo (self_relevance), outer halo (partner_relevance),
-     shape angularity (goal_relevance), wireframe (achievement), roughness (risk)
-  3. Link base: color (relation), width (weight), opacity (trust), glow (energy)
-  4. Link relational: wave (friction), dash (permanence), saturation (affinity),
-     double-line (aversion), temperature (valence), jaggedness (1-stability)
-  5-9: Partially — modality shapes, regions, provenance patina
+No straight lines. No dashes. No plastic. Curves everywhere.
+Muted organic palette. Glow on links. Smaller nodes.
 """
 
 import json
@@ -25,7 +14,6 @@ def render_html(scan_path: Path, output_path: Path):
     scan = json.loads(scan_path.read_text())
     nodes_json = json.dumps(scan["nodes"])
     links_json = json.dumps(scan["links"])
-    regions_json = json.dumps(scan.get("regions", {}))
     citizen_id = scan["citizen_id"]
     stats = scan["stats"]
 
@@ -36,31 +24,30 @@ def render_html(scan_path: Path, output_path: Path):
 <title>Brain Scan — @{citizen_id}</title>
 <style>
   * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-  body {{ background: #0a0a0a; color: #e0e0e0; font-family: 'SF Mono', 'Cascadia Code', monospace; overflow: hidden; }}
+  body {{ background: #06060c; color: #c0c0c8; font-family: 'SF Mono', 'Cascadia Code', monospace; overflow: hidden; }}
+  canvas {{ filter: contrast(1.4) brightness(1.2) saturate(1.3); }}
   #info {{
     position: absolute; top: 16px; left: 16px; z-index: 10;
-    background: rgba(10,10,10,0.9); padding: 16px; border-radius: 8px;
-    border: 1px solid #333; max-width: 280px; font-size: 11px; line-height: 1.5;
+    background: rgba(8,8,16,0.92); padding: 14px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.08); max-width: 240px; font-size: 10px; line-height: 1.5;
   }}
-  #info h2 {{ font-size: 14px; margin-bottom: 8px; color: #fff; }}
-  .stat {{ color: #888; margin: 2px 0; }}
-  .legend {{ margin-top: 10px; }}
-  .legend-item {{ display: flex; align-items: center; gap: 6px; margin: 2px 0; cursor: pointer; user-select: none; }}
-  .legend-item.dimmed {{ opacity: 0.2; }}
-  .legend-dot {{ width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }}
+  #info h2 {{ font-size: 13px; margin-bottom: 6px; color: #e0e0e8; font-weight: 500; }}
+  .stat {{ color: #666; margin: 2px 0; }}
+  .legend {{ margin-top: 8px; }}
+  .legend-item {{ display: flex; align-items: center; gap: 5px; margin: 2px 0; cursor: pointer; user-select: none; font-size: 10px; }}
+  .legend-item.dimmed {{ opacity: 0.15; }}
+  .legend-dot {{ width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }}
   #hover-info {{
     position: absolute; bottom: 16px; left: 16px; z-index: 10;
-    background: rgba(10,10,10,0.92); padding: 12px; border-radius: 8px;
-    border: 1px solid #444; font-size: 12px; display: none; max-width: 420px; line-height: 1.6;
+    background: rgba(8,8,16,0.95); padding: 10px 14px; border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1); font-size: 11px; display: none; max-width: 380px; line-height: 1.5;
   }}
   #controls {{
     position: absolute; top: 16px; right: 16px; z-index: 10;
-    background: rgba(10,10,10,0.9); padding: 12px; border-radius: 8px;
-    border: 1px solid #333; font-size: 11px;
+    background: rgba(8,8,16,0.92); padding: 10px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.08); font-size: 10px;
   }}
-  #controls label {{ display: block; margin: 3px 0; cursor: pointer; }}
-  #controls hr {{ border-color: #333; margin: 6px 0; }}
-  .bar {{ display: inline-block; height: 6px; border-radius: 3px; margin-right: 4px; }}
+  #controls label {{ display: block; margin: 2px 0; cursor: pointer; }}
 </style>
 </head>
 <body>
@@ -68,25 +55,12 @@ def render_html(scan_path: Path, output_path: Path):
 <div id="info">
   <h2>@{citizen_id}</h2>
   <div class="stat">{stats['total_nodes']} nodes — {stats['total_links']} links</div>
-  <div class="stat">stem {stats['layers'].get('stem',0)} / limbic {stats['layers'].get('limbic',0)} / cortex {stats['layers'].get('cortex',0)}</div>
   <div class="legend" id="legend"></div>
 </div>
 
 <div id="controls">
-  <strong>Layers</strong>
-  <label><input type="checkbox" checked data-layer="stem"> Stem</label>
-  <label><input type="checkbox" checked data-layer="limbic"> Limbic</label>
-  <label><input type="checkbox" checked data-layer="cortex"> Cortex</label>
-  <hr>
-  <strong>Display</strong>
   <label><input type="checkbox" checked id="showLinks"> Links</label>
-  <label><input type="checkbox" checked id="showHalos"> Halos (relevance)</label>
-  <label><input type="checkbox" id="showWireframe"> Wireframe (achievement)</label>
-  <hr>
-  <strong>Regions</strong>
-  <label><input type="checkbox" id="showSelf"> Self model</label>
-  <label><input type="checkbox" id="showPartner"> Partner model</label>
-  <label><input type="checkbox" id="showGoals"> Goal space</label>
+  <label><input type="checkbox" checked id="showHalos"> Relevance halos</label>
 </div>
 
 <div id="hover-info"></div>
@@ -96,86 +70,112 @@ def render_html(scan_path: Path, output_path: Path):
 <script>
 const nodes = {nodes_json};
 const links = {links_json};
-const regionData = {regions_json};
 
-// ── Scene setup ─────────────────────────────────────────────
+// ── Organic color palette ───────────────────────────────────
+// Muted, warm, desaturated — like neural tissue under soft light
+const PALETTE = {{
+  process:   0x5a8a6a,  // sage green
+  desire:    0xc47058,  // terracotta
+  narrative: 0x8a6ab0,  // muted lavender
+  value:     0xc4a040,  // old gold
+  concept:   0x5878a0,  // steel blue
+  memory:    0x707078,  // warm gray
+  state:     0xb06888,  // dusty rose
+  stimulus:  0xc08050,  // burnt sienna
+  frequency: 0x508888,  // teal
+}};
+
+const LINK_PALETTE = {{
+  activates:    0x5a8a6a,
+  supports:     0x5878a0,
+  contradicts:  0xc47058,
+  reminds_of:   0x8a6ab0,
+  causes:       0xc4a040,
+  regulates:    0x508888,
+  depends_on:   0x606068,
+  exemplifies:  0x5a9878,
+  associates:   0x585860,
+  default:      0x484850,
+}};
+
+// ── Scene ───────────────────────────────────────────────────
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x080810);
-scene.fog = new THREE.FogExp2(0x080810, 0.25);
+scene.background = new THREE.Color(0x06060c);
+scene.fog = new THREE.FogExp2(0x06060c, 0.4);
 
-const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.01, 100);
-camera.position.set(0.8, 0.8, 1.8);
-camera.lookAt(0, 0.4, 0);
+const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.01, 50);
+camera.position.set(0.3, 0.5, 0.8);
+camera.lookAt(0, 0.3, 0);
 
-const renderer = new THREE.WebGLRenderer({{ antialias: true, alpha: true }});
+const renderer = new THREE.WebGLRenderer({{ antialias: true }});
 renderer.setSize(innerWidth, innerHeight);
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.2;
+renderer.toneMappingExposure = 1.8;  // pushed bright
 document.body.appendChild(renderer.domElement);
 
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.autoRotate = false;  // STATIC by default
-controls.target.set(0, 0.4, 0);
+controls.dampingFactor = 0.06;
+controls.autoRotate = false;
+controls.target.set(0, 0.3, 0);
 
-// Lights
-const ambient = new THREE.AmbientLight(0x404060, 0.4);
-scene.add(ambient);
-const key = new THREE.PointLight(0xffeedd, 0.8, 8);
-key.position.set(1, 2, 2);
+// Soft organic lighting
+scene.add(new THREE.AmbientLight(0x2a2a3e, 0.8));
+const key = new THREE.PointLight(0xffe8d0, 1.0, 6);
+key.position.set(0.6, 1.2, 0.8);
 scene.add(key);
-const fill = new THREE.PointLight(0x4466aa, 0.3, 6);
-fill.position.set(-1, 0.5, -1);
+const rim = new THREE.PointLight(0x4060a0, 0.5, 5);
+rim.position.set(-0.6, 0.2, -0.6);
+scene.add(rim);
+const fill = new THREE.PointLight(0xa08060, 0.3, 4);
+fill.position.set(0, -0.5, 0.5);
 scene.add(fill);
 
 // ── Legend ───────────────────────────────────────────────────
-const typeColors = {{
-  process: "#22c55e", desire: "#ef4444", narrative: "#a855f7",
-  value: "#f59e0b", concept: "#3b82f6", memory: "#6b7280"
-}};
 const legend = document.getElementById('legend');
-const activeTypes = new Set(Object.keys(typeColors));
-for (const [type, color] of Object.entries(typeColors)) {{
+const activeTypes = new Set(Object.keys(PALETTE));
+for (const [type, hex] of Object.entries(PALETTE)) {{
+  const c = '#' + hex.toString(16).padStart(6, '0');
   const item = document.createElement('div');
   item.className = 'legend-item';
-  item.innerHTML = `<span class="legend-dot" style="background:${{color}}"></span>${{type}}`;
+  item.innerHTML = `<span class="legend-dot" style="background:${{c}}"></span>${{type}}`;
   item.onclick = () => {{
     if (activeTypes.has(type)) {{ activeTypes.delete(type); item.classList.add('dimmed'); }}
     else {{ activeTypes.add(type); item.classList.remove('dimmed'); }}
-    updateVisibility();
+    nodeMeshes.forEach(m => {{
+      m.visible = activeTypes.has(m.userData.node_type);
+    }});
   }};
   legend.appendChild(item);
 }}
 
-// ── Node meshes ─────────────────────────────────────────────
+// ── Nodes ───────────────────────────────────────────────────
 const nodeGroup = new THREE.Group();
 const haloGroup = new THREE.Group();
 const nodeMeshes = [];
 const nodeById = {{}};
 
 nodes.forEach(n => {{
-  // Base geometry (sphere for now — modality shapes in Phase 2)
-  const geo = new THREE.SphereGeometry(n.radius * 0.003, 14, 14);
+  const geo = new THREE.SphereGeometry(n.radius * 0.003, 10, 10);
+  const baseHex = PALETTE[n.node_type] || 0x585860;
+  const baseColor = new THREE.Color(baseHex);
 
-  // Color with patina (old nodes get brownish tint)
-  const baseColor = new THREE.Color(n.color);
-  const patinaColor = new THREE.Color(0x8b7355);
-  const finalColor = baseColor.clone().lerp(patinaColor, n.patina * 0.4);
+  // Patina: old nodes get slightly warmer/darker
+  const patinaColor = new THREE.Color(0x6b5b4b);
+  const finalColor = baseColor.clone().lerp(patinaColor, n.patina * 0.3);
 
-  const mat = new THREE.MeshPhongMaterial({{
+  // All nodes glow — emissive based on type color + energy boost
+  const emissiveBase = baseColor.clone().multiplyScalar(0.4 + n.glow * 0.5);
+
+  const mat = new THREE.MeshStandardMaterial({{
     color: finalColor,
-    emissive: n.glow > 0 ? baseColor.clone().multiplyScalar(n.glow * 0.5) : new THREE.Color(0),
+    emissive: emissiveBase,
+    roughness: 0.7,
+    metalness: 0.0,
     transparent: true,
-    opacity: n.opacity,
-    shininess: n.sharpness * 80,  // recency → shininess (sharp = shiny)
+    opacity: Math.max(0.75, n.opacity),
   }});
-
-  // Roughness via flatShading for high risk_affinity
-  if (n.roughness > 0.3) {{
-    mat.flatShading = true;
-  }}
 
   const mesh = new THREE.Mesh(geo, mat);
   mesh.position.set(n.x, n.z, n.y);
@@ -184,35 +184,22 @@ nodes.forEach(n => {{
   nodeMeshes.push(mesh);
   nodeById[n.id] = mesh;
 
-  // Inner halo (self_relevance → subtle amber glow) — only for high values
-  if (n.inner_halo > 0.7) {{
-    const haloGeo = new THREE.SphereGeometry(n.radius * 0.005, 8, 8);
-    const haloMat = new THREE.MeshBasicMaterial({{
-      color: 0xf59e0b, transparent: true, opacity: n.inner_halo * 0.15, depthWrite: false
+  // Subtle self_relevance halo (only very high)
+  if (n.inner_halo > 0.8) {{
+    const hGeo = new THREE.SphereGeometry(n.radius * 0.004, 8, 8);
+    const hMat = new THREE.MeshBasicMaterial({{
+      color: 0xc4a040, transparent: true, opacity: 0.08, depthWrite: false
     }});
-    const halo = new THREE.Mesh(haloGeo, haloMat);
-    halo.position.copy(mesh.position);
-    halo.userData = {{ type: 'inner_halo' }};
-    haloGroup.add(halo);
-  }}
-
-  // Outer halo (partner_relevance → subtle cyan glow)
-  if (n.outer_halo > 0.5) {{
-    const haloGeo = new THREE.SphereGeometry(n.radius * 0.006, 8, 8);
-    const haloMat = new THREE.MeshBasicMaterial({{
-      color: 0x06b6d4, transparent: true, opacity: n.outer_halo * 0.12, depthWrite: false
-    }});
-    const halo = new THREE.Mesh(haloGeo, haloMat);
-    halo.position.copy(mesh.position);
-    halo.userData = {{ type: 'outer_halo' }};
-    haloGroup.add(halo);
+    const h = new THREE.Mesh(hGeo, hMat);
+    h.position.copy(mesh.position);
+    h.userData = {{ type: 'inner_halo' }};
+    haloGroup.add(h);
   }}
 }});
-
 scene.add(nodeGroup);
 scene.add(haloGroup);
 
-// ── Link lines ──────────────────────────────────────────────
+// ── Links (curved, organic) ─────────────────────────────────
 const linkGroup = new THREE.Group();
 
 links.forEach(l => {{
@@ -220,154 +207,76 @@ links.forEach(l => {{
   const tgt = nodeById[l.target];
   if (!src || !tgt) return;
 
-  const srcPos = src.position;
-  const tgtPos = tgt.position;
+  const s = src.position;
+  const t = tgt.position;
 
-  let points;
-  if (l.wave > 0.5) {{
-    // Curved link (friction → bezier)
-    const mid = new THREE.Vector3().addVectors(srcPos, tgtPos).multiplyScalar(0.5);
-    const offset = new THREE.Vector3(
-      (Math.random() - 0.5) * l.wave * 0.02,
-      (Math.random() - 0.5) * l.wave * 0.02,
-      (Math.random() - 0.5) * l.wave * 0.02
-    );
-    mid.add(offset);
-    const curve = new THREE.QuadraticBezierCurve3(srcPos, mid, tgtPos);
-    points = curve.getPoints(12);
-  }} else {{
-    points = [srcPos, tgtPos];
-  }}
+  // ALWAYS curved — no straight lines
+  // Control point offset based on link properties
+  const mid = new THREE.Vector3().addVectors(s, t).multiplyScalar(0.5);
 
-  // Jaggedness (1-stability → noise on vertices)
-  if (l.jaggedness > 0.5 && points.length > 2) {{
-    for (let i = 1; i < points.length - 1; i++) {{
-      points[i].x += (Math.random() - 0.5) * l.jaggedness * 0.005;
-      points[i].y += (Math.random() - 0.5) * l.jaggedness * 0.005;
-      points[i].z += (Math.random() - 0.5) * l.jaggedness * 0.005;
-    }}
-  }}
+  // Curve direction: perpendicular to link axis, magnitude from friction + weight
+  const axis = new THREE.Vector3().subVectors(t, s);
+  const len = axis.length();
+  const perp = new THREE.Vector3(-axis.z, 0, axis.x).normalize();
+  // Use a hash of source+target to get consistent curve direction
+  const hash = (l.source.length + l.target.length + l.weight * 100) % 7 - 3.5;
+  const curveStrength = 0.05 + l.friction * 0.1 + Math.abs(hash) * 0.01;
+  const upOffset = (l.valence * 0.03);  // positive valence curves up, negative down
+
+  mid.add(perp.multiplyScalar(curveStrength * (hash > 0 ? 1 : -1)));
+  mid.y += upOffset;
+
+  const curve = new THREE.QuadraticBezierCurve3(s, mid, t);
+  const points = curve.getPoints(8);
 
   const geo = new THREE.BufferGeometry().setFromPoints(points);
 
-  // Color with valence temperature shift and affinity saturation
-  let linkColor = new THREE.Color(l.color);
-  if (l.temp_shift !== 0) {{
-    const hsl = {{}};
-    linkColor.getHSL(hsl);
-    hsl.h += l.temp_shift / 360;
-    linkColor.setHSL(hsl.h, hsl.s * l.saturation, hsl.l);
-  }} else {{
-    const hsl = {{}};
-    linkColor.getHSL(hsl);
-    linkColor.setHSL(hsl.h, hsl.s * l.saturation, hsl.l);
+  // Link color from palette, muted
+  const linkHex = LINK_PALETTE[l.relation] || LINK_PALETTE.default;
+  let linkColor = new THREE.Color(linkHex);
+
+  // Valence shifts temperature
+  if (l.valence > 0.1) {{
+    linkColor.lerp(new THREE.Color(0xc4a040), l.valence * 0.3);  // warm
+  }} else if (l.valence < -0.1) {{
+    linkColor.lerp(new THREE.Color(0x4060a0), Math.abs(l.valence) * 0.3);  // cool
   }}
 
-  let mat;
-  if (l.dash_gap > 2) {{
-    mat = new THREE.LineDashedMaterial({{
-      color: linkColor, transparent: true, opacity: l.opacity * 0.6,
-      dashSize: 0.01, gapSize: l.dash_gap * 0.001,
-    }});
-  }} else {{
-    mat = new THREE.LineBasicMaterial({{
-      color: linkColor, transparent: true, opacity: l.opacity * 0.6,
-    }});
-  }}
+  // Affinity → saturation (low affinity = more gray, but keep some color)
+  linkColor.lerp(new THREE.Color(0x404048), (1.0 - l.saturation) * 0.6);
+
+  // Thin but visible — differentiated by trust
+  const op = 0.04 + l.opacity * 0.12;
+
+  const mat = new THREE.LineBasicMaterial({{
+    color: linkColor,
+    transparent: true,
+    opacity: op,
+  }});
 
   const line = new THREE.Line(geo, mat);
-  if (l.dash_gap > 2) line.computeLineDistances();
   line.userData = l;
   linkGroup.add(line);
 
-  // Double line for aversion
-  if (l.has_aversion) {{
-    const offsetDir = new THREE.Vector3().subVectors(tgtPos, srcPos).cross(new THREE.Vector3(0,1,0)).normalize().multiplyScalar(0.008);
-    const points2 = points.map(p => p.clone().add(offsetDir));
-    const geo2 = new THREE.BufferGeometry().setFromPoints(points2);
-    const mat2 = new THREE.LineBasicMaterial({{ color: 0xef4444, transparent: true, opacity: 0.3 }});
-    const line2 = new THREE.Line(geo2, mat2);
-    linkGroup.add(line2);
+  // Glow line (energy > 0.3) — wider, brighter duplicate
+  if (l.glow > 0.1) {{
+    const glowMat = new THREE.LineBasicMaterial({{
+      color: linkColor.clone().multiplyScalar(1.5),
+      transparent: true,
+      opacity: l.glow * 0.1,
+    }});
+    const glowLine = new THREE.Line(geo.clone(), glowMat);
+    linkGroup.add(glowLine);
   }}
 }});
-
 scene.add(linkGroup);
 
-// ── Region membranes ────────────────────────────────────────
-const regionMeshes = {{}};
-
-function createRegionMembrane(nodeIds, color, opacity, name) {{
-  if (!nodeIds || nodeIds.length < 3) return null;
-  // Compute bounding sphere of region nodes
-  const positions = nodeIds.map(id => nodeById[id]?.position).filter(Boolean);
-  if (positions.length < 3) return null;
-
-  const center = new THREE.Vector3();
-  positions.forEach(p => center.add(p));
-  center.divideScalar(positions.length);
-
-  let maxDist = 0;
-  positions.forEach(p => {{ maxDist = Math.max(maxDist, center.distanceTo(p)); }});
-
-  const geo = new THREE.SphereGeometry(maxDist * 1.3, 16, 16);
-  const mat = new THREE.MeshBasicMaterial({{
-    color: new THREE.Color(color), transparent: true, opacity: opacity,
-    wireframe: false, side: THREE.BackSide, depthWrite: false,
-  }});
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.copy(center);
-  mesh.visible = false;
-  scene.add(mesh);
-  return mesh;
-}}
-
-// Build region node ID lists
-const selfIds = nodes.filter(n => n.self_relevance > 0.5).map(n => n.id);
-const partnerIds = nodes.filter(n => n.partner_relevance > 0.5).map(n => n.id);
-const goalIds = nodes.filter(n => n.goal_relevance > 0.5).map(n => n.id);
-
-regionMeshes.self = createRegionMembrane(selfIds, '#f59e0b', 0.06, 'self');
-regionMeshes.partner = createRegionMembrane(partnerIds, '#06b6d4', 0.06, 'partner');
-regionMeshes.goals = createRegionMembrane(goalIds, '#22c55e', 0.05, 'goals');
-
 // ── Controls ────────────────────────────────────────────────
-function updateVisibility() {{
-  nodeMeshes.forEach(m => {{
-    const n = m.userData;
-    m.visible = activeTypes.has(n.node_type) &&
-      document.querySelector(`[data-layer="${{n.layer}}"]`)?.checked !== false;
-  }});
-}}
-
-document.querySelectorAll('[data-layer]').forEach(cb => {{
-  cb.addEventListener('change', updateVisibility);
-}});
-
 document.getElementById('showLinks').addEventListener('change', e => {{
   linkGroup.visible = e.target.checked;
 }});
-
 document.getElementById('showHalos').addEventListener('change', e => {{
-  haloGroup.children.forEach(h => {{
-    if (h.userData?.type === 'inner_halo' || h.userData?.type === 'outer_halo')
-      h.visible = e.target.checked;
-  }});
-}});
-
-document.getElementById('showWireframe').addEventListener('change', e => {{
-  haloGroup.children.forEach(h => {{
-    if (h.userData?.type === 'wireframe') h.visible = e.target.checked;
-  }});
-}});
-
-document.getElementById('showSelf').addEventListener('change', e => {{
-  if (regionMeshes.self) regionMeshes.self.visible = e.target.checked;
-}});
-document.getElementById('showPartner').addEventListener('change', e => {{
-  if (regionMeshes.partner) regionMeshes.partner.visible = e.target.checked;
-}});
-document.getElementById('showGoals').addEventListener('change', e => {{
-  if (regionMeshes.goals) regionMeshes.goals.visible = e.target.checked;
+  haloGroup.visible = e.target.checked;
 }});
 
 // ── Hover ───────────────────────────────────────────────────
@@ -385,37 +294,30 @@ function updateHover() {{
   const hits = raycaster.intersectObjects(nodeMeshes);
   if (hits.length > 0) {{
     const n = hits[0].object.userData;
+    const c = '#' + (PALETTE[n.node_type] || 0x585860).toString(16).padStart(6, '0');
     hoverInfo.style.display = 'block';
     hoverInfo.innerHTML = `
-      <strong style="color:${{n.color}}">${{n.node_type}}</strong> — ${{n.label}}<br>
-      <span style="color:#999">
-        W=${{n.weight.toFixed(2)}} E=${{n.energy.toFixed(2)}} S=${{n.stability.toFixed(2)}} R=${{n.recency.toFixed(2)}}<br>
-        self=${{n.self_relevance.toFixed(2)}} partner=${{n.partner_relevance.toFixed(2)}} goal=${{n.goal_relevance.toFixed(2)}}<br>
-        novelty=${{n.novelty_affinity.toFixed(2)}} care=${{n.care_affinity.toFixed(2)}} achieve=${{n.achievement_affinity.toFixed(2)}} risk=${{n.risk_affinity.toFixed(2)}}<br>
-        activations=${{n.activation_count}} age=${{n.age_days.toFixed(0)}}d patina=${{n.patina.toFixed(2)}}
+      <strong style="color:${{c}}">${{n.node_type}}</strong> ${{n.label}}<br>
+      <span style="color:#777">
+        W=${{n.weight.toFixed(2)}} E=${{n.energy.toFixed(2)}} S=${{n.stability.toFixed(2)}}
+        self=${{n.self_relevance.toFixed(2)}} goal=${{n.goal_relevance.toFixed(2)}}
       </span>`;
   }} else {{
     hoverInfo.style.display = 'none';
   }}
 }}
 
-// ── Resize ──────────────────────────────────────────────────
+// ── Resize + Render ─────────────────────────────────────────
 addEventListener('resize', () => {{
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
 }});
 
-// ── Render loop ─────────────────────────────────────────────
 function animate() {{
   requestAnimationFrame(animate);
   controls.update();
   updateHover();
-  // Face halos toward camera
-  haloGroup.children.forEach(h => {{
-    if (h.userData?.type === 'inner_halo' || h.userData?.type === 'outer_halo')
-      h.lookAt(camera.position);
-  }});
   renderer.render(scene, camera);
 }}
 animate();
@@ -425,7 +327,7 @@ animate();
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html)
-    print(f"Brain scan v2 → {output_path}")
+    print(f"Brain scan v3 → {output_path}")
 
 
 if __name__ == "__main__":
