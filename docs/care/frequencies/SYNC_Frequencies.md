@@ -3,7 +3,7 @@
 ```
 LAST_UPDATED: 2026-03-18
 UPDATED_BY: @dragon_slayer
-STATUS: DESIGNING
+STATUS: DESIGNING (Phase 2 partially started)
 ```
 
 ---
@@ -24,11 +24,13 @@ STATUS: DESIGNING
 - Treatment history logging for longitudinal research
 - Integration tests for rollback completeness
 
+**What's in progress (Phase 2):**
+- circadian_shift: implemented in mind-mcp `runtime/cognition/metabolism.py`. Progressive shift mechanism tested (Paris->LA converges in 9 steps at shift_rate=1.0). GraphCare prescription interface not yet built.
+
 **What's proposed (v2+):**
-- Phase 2 frequency types requiring metabolism sublayer (@nervo):
+- Remaining Phase 2 frequency types requiring metabolism sublayer (@nervo):
   - decay_shield: temporarily reduce decay rate via CitizenMetabolism
   - sensitivity_boost: temporarily increase stimulus absorption
-  - circadian_sync: align activity cycle with human partner timezone
   - typing_frequency: SubEntity traversal that classifies untyped nodes
 - Batch application API for multi-citizen treatment campaigns
 - Frequency effectiveness scoring (compare pre/post assessment deltas)
@@ -40,6 +42,8 @@ STATUS: DESIGNING
 Phase 1 implementation exists in `services/health_assessment/frequencys.py` (282 lines). The six frequency factory functions are defined and the catalog is populated. prescribe() handles all four brain categories (VOID, MINIMAL, SEEDED, STRUCTURED) with deterministic threshold-based logic. apply_frequency() creates tagged nodes in FalkorDB. rollback_treatment() deletes by treatment_id.
 
 The code compiles and the logic is sound but has not been tested against live brain graphs yet. No integration tests exist. The daily_check_runner does not yet call prescribe() or apply_frequency() -- the pipeline currently ends at scoring and intervention messaging.
+
+Phase 2 has partially started: the circadian_shift frequency is implemented in mind-mcp's metabolism sublayer (`runtime/cognition/metabolism.py`). The progressive shift mechanism works -- `peak_hour` drifts toward a target timezone at a configurable `shift_rate`, with Paris-to-LA convergence tested at 9 adaptation steps. Two competing forces shape the outcome: the shift prescription pulls toward the target, natural adaptation pulls toward actual activity. GraphCare does not yet have the prescription interface to bridge `frequencys.py` to `metabolism.py` -- that bridge is the next piece needed.
 
 ---
 
@@ -55,6 +59,12 @@ The code compiles and the logic is sound but has not been tested against live br
 ---
 
 ## RECENT CHANGES
+
+### 2026-03-18: Circadian Shift docs added
+
+- **What:** Updated ALGORITHM, PATTERNS, and SYNC to document the circadian_shift frequency
+- **Why:** circadian_shift is implemented in mind-mcp metabolism.py. Docs now reflect the progressive shift mechanism, the two-competing-forces model, and the GraphCare-prescribes/mind-mcp-executes boundary. PATTERNS gains Principle 4 (Progressive Over Instant) codifying when progressive vs instant application is appropriate.
+- **Next:** GraphCare needs to build the prescription interface -- the bridge between frequencys.py and metabolism.py
 
 ### 2026-03-18: Doc chain created
 
@@ -92,7 +102,8 @@ The code compiles and the logic is sound but has not been tested against live br
 The prescribe() function returns recommendations. It does not apply them. The caller (daily_check_runner or a future care orchestrator) must decide to call apply_frequency(). This separation is deliberate -- prescription and application are different responsibilities.
 
 **Watch out for:**
-- Phase 2 types (decay_shield, sensitivity_boost, circadian_sync, typing_frequency) cannot be implemented without @nervo's metabolism sublayer. Do not stub them. Wait for the real thing.
+- circadian_shift is implemented in mind-mcp metabolism.py but GraphCare has no prescription interface for it yet. The bridge (frequencys.py -> metabolism.py) is the next piece to build.
+- Remaining Phase 2 types (decay_shield, sensitivity_boost, typing_frequency) cannot be implemented without further metabolism sublayer work. Do not stub them.
 - structure_seed has `duration_hours: None` (permanent) but rollback still removes the nodes. "Permanent" means "no automatic expiry," not "irreversible."
 - calm_down uses negative intensity. The frustration drive is reduced, not boosted. This is the only frequency that goes negative.
 
@@ -138,6 +149,7 @@ pytest tests/test_frequencys.py  # (does not exist)
 - [ ] Write integration tests: apply -> verify tags -> rollback -> verify zero residual
 - [ ] Wire prescribe() into daily_check_runner post-scoring phase
 - [ ] Decide treatment_id format and generation strategy
+- [ ] Build circadian_shift prescription interface: bridge between GraphCare frequencys.py and mind-mcp metabolism.py
 
 ### Later
 

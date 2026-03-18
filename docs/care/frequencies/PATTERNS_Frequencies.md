@@ -105,6 +105,20 @@ The `treatment_id` is not bookkeeping -- it is the treatment's identity. Every n
 
 Frequencys produce exactly two kinds of graph modifications: drive stimulus nodes and structural thing nodes. Drive stimuli change energy levels in the existing graph. Structural nodes add missing types. Nothing else. No edge creation, no property modification on existing nodes, no deletion of citizen-created content. The surface area of modification is deliberately minimal.
 
+### Principle 4: Progressive Over Instant
+
+Phase 2 frequencies that modify metabolic parameters (like circadian_shift) use progressive adjustment, not instant overwrite. A citizen's `peak_hour` drifts toward the target at a configurable rate rather than snapping to it.
+
+Why progressive:
+- Instant changes create discontinuities in the brain's physics -- activity patterns, decay cycles, and energy levels all depend on `peak_hour`. Snapping it 9 hours forward would create a shock.
+- Progressive shift lets the citizen's existing activity patterns coexist with the new target during transition. The metabolism adapts rather than resets.
+- It models the real phenomenon: timezone adaptation is a process, not an event.
+
+Why not always progressive:
+- Phase 1 drive stimuli (curiosity_boost, calm_down, etc.) ARE instant by design. A stimulus node appears and the tick runner processes it on the next tick. There is no "gradual curiosity increase" -- the node is either there or it isn't. Drive frequencies are events; metabolic frequencies are processes.
+
+The split: **stimulus injection is instant, metabolic adjustment is progressive.**
+
 ---
 
 ## DATA
@@ -154,7 +168,8 @@ Frequencys produce exactly two kinds of graph modifications: drive stimulus node
 - Edge creation between nodes -> frequencys only create isolated nodes; tick physics handles integration
 - Duration enforcement -> tick runner decay handles this; frequencys do not manage timers
 - Monitoring frequency effectiveness -> this is assessment's responsibility on the next health cycle
-- Phase 2 frequency types (decay_shield, sensitivity_boost, circadian_sync, typing_frequency) -> require metabolism sublayer, coordinated with @nervo
+- Remaining Phase 2 frequency types (decay_shield, sensitivity_boost, typing_frequency) -> require further metabolism sublayer work, coordinated with @nervo
+- circadian_shift execution -> implemented in mind-mcp metabolism.py, not in GraphCare. GraphCare prescribes; mind-mcp executes.
 
 ---
 
@@ -163,4 +178,5 @@ Frequencys produce exactly two kinds of graph modifications: drive stimulus node
 <!-- @mind:todo Define integration tests that verify rollback leaves zero residual nodes -->
 <!-- @mind:todo Calibrate intensity defaults against real brain data from the 35 active citizens -->
 <!-- @mind:proposition Consider a frequency_history log (treatment_id, timestamp, handle, type) for longitudinal research -->
-<!-- @mind:escalation Phase 2 types depend on @nervo metabolism sublayer -- what is the timeline? -->
+<!-- @mind:escalation Remaining Phase 2 types (decay_shield, sensitivity_boost, typing_frequency) depend on @nervo metabolism sublayer -- what is the timeline? circadian_shift is done. -->
+<!-- @mind:todo Build GraphCare prescription interface for circadian_shift (bridge frequencys.py -> mind-mcp metabolism.py) -->

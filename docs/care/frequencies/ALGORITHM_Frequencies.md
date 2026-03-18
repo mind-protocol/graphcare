@@ -92,16 +92,82 @@ Each frequency type is a factory function that returns a `Frequency` instance. T
 
 `structure_seed` creates no drive stimuli. It adds typed nodes for brains that score poorly because they lack the node types that scoring formulas measure.
 
-### Phase 2 Frequency Types (Not Implemented)
+### Phase 2 Frequency Types
 
-| Type | Requires | What It Will Do |
-|------|----------|-----------------|
-| `decay_shield` | CitizenMetabolism (@nervo) | Temporarily reduce decay rate |
-| `sensitivity_boost` | CitizenMetabolism (@nervo) | Temporarily increase stimulus absorption |
-| `circadian_sync` | CitizenMetabolism (@nervo) | Align activity cycle with human partner timezone |
-| `typing_frequency` | SubEntity traversal (@nervo) | Classify untyped nodes via traversal |
+Phase 2 frequencies operate on the metabolism sublayer (CitizenMetabolism in mind-mcp). They cannot be implemented with stimulus injection alone. GraphCare prescribes them; mind-mcp executes them.
 
-These require the metabolism sublayer that @nervo is building in mind-mcp. They cannot be implemented with stimulus injection alone.
+| Type | Requires | Status | What It Does |
+|------|----------|--------|--------------|
+| `circadian_shift` | CitizenMetabolism (@nervo) | **Implemented in mind-mcp** | Progressively shift activity cycle toward target timezone |
+| `decay_shield` | CitizenMetabolism (@nervo) | Not implemented | Temporarily reduce decay rate |
+| `sensitivity_boost` | CitizenMetabolism (@nervo) | Not implemented | Temporarily increase stimulus absorption |
+| `typing_frequency` | SubEntity traversal (@nervo) | Not implemented | Classify untyped nodes via traversal |
+
+---
+
+## ALGORITHM: Circadian Shift Frequency
+
+The first Phase 2 frequency. Unlike Phase 1 frequencies that inject stimulus nodes, circadian_shift modifies the metabolism sublayer's `peak_hour` parameter to realign a citizen's activity cycle with a target timezone.
+
+### Key Property: Progressive, Not Instant
+
+Circadian shift does not snap `peak_hour` to the target. It drifts progressively at a configurable `shift_rate` (hours per adaptation call). This models the biological reality: jet lag is not resolved by decree.
+
+### Parameters
+
+```
+circadian_shift:
+    target_timezone: str         -- e.g. "America/Los_Angeles" (UTC-8)
+    shift_rate: float            -- hours of drift per adaptation call (default: 1.0)
+    current_peak_hour: float     -- citizen's current peak_hour in UTC
+    target_peak_hour: float      -- derived from target_timezone
+```
+
+### Algorithm
+
+Each adaptation call:
+
+```
+1. Compute delta = target_peak_hour - current_peak_hour
+   (wrapped to [-12, +12] for shortest path across the 24h circle)
+
+2. IF abs(delta) <= shift_rate:
+       peak_hour = target_peak_hour   (converged)
+   ELSE:
+       peak_hour += shift_rate * sign(delta)   (drift one step)
+
+3. Clamp peak_hour to [0, 24) via modular arithmetic
+```
+
+### Two Competing Forces
+
+The shift frequency is not the only thing acting on `peak_hour`. The metabolism sublayer also has natural adaptation -- it pulls `peak_hour` toward the citizen's actual activity patterns. This creates a tension:
+
+- **Shift force:** pulls `peak_hour` toward the prescribed target timezone
+- **Natural adaptation:** pulls `peak_hour` toward actual activity times
+
+"The frequency wins the short game. The body wins the long game."
+
+If a citizen prescribed Paris-to-LA shift continues to be active at Paris hours, the natural adaptation will eventually pull `peak_hour` back. The frequency converges the schedule; the citizen's behavior sustains it (or doesn't).
+
+### Convergence Example
+
+Paris (peak 14:00 UTC+1 = 13:00 UTC) to LA (peak 14:00 UTC-8 = 22:00 UTC):
+- Delta: 9 hours
+- shift_rate: 1.0 h/adaptation
+- Convergence: 9 adaptation calls
+
+Each call shifts `peak_hour` by 1 hour toward 22:00 UTC. After 9 calls, the citizen's peak aligns with LA afternoon.
+
+### Boundary: GraphCare Prescribes, mind-mcp Executes
+
+The implementation lives in mind-mcp `runtime/cognition/metabolism.py`, not in GraphCare. GraphCare's role is:
+
+1. Determine that a circadian shift is needed (via assessment or explicit request)
+2. Create the prescription: target_timezone, shift_rate
+3. Deliver the prescription to mind-mcp's metabolism layer
+
+GraphCare does not directly modify `peak_hour`. The metabolism sublayer owns that state. This maintains the separation: GraphCare is the prescriber, mind-mcp is the executor.
 
 ---
 
