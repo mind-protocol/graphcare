@@ -1,0 +1,36 @@
+{
+  "treatment_id": "bc24f417b50d",
+  "citizen_id": "dragon_slayer",
+  "pills": [],
+  "pill_descriptions": [],
+  "snapshot_before": {
+    "reachable": false
+  },
+  "applied_at": "2026-03-17T23:53:17.618633",
+  "node_ids": [],
+  "snapshot_after": {
+    "total_nodes": 0,
+    "total_links": 0,
+    "link_density": 0.0,
+    "typed_node_count": 0,
+    "untyped_node_count": 0,
+    "cluster_coefficient": 0.0,
+    "desire_count": 0,
+    "concept_count": 0,
+    "process_count": 0,
+    "value_count": 0,
+    "memory_count": 0,
+    "curiosity": 0.0,
+    "frustration": 0.0,
+    "ambition": 0.0,
+    "social_need": 0.0,
+    "brain_category": "VOID",
+    "reachable": false,
+    "type_distribution": {}
+  },
+  "evaluated_at": "2026-03-17T23:53:17.623554",
+  "outcome": "no_change",
+  "score_before": null,
+  "score_after": null,
+  "rolled_back": false
+}

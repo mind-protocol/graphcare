@@ -241,6 +241,11 @@ def recency(graph, node_type: str) -> float:
 
     age_hours = (time.time() - newest_epoch) / 3600
     half_life = 168  # 7 days
+    # Guard against extreme values (future timestamps, overflow)
+    if age_hours < 0:
+        return 1.0  # future timestamp = maximally recent
+    if age_hours > half_life * 20:
+        return 0.0  # ancient = zero recency
     return max(0.0, min(1.0, 0.5 ** (age_hours / half_life)))
 
 

@@ -1,0 +1,74 @@
+{
+  "treatment_id": "7b2b41f62c83",
+  "citizen_id": "dragon_slayer",
+  "frequencies": [
+    "root",
+    "surge"
+  ],
+  "frequency_descriptions": [
+    "Structural frequency: desire, concept, value, process emergence",
+    "Surge frequency at intensity 0.20"
+  ],
+  "snapshot_before": {
+    "total_nodes": 0,
+    "total_links": 0,
+    "link_density": 0.0,
+    "typed_node_count": 0,
+    "untyped_node_count": 0,
+    "cluster_coefficient": 0.0,
+    "desire_count": 0,
+    "concept_count": 0,
+    "process_count": 0,
+    "value_count": 0,
+    "memory_count": 0,
+    "curiosity": 0.0,
+    "frustration": 0.0,
+    "ambition": 0.0,
+    "social_need": 0.0,
+    "brain_category": "VOID",
+    "reachable": true,
+    "type_distribution": {}
+  },
+  "applied_at": "2026-03-18T01:40:57.739794",
+  "node_ids": [
+    "freq_7b2b41f62c83_struct_0",
+    "freq_7b2b41f62c83_struct_1",
+    "freq_7b2b41f62c83_struct_2",
+    "freq_7b2b41f62c83_struct_3",
+    "freq_7b2b41f62c83_struct_4",
+    "freq_7b2b41f62c83_curiosity",
+    "freq_7b2b41f62c83_ambition",
+    "freq_7b2b41f62c83_social_need"
+  ],
+  "snapshot_after": {
+    "total_nodes": 8,
+    "total_links": 0,
+    "link_density": 0.0,
+    "typed_node_count": 8,
+    "untyped_node_count": 0,
+    "cluster_coefficient": 0.0,
+    "desire_count": 1,
+    "concept_count": 2,
+    "process_count": 1,
+    "value_count": 1,
+    "memory_count": 0,
+    "curiosity": 0.0,
+    "frustration": 0.0,
+    "ambition": 0.0,
+    "social_need": 0.0,
+    "brain_category": "MINIMAL",
+    "reachable": true,
+    "type_distribution": {
+      "frequency": 3,
+      "concept": 2,
+      "desire": 1,
+      "value": 1,
+      "process": 1
+    }
+  },
+  "evaluated_at": "2026-03-18T01:41:18.517817",
+  "outcome": "improved",
+  "score_before": null,
+  "score_after": null,
+  "rolled_back": false
+}
