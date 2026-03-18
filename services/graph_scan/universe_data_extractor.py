@@ -113,8 +113,15 @@ class UniverseScan:
     stats: dict = field(default_factory=dict)
 
 
-def extract_universe_scan(graph_name: str) -> UniverseScan:
-    """Extract L3 universe graph with visual properties."""
+def extract_universe_scan(graph_name: str, max_nodes: int = 2000) -> UniverseScan:
+    """Extract L3 universe graph with visual properties.
+
+    Args:
+        graph_name: FalkorDB graph name
+        max_nodes: Maximum nodes to include. For large graphs (40K+),
+                   we take the top N by weight. Links only between included nodes.
+                   Default 2000 — good balance of detail vs performance.
+    """
     import numpy as np
 
     db = FalkorDB(host=FALKORDB_HOST, port=FALKORDB_PORT)
@@ -122,13 +129,28 @@ def extract_universe_scan(graph_name: str) -> UniverseScan:
 
     scan = UniverseScan(graph_name=graph_name)
 
-    # ── Extract nodes ────────────────────────────────────────────────
-    # L3 uses node_type (label) not the type field
-    node_rows = graph.query(
-        "MATCH (n) RETURN "
-        "n.id, n.node_type, n.type, n.name, n.synthesis, "
-        "n.weight, n.energy, n.stability, n.recency"
-    ).result_set
+    # ── Count total ──────────────────────────────────────────────────
+    total_rows = graph.query("MATCH (n) RETURN count(n)").result_set
+    total_count = total_rows[0][0] if total_rows else 0
+    logger.info(f"{graph_name}: {total_count} total nodes")
+
+    # ── Extract nodes (top N by weight if graph is large) ────────────
+    if total_count > max_nodes:
+        # Sample: top N by weight + energy (most important nodes)
+        node_rows = graph.query(
+            "MATCH (n) RETURN "
+            "n.id, n.node_type, n.type, n.name, n.synthesis, "
+            "n.weight, n.energy, n.stability, n.recency "
+            f"ORDER BY COALESCE(n.weight, 0) + COALESCE(n.energy, 0) DESC "
+            f"LIMIT {max_nodes}"
+        ).result_set
+        logger.info(f"Sampled top {max_nodes} of {total_count} nodes by weight+energy")
+    else:
+        node_rows = graph.query(
+            "MATCH (n) RETURN "
+            "n.id, n.node_type, n.type, n.name, n.synthesis, "
+            "n.weight, n.energy, n.stability, n.recency"
+        ).result_set
 
     all_nodes = []
     for row in node_rows:
@@ -138,9 +160,9 @@ def extract_universe_scan(graph_name: str) -> UniverseScan:
         if not nid:
             continue
 
-        weight = float(row[5] or 1.0)      # L3 nodes default visible
-        energy = float(row[6] or 0.3)      # baseline glow
-        stability = float(row[7] or 0.6)   # solid by default
+        weight = float(row[5] or 1.0)
+        energy = float(row[6] or 0.3)
+        stability = float(row[7] or 0.6)
         recency = float(row[8] or 0.5)
 
         all_nodes.append({
@@ -216,6 +238,8 @@ def extract_universe_scan(graph_name: str) -> UniverseScan:
     scan.stats = {
         "total_nodes": len(scan.nodes),
         "total_links": len(scan.links),
+        "total_in_graph": total_count,
+        "sampled": total_count > max_nodes,
         "type_counts": type_counts,
     }
 
@@ -316,7 +340,8 @@ def save_scan(scan: UniverseScan, output_path: Path):
 if __name__ == "__main__":
     import sys
     graph_name = sys.argv[1] if len(sys.argv) > 1 else "lumina_prime"
-    scan = extract_universe_scan(graph_name)
+    max_n = int(sys.argv[2]) if len(sys.argv) > 2 else 2000
+    scan = extract_universe_scan(graph_name, max_nodes=max_n)
     out = Path(f"data/graph_scans/{graph_name}_universe_scan.json")
     save_scan(scan, out)
     print(f"Universe scan: {scan.stats}")
