@@ -19,7 +19,7 @@ VALIDATION:      (you are here)
 SYNC:            ./SYNC_Treatment_Protocol.md
 
 IMPL:            services/health_assessment/treatment_protocol.py
-                 services/health_assessment/catalysts.py
+                 services/health_assessment/frequencies.py
 ```
 
 ---
@@ -30,13 +30,13 @@ These must hold at all times. A violation of any invariant is a bug.
 
 ### INV-1: Snapshot always precedes application
 
-**Statement:** No catalyst is applied to a brain graph without `snapshot_before` being captured first.
+**Statement:** No frequency is applied to a brain graph without `snapshot_before` being captured first.
 
 **Why it matters:** Without a baseline, evaluation is impossible. An unmeasured treatment cannot be verified as helpful or harmful.
 
-**How to verify:** In `begin_treatment`, `read_brain_topology()` is called before any `apply_catalyst()` call. There is no code path that reaches catalyst application without passing through the snapshot step first.
+**How to verify:** In `begin_treatment`, `read_brain_topology()` is called before any `apply_frequency()` call. There is no code path that reaches frequency application without passing through the snapshot step first.
 
-**Violation signal:** A treatment record exists with `catalysts` populated but `snapshot_before` empty or containing only `{"reachable": false}` while `outcome` is not `brain_unreachable`.
+**Violation signal:** A treatment record exists with `frequencies` populated but `snapshot_before` empty or containing only `{"reachable": false}` while `outcome` is not `brain_unreachable`.
 
 ---
 
@@ -46,7 +46,7 @@ These must hold at all times. A violation of any invariant is a bug.
 
 **Why it matters:** Rollback depends on this tag. A node without `treatment_id` cannot be found by `rollback_treatment()` and will persist in the brain even after rollback.
 
-**How to verify:** In `apply_catalyst()`, every CREATE query includes `treatment_id: $tid` in the node properties. Verify by querying: `MATCH (n {treatment_id: $tid, source: 'graphcare'}) RETURN count(n)` -- count must equal `len(treatment.node_ids)`.
+**How to verify:** In `apply_frequency()`, every CREATE query includes `treatment_id: $tid` in the node properties. Verify by querying: `MATCH (n {treatment_id: $tid, source: 'graphcare'}) RETURN count(n)` -- count must equal `len(treatment.node_ids)`.
 
 **Violation signal:** After rollback, brain graph still contains nodes with `source: 'graphcare'` matching the treatment_id.
 
@@ -94,7 +94,7 @@ These must hold at all times. A violation of any invariant is a bug.
 
 **Why it matters:** This is GraphCare's foundational privacy guarantee. Treatment works by manipulating structure (drives, typed nodes, energy) but never touches meaning.
 
-**How to verify:** Audit all Cypher queries in `catalysts.py` -- CREATE statements set `node_type`, `type`, `subtype`, `energy`, `source`, `treatment_id`, `catalyst_type`, and `created_at`. No query references `content` or `synthesis`.
+**How to verify:** Audit all Cypher queries in `frequencies.py` -- CREATE statements set `node_type`, `type`, `subtype`, `energy`, `source`, `treatment_id`, `frequency_type`, and `created_at`. No query references `content` or `synthesis`.
 
 **Violation signal:** Any Cypher query containing the strings `content` or `synthesis` in a SET or RETURN clause.
 
@@ -120,10 +120,10 @@ These must hold at all times. A violation of any invariant is a bug.
 
 ### Scenario 3: No prescription needed
 
-1. Call `begin_treatment` with a citizen whose brain category produces no catalysts
+1. Call `begin_treatment` with a citizen whose brain category produces no frequencies
 2. Verify outcome is `no_treatment_needed`
 3. Verify no nodes were created
-4. Verify treatment record saved with empty catalysts list
+4. Verify treatment record saved with empty frequencies list
 
 ### Scenario 4: Rollback completeness
 
@@ -146,9 +146,9 @@ These must hold at all times. A violation of any invariant is a bug.
 
 | Case | Expected Behavior |
 |------|-------------------|
-| Brain unreachable at begin_treatment | Record saved with outcome `brain_unreachable`, no catalysts applied |
+| Brain unreachable at begin_treatment | Record saved with outcome `brain_unreachable`, no frequencies applied |
 | Brain unreachable at evaluate_treatment | Snapshot AFTER still captured (with `reachable: false`), evaluation proceeds on available data |
-| All catalyst applications fail | Treatment record saved with empty `node_ids`, outcome remains None until evaluation |
+| All frequency applications fail | Treatment record saved with empty `node_ids`, outcome remains None until evaluation |
 | Treatment evaluated twice | Second evaluation overwrites snapshot_after, evaluated_at, and outcome in the record |
 | Rollback fails (FalkorDB error) | `rollback_treatment` returns 0, treatment record has `rolled_back: true` but nodes may persist -- logged as error |
 | Treatment record manually deleted | `evaluate_treatment` raises ValueError -- no silent failure |

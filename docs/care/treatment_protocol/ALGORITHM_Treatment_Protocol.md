@@ -18,7 +18,7 @@ VALIDATION:      ./VALIDATION_Treatment_Protocol.md
 SYNC:            ./SYNC_Treatment_Protocol.md
 
 IMPL:            services/health_assessment/treatment_protocol.py
-                 services/health_assessment/catalysts.py
+                 services/health_assessment/frequencies.py
 ```
 
 ---
@@ -28,8 +28,8 @@ IMPL:            services/health_assessment/treatment_protocol.py
 The treatment protocol has two phases, called separately with an observation window between them.
 
 ```
-Phase 1: begin_treatment(citizen_id, catalysts?)
-    -> snapshot BEFORE -> prescribe (if needed) -> apply catalysts -> save record -> return Treatment
+Phase 1: begin_treatment(citizen_id, frequencies?)
+    -> snapshot BEFORE -> prescribe (if needed) -> apply frequencies -> save record -> return Treatment
 
     ... observation window (caller-managed) ...
 
@@ -41,7 +41,7 @@ Phase 2: evaluate_treatment(citizen_id, treatment_id)
 
 ## PHASE 1: begin_treatment
 
-**Input:** `citizen_id` (string), optional `catalysts` (list of Catalyst)
+**Input:** `citizen_id` (string), optional `frequencies` (list of Frequency)
 
 **Steps:**
 
@@ -51,27 +51,27 @@ Phase 2: evaluate_treatment(citizen_id, treatment_id)
    - If brain is unreachable: record outcome as `brain_unreachable`, save, return early
    - Convert BrainStats to serializable dict via `_brain_stats_to_dict()`
 
-3. Prescribe (if no catalysts provided): call `prescribe(brain_category, brain_stats)`
-   - If no catalysts prescribed: record outcome as `no_treatment_needed`, save, return early
+3. Prescribe (if no frequencies provided): call `prescribe(brain_category, brain_stats)`
+   - If no frequencies prescribed: record outcome as `no_treatment_needed`, save, return early
 
-4. Apply each catalyst: call `apply_catalyst(citizen_id, catalyst, treatment_id)` for each
-   - Collect all created node_ids across all catalysts
-   - Log success/failure per catalyst
+4. Apply each frequency: call `apply_frequency(citizen_id, frequency, treatment_id)` for each
+   - Collect all created node_ids across all frequencies
+   - Log success/failure per frequency
 
 5. Create Treatment record with:
    - treatment_id, citizen_id
-   - catalyst types and descriptions
+   - frequency types and descriptions
    - snapshot_before
    - applied_at (UTC ISO timestamp)
-   - node_ids (all nodes created across all catalysts)
+   - node_ids (all nodes created across all frequencies)
 
 6. Save to `data/treatments/{citizen_id}/{treatment_id}.json`
 
 7. Return the Treatment dataclass
 
 **Early exits:**
-- Brain unreachable: Treatment with `outcome="brain_unreachable"`, no catalysts applied
-- No catalysts prescribed: Treatment with `outcome="no_treatment_needed"`, no changes made
+- Brain unreachable: Treatment with `outcome="brain_unreachable"`, no frequencies applied
+- No frequencies prescribed: Treatment with `outcome="no_treatment_needed"`, no changes made
 
 ---
 
@@ -155,9 +155,9 @@ elif after["frustration"] > before["frustration"]:
 
 ## AUTO-PRESCRIPTION LOGIC
 
-When `begin_treatment` is called without explicit catalysts, `prescribe(brain_category, brain_stats)` selects catalysts based on brain state.
+When `begin_treatment` is called without explicit frequencies, `prescribe(brain_category, brain_stats)` selects frequencies based on brain state.
 
-| Brain Category | Prescribed Catalysts | Rationale |
+| Brain Category | Prescribed Frequencies | Rationale |
 |----------------|---------------------|-----------|
 | `VOID` | `structure_seed` + `energy_infusion(0.2)` | Empty brain needs scaffolding and baseline energy |
 | `MINIMAL` | `structure_seed` + `curiosity_boost(0.25)` | Has some content but needs typed nodes and exploration drive |
@@ -174,11 +174,11 @@ Brain categories above STRUCTURED (if they exist) receive no auto-prescription. 
 Treatment:
     treatment_id:          str     -- 12-char hex, unique per treatment
     citizen_id:            str     -- citizen handle
-    catalysts:             [str]   -- catalyst type names applied
-    catalyst_descriptions: [str]   -- human-readable descriptions
+    frequencies:           [str]   -- frequency type names applied
+    frequency_descriptions: [str]  -- human-readable descriptions
     snapshot_before:       dict    -- full BrainStats at treatment start
     applied_at:            str     -- ISO timestamp of application
-    node_ids:              [str]   -- all graph node IDs created by catalysts
+    node_ids:              [str]   -- all graph node IDs created by frequencies
     snapshot_after:        dict?   -- full BrainStats at evaluation (null until evaluated)
     evaluated_at:          str?    -- ISO timestamp of evaluation (null until evaluated)
     outcome:               str?    -- improved | degraded | no_change | brain_unreachable | no_treatment_needed

@@ -28,7 +28,7 @@ STATUS: CANONICAL
 **What's proposed (v2+):**
 - Partial rollback (requires content awareness -- may conflict with topology-only principle)
 - Treatment scheduling (recurring treatments, cooldown periods)
-- Cross-citizen treatment efficacy analysis (which catalysts work best for which brain categories)
+- Cross-citizen treatment efficacy analysis (which frequencies work best for which brain categories)
 - Integration with crisis_detection (auto-treat on certain crisis patterns)
 - Weight calibration from accumulated treatment records
 
@@ -36,7 +36,7 @@ STATUS: CANONICAL
 
 ## CURRENT STATE
 
-The treatment protocol is fully implemented in `services/health_assessment/treatment_protocol.py`. The code is complete and structurally sound. It depends on `catalysts.py` (also implemented) and `brain_topology_reader.py` (also implemented).
+The treatment protocol is fully implemented in `services/health_assessment/treatment_protocol.py`. The code is complete and structurally sound. It depends on `frequencies.py` (also implemented) and `brain_topology_reader.py` (also implemented).
 
 What exists:
 - `begin_treatment()` -- snapshot, prescribe, apply, save
@@ -60,7 +60,7 @@ What has not been done:
 - **Started:** 2026-03-18
 - **By:** @dragon_slayer
 - **Status:** Complete -- OBJECTIVES, PATTERNS, ALGORITHM, VALIDATION, SYNC written
-- **Context:** First doc chain for the treatment subsystem. Created after code review of treatment_protocol.py and catalysts.py.
+- **Context:** First doc chain for the treatment subsystem. Created after code review of treatment_protocol.py and frequencies.py.
 
 ---
 
@@ -118,14 +118,14 @@ The weighted comparison in `evaluate_treatment` is the core decision engine. It 
 **Open questions:**
 - Should there be a cooldown between treatments on the same citizen?
 - Should `evaluate_treatment` refuse to run if called too soon after `begin_treatment`?
-- What is the recommended observation window for each catalyst type?
+- What is the recommended observation window for each frequency type?
 
 ---
 
 ## HANDOFF: FOR HUMAN
 
 **Executive summary:**
-Treatment protocol doc chain is complete (5 files). The code in `treatment_protocol.py` implements the full lifecycle: snapshot before, prescribe, apply catalysts, observe, snapshot after, evaluate with weighted metrics, auto-rollback on degradation. Treatment records persist as JSON. The code is implemented but needs a live FalkorDB test to confirm it works end-to-end. Three issues documented: no live test, unused score fields, rollback confirmation bug.
+Treatment protocol doc chain is complete (5 files). The code in `treatment_protocol.py` implements the full lifecycle: snapshot before, prescribe, apply frequencies, observe, snapshot after, evaluate with weighted metrics, auto-rollback on degradation. Treatment records persist as JSON. The code is implemented but needs a live FalkorDB test to confirm it works end-to-end. Three issues documented: no live test, unused score fields, rollback confirmation bug.
 
 **Decisions already made:**
 - All-or-nothing rollback (no partial rollback -- topology-only constraint prevents it)
@@ -134,7 +134,7 @@ Treatment protocol doc chain is complete (5 files). The code in `treatment_proto
 - JSON file persistence per citizen per treatment
 
 **Needs your input:**
-- Recommended observation window per catalyst type (hours? days?)
+- Recommended observation window per frequency type (hours? days?)
 - Whether to populate or remove the unused `score_before`/`score_after` fields
 - Priority of the rollback confirmation bug fix
 
@@ -166,7 +166,7 @@ Treatment protocol doc chain is complete (5 files). The code in `treatment_proto
 | What | Where |
 |------|-------|
 | Treatment protocol code | `services/health_assessment/treatment_protocol.py` |
-| Catalysts module | `services/health_assessment/catalysts.py` |
+| Frequencies module | `services/health_assessment/frequencies.py` |
 | Brain topology reader | `services/health_assessment/brain_topology_reader.py` |
 | Treatment data storage | `data/treatments/{citizen_id}/{treatment_id}.json` |
 | Crisis detection (related care module) | `docs/care/crisis_detection/` |

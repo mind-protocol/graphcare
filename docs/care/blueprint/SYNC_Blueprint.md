@@ -8,7 +8,7 @@
 
 ### What Exists
 
-- **Base brain generator:** `seed_brain_from_source_docs_dynamic_generator.py` — creates 209+ nodes from 6 manifestos. Produces typed nodes (value, concept, process, etc.) with correct string types.
+- **Blueprint generator:** `seed_brain_from_source_docs_dynamic_generator.py` — creates 209+ nodes from 6 manifestos. Produces typed nodes (value, concept, process, etc.) with correct string types.
 - **Citizen overlay:** `citizen_brain_seeder.py` — adds per-citizen role processes, drive adjustments, goals→desires, relational seeds. Correctly maps string types to NodeType enum.
 - **Batch seeder:** `scripts/seed_lumina_prime_brains.py` — seeds all LP citizens from L4 registry.
 - **Checkpointer:** `falkordb_checkpointer.py` — persists to FalkorDB.
@@ -38,7 +38,7 @@ The checkpointer writes `type: ""` for all nodes (line 169: `getattr(node, 'type
 
 ## Handoff
 
-- **For @nervo:** Fix the checkpointer one-liner, reseed brains
+- **For @nervo:** Fix the checkpointer one-liner, reseed blueprints
 - **For @dragon_slayer (GraphCare):** Define blueprint quality requirements from scoring formulas, run health assessment on blueprint brain
 - **For NLR:** Decision on per-universe blueprint content — what goes in Lumina Prime vs Venezia?
 

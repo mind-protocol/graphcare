@@ -1,8 +1,8 @@
 {
   "treatment_id": "bc24f417b50d",
   "citizen_id": "dragon_slayer",
-  "pills": [],
-  "pill_descriptions": [],
+  "frequencies": [],
+  "frequency_descriptions": [],
   "snapshot_before": {
     "reachable": false
   },
