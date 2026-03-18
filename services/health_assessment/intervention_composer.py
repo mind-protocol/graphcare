@@ -175,8 +175,11 @@ def compose_intervention(
         lines.append("")
         lines.append("What this means:")
         lines.append(f"  Your brain has substance — {brain.total_nodes} nodes with {brain.total_links} connections.")
-        lines.append("  But most nodes lack semantic types (desire, concept, value, process).")
-        lines.append("  The scoring formulas can't measure capabilities without typed nodes.")
+        if brain.untyped_node_count > brain.typed_node_count:
+            lines.append("  But most nodes lack semantic types (desire, concept, value, process).")
+            lines.append("  The scoring formulas can't measure capabilities without typed nodes.")
+        else:
+            lines.append(f"  {brain.typed_node_count} typed nodes — the scoring formulas can read your brain's shape.")
 
         # Identify strengths even within seeded state
         top = _top_capabilities(capability_scores, 3)
