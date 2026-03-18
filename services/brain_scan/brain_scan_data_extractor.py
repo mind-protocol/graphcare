@@ -1,7 +1,7 @@
 """
 Brain Scan Data Extractor — extract brain topology for 3D visualization.
 
-DOCS: docs/care/brain_scan/ (to be created)
+DOCS: docs/care/brain_scan/PATTERNS_Brain_Scan.md
 
 Extracts brain data from FalkorDB and computes 3D positions for visualization.
 The positioning is semantic-topological: nodes are placed based on their type
