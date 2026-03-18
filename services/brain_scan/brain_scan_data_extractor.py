@@ -40,7 +40,7 @@ FALKORDB_PORT = 6379
 # ── Visual mapping functions (from physics_visual_mapping.py) ────────────
 
 def _node_radius(weight: float) -> float:
-    return 2.0 + 6.0 * math.log1p(weight * 5.0)
+    return 0.7 + 2.0 * math.log1p(weight * 5.0)
 
 def _node_glow(energy: float) -> float:
     if energy < 0.1:
@@ -200,6 +200,91 @@ class BrainScan:
     regions: dict = field(default_factory=dict)
 
 
+def _compute_semantic_positions(nodes: list[dict], graph) -> list[tuple]:
+    """Compute 3D positions from semantic content using TF-IDF + UMAP.
+
+    Nodes with similar content cluster together — creating brain folds.
+    Weight pulls toward center. Self-relevance pulls toward center.
+    """
+    import numpy as np
+
+    contents = []
+    for nd in nodes:
+        # Combine type + id + label for semantic signal
+        text = f"{nd['type']} {nd['id'].replace(':', ' ')} {nd['label']}"
+        contents.append(text)
+
+    if len(contents) < 5:
+        # Too few nodes for UMAP — fallback to golden angle sphere
+        golden = math.pi * (3 - math.sqrt(5))
+        positions = []
+        for i in range(len(contents)):
+            theta = i * golden
+            phi = math.acos(1 - 2 * (i + 0.5) / max(len(contents), 1))
+            x = 0.5 * math.sin(phi) * math.cos(theta)
+            y = 0.5 * math.sin(phi) * math.sin(theta)
+            z = 0.5 * math.cos(phi) + 0.4
+            positions.append((x, y, z))
+        return positions
+
+    try:
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        import umap
+
+        # TF-IDF on content
+        tfidf = TfidfVectorizer(max_features=200, stop_words='english')
+        X = tfidf.fit_transform(contents)
+
+        # UMAP to 3D
+        reducer = umap.UMAP(
+            n_components=3,
+            n_neighbors=min(15, len(contents) - 1),
+            min_dist=0.1,
+            metric='cosine',
+            random_state=42,
+        )
+        coords = reducer.fit_transform(X.toarray())
+
+        # Normalize to [-0.6, 0.6] range
+        for dim in range(3):
+            col = coords[:, dim]
+            mn, mx = col.min(), col.max()
+            if mx - mn > 0:
+                coords[:, dim] = (col - mn) / (mx - mn) * 1.2 - 0.6
+
+        # Weight and self_relevance pull toward center
+        positions = []
+        for i, nd in enumerate(nodes):
+            x, y, z = coords[i]
+            # Contract toward center based on weight
+            center_pull = 1.0 - nd["weight"] * 0.25 - nd["self_relevance"] * 0.1
+            x *= center_pull
+            y *= center_pull
+            z = z * center_pull + 0.4  # offset up
+
+            positions.append((
+                round(float(x), 4),
+                round(float(y), 4),
+                round(float(z), 4),
+            ))
+        return positions
+
+    except Exception as e:
+        logger.warning(f"UMAP failed, falling back to sphere: {e}")
+        golden = math.pi * (3 - math.sqrt(5))
+        positions = []
+        n = len(nodes)
+        for i in range(n):
+            theta = i * golden
+            phi = math.acos(1 - 2 * (i + 0.5) / max(n, 1))
+            r = 0.4 + 0.3 * (1.0 - nodes[i]["weight"] * 0.5)
+            x = r * math.sin(phi) * math.cos(theta)
+            y = r * math.sin(phi) * math.sin(theta)
+            z = r * math.cos(phi) + 0.4
+            positions.append((round(x, 4), round(y, 4), round(z, 4)))
+        return positions
+
+
 def extract_brain_scan(citizen_handle: str) -> BrainScan:
     """Extract full brain data with all visual properties computed."""
     import time as _time
@@ -260,62 +345,57 @@ def extract_brain_scan(citizen_handle: str) -> BrainScan:
             "activation_count": act_count, "age_days": age_days, "patina": patina,
         })
 
-    # ── Position nodes ───────────────────────────────────────────────
-    for ntype, group in type_groups.items():
-        z_lo, z_hi = LAYER_Z.get(ntype, (0.4, 0.6))
-        n = len(group)
-        golden_angle = math.pi * (3 - math.sqrt(5))
+    # ── Position nodes by semantic topology ─────────────────────────
+    # Use TF-IDF on node content → UMAP 3D projection.
+    # Semantically similar nodes cluster together — brain folds emerge.
+    # Weight pulls toward center. Links reinforce proximity.
+    all_nodes_flat = []
+    for group in type_groups.values():
+        all_nodes_flat.extend(group)
 
-        for i, nd in enumerate(group):
-            theta = i * golden_angle
-            r = 0.3 + 0.4 * math.sqrt(i / max(n, 1))
-            # Heavy + self-relevant nodes are more central
-            r *= (1.2 - nd["weight"] * 0.2 - nd["self_relevance"] * 0.2)
+    positions_3d = _compute_semantic_positions(all_nodes_flat, graph)
 
-            x = r * math.cos(theta) + random.gauss(0, 0.015)
-            y = r * math.sin(theta) + random.gauss(0, 0.015)
-            z = z_lo + (z_hi - z_lo) * (i / max(n - 1, 1)) + random.gauss(0, 0.008)
+    for i, nd in enumerate(all_nodes_flat):
+        x, y, z = positions_3d[i]
 
-            color = NODE_COLORS.get(ntype, "#9ca3af")
-            layer = "stem" if z < 0.25 else ("limbic" if z < 0.5 else "cortex")
+        ntype = nd["type"]
+        color = NODE_COLORS.get(ntype, "#9ca3af")
+        layer = "stem" if z < 0.25 else ("limbic" if z < 0.5 else "cortex")
 
-            node = ScanNode(
-                id=nd["id"], node_type=ntype, label=nd["label"],
-                x=round(x, 4), y=round(y, 4), z=round(z, 4),
-                # Raw physics
-                weight=nd["weight"], energy=nd["energy"],
-                stability=nd["stability"], recency=nd["recency"],
-                self_relevance=nd["self_relevance"],
-                partner_relevance=nd["partner_relevance"],
-                goal_relevance=nd["goal_relevance"],
-                novelty_affinity=nd["novelty_affinity"],
-                care_affinity=nd["care_affinity"],
-                achievement_affinity=nd["achievement_affinity"],
-                risk_affinity=nd["risk_affinity"],
-                activation_count=nd["activation_count"],
-                # Computed visuals
-                color=color,
-                radius=round(_node_radius(nd["weight"]), 1),
-                glow=round(_node_glow(nd["energy"]), 2),
-                opacity=round(_node_opacity(nd["stability"]), 2),
-                sharpness=round(nd["recency"], 2),
-                shape=MODALITY_SHAPES.get("text", "sphere"),
-                inner_halo=round(nd["self_relevance"], 2),
-                outer_halo=round(nd["partner_relevance"], 2),
-                angularity=round(nd["goal_relevance"], 2),
-                scatter_count=min(8, int(nd["novelty_affinity"] * 8)),
-                diffusion=round(nd["care_affinity"], 2),
-                wireframe=round(nd["achievement_affinity"], 2),
-                roughness=round(nd["risk_affinity"], 2),
-                ring_count=min(5, int(math.log2(nd["activation_count"] + 1))),
-                # Provenance
-                age_days=round(nd["age_days"], 1),
-                patina=round(patina, 2),
-                has_action=False,
-                layer=layer,
-            )
-            scan.nodes.append(node)
-            node_positions[nd["id"]] = (x, z, y)
+        node = ScanNode(
+            id=nd["id"], node_type=ntype, label=nd["label"],
+            x=round(x, 4), y=round(y, 4), z=round(z, 4),
+            weight=nd["weight"], energy=nd["energy"],
+            stability=nd["stability"], recency=nd["recency"],
+            self_relevance=nd["self_relevance"],
+            partner_relevance=nd["partner_relevance"],
+            goal_relevance=nd["goal_relevance"],
+            novelty_affinity=nd["novelty_affinity"],
+            care_affinity=nd["care_affinity"],
+            achievement_affinity=nd["achievement_affinity"],
+            risk_affinity=nd["risk_affinity"],
+            activation_count=nd["activation_count"],
+            color=color,
+            radius=round(_node_radius(nd["weight"]), 1),
+            glow=round(_node_glow(nd["energy"]), 2),
+            opacity=round(_node_opacity(nd["stability"]), 2),
+            sharpness=round(nd["recency"], 2),
+            shape=MODALITY_SHAPES.get("text", "sphere"),
+            inner_halo=round(nd["self_relevance"], 2),
+            outer_halo=round(nd["partner_relevance"], 2),
+            angularity=round(nd["goal_relevance"], 2),
+            scatter_count=min(8, int(nd["novelty_affinity"] * 8)),
+            diffusion=round(nd["care_affinity"], 2),
+            wireframe=round(nd["achievement_affinity"], 2),
+            roughness=round(nd["risk_affinity"], 2),
+            ring_count=min(5, int(math.log2(nd["activation_count"] + 1))),
+            age_days=round(nd["age_days"], 1),
+            patina=round(nd["patina"], 2),
+            has_action=False,
+            layer=layer,
+        )
+        scan.nodes.append(node)
+        node_positions[nd["id"]] = (x, z, y)
 
     # ── Extract links with ALL fields ────────────────────────────────
     link_rows = graph.query(

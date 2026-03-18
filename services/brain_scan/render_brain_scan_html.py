@@ -184,51 +184,28 @@ nodes.forEach(n => {{
   nodeMeshes.push(mesh);
   nodeById[n.id] = mesh;
 
-  // Inner halo (self_relevance → amber ring)
-  if (n.inner_halo > 0.2) {{
-    const haloGeo = new THREE.RingGeometry(n.radius * 0.004, n.radius * 0.006, 24);
+  // Inner halo (self_relevance → subtle amber glow) — only for high values
+  if (n.inner_halo > 0.7) {{
+    const haloGeo = new THREE.SphereGeometry(n.radius * 0.005, 8, 8);
     const haloMat = new THREE.MeshBasicMaterial({{
-      color: 0xf59e0b, transparent: true, opacity: n.inner_halo * 0.5, side: THREE.DoubleSide
+      color: 0xf59e0b, transparent: true, opacity: n.inner_halo * 0.15, depthWrite: false
     }});
     const halo = new THREE.Mesh(haloGeo, haloMat);
     halo.position.copy(mesh.position);
-    halo.lookAt(camera.position);
     halo.userData = {{ type: 'inner_halo' }};
     haloGroup.add(halo);
   }}
 
-  // Outer halo (partner_relevance → cyan ring)
-  if (n.outer_halo > 0.2) {{
-    const haloGeo = new THREE.RingGeometry(n.radius * 0.006, n.radius * 0.008, 24);
+  // Outer halo (partner_relevance → subtle cyan glow)
+  if (n.outer_halo > 0.5) {{
+    const haloGeo = new THREE.SphereGeometry(n.radius * 0.006, 8, 8);
     const haloMat = new THREE.MeshBasicMaterial({{
-      color: 0x06b6d4, transparent: true, opacity: n.outer_halo * 0.4, side: THREE.DoubleSide
+      color: 0x06b6d4, transparent: true, opacity: n.outer_halo * 0.12, depthWrite: false
     }});
     const halo = new THREE.Mesh(haloGeo, haloMat);
     halo.position.copy(mesh.position);
-    halo.lookAt(camera.position);
     halo.userData = {{ type: 'outer_halo' }};
     haloGroup.add(halo);
-  }}
-
-  // Wireframe overlay (achievement_affinity)
-  if (n.wireframe > 0.3) {{
-    const wfGeo = new THREE.WireframeGeometry(geo);
-    const wfMat = new THREE.LineBasicMaterial({{ color: finalColor, transparent: true, opacity: n.wireframe * 0.6 }});
-    const wf = new THREE.LineSegments(wfGeo, wfMat);
-    wf.position.copy(mesh.position);
-    wf.scale.setScalar(1.15);
-    wf.userData = {{ type: 'wireframe' }};
-    haloGroup.add(wf);
-  }}
-
-  // Ring count (activation_count → torus rings)
-  for (let r = 0; r < n.ring_count; r++) {{
-    const ringGeo = new THREE.TorusGeometry(n.radius * 0.003 * (1.3 + r * 0.3), 0.0005, 6, 24);
-    const ringMat = new THREE.MeshBasicMaterial({{ color: finalColor, transparent: true, opacity: 0.2 }});
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.position.copy(mesh.position);
-    ring.rotation.x = Math.PI / 2 + r * 0.3;
-    haloGroup.add(ring);
   }}
 }});
 
