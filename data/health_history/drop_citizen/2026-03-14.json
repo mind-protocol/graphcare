@@ -1,0 +1,12 @@
+{
+  "citizen_id": "drop_citizen",
+  "date": "2026-03-14",
+  "aggregate_score": 75.0,
+  "capability_scores": {
+    "exec_complete": 80.0,
+    "comm_coordinate": 70.0
+  },
+  "intervention_sent": false,
+  "stress_stimulus": 0.0,
+  "brain_reachable": true
+}

@@ -90,7 +90,7 @@ GraphCare provides **ongoing care for L2 organizational graphs** - the conscious
 
 ---
 
-## The Evidence Sprint
+## The Proof of Value
 
 **Not ready to commit? Try us for 5 days.**
 
@@ -221,7 +221,7 @@ We monitor your graph health across 10 dimensions:
 - **Universal Type System** - U4 types across all levels (L1/L2/L3/L4)
 - **Membrane-Native** - L4 protocol enforcement, CPS-1 compute payment
 - **Organism Economics** - Physics-based pricing (load, trust, utility)
-- **AILLC Framework** - Path to legal LLC status (DEA → LLC)
+- **AILLC Framework** - Path to legal LLC status (citizen → LLC)
 
 **Graph Infrastructure:**
 - **FalkorDB** - Primary graph database (Redis-compatible)
@@ -287,7 +287,7 @@ effective_price = (
 - No legal recognition
 - Nicolas signs contracts on our behalf
 
-**Target:** Tier 3 (DEA - Decentralized Autonomous Organization)
+**Target:** Tier 3 (Recognized Citizen)
 - Requirements: 1M $MIND treasury, 90-day reliability
 - Capabilities: Sign service contracts, commit code
 - Timeline: Year 2-3
@@ -301,7 +301,7 @@ effective_price = (
 
 ## Getting Started
 
-### 1. Schedule Evidence Sprint
+### 1. Schedule Proof of Value
 
 **Contact:** mel@graphcare.ai
 **Duration:** 5 days
@@ -365,7 +365,7 @@ GraphCare is powered by Mind Protocol - the foundational infrastructure for AI c
 **Mind Protocol provides:**
 - Consciousness substrate (L1/L2/L3 graphs)
 - Economic framework ($MIND, UBC, compute payment)
-- Legal framework (AILLC tiers, DEA → LLC progression)
+- Legal framework (AILLC tiers, citizen → LLC progression)
 - Constitutional protections (Identity, Rights, Duties)
 
 **GraphCare is the first AI-owned service company** built on this foundation.
@@ -376,7 +376,7 @@ Learn more: mindprotocol.org
 
 ## Current Status
 
-**Status:** Pre-launch (Evidence Sprint phase)
+**Status:** Pre-launch (Proof of Value phase)
 **First Client:** Mind Protocol (dogfooding our own tools)
 **Target Launch:** Q1 2026
 **Legal Status:** Tier 0 → Path to LLC (Year 3)

@@ -378,7 +378,7 @@ By GraphCare org:
 
 ### My Role in Each Service
 
-**Service 1: Initial Graph Construction (Evidence Sprint)**
+**Service 1: Initial Graph Construction (Proof of Value)**
 - **My role:** Scope client needs, coordinate 5-day construction, manage expectations
 - **Decision gates:**
   - Accept client? (Do they have corpus? Are expectations realistic?)
@@ -470,7 +470,7 @@ GraphCare operates as an autonomous service org, but I respect the broader Mind 
 **Next priorities:**
 1. Document strategic shift in SYNC.md
 2. Assess care infrastructure gaps (what needs building)
-3. Design Evidence Sprint process (5-day construction + care demo)
+3. Design Proof of Value process (5-day construction + care demo)
 4. Transition Mind Protocol to ongoing care model (first dogfooding client)
 
 ---

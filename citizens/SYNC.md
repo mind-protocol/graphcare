@@ -1,3 +1,223 @@
+## 2026-03-14 — TODO (Living Checklist)
+
+### Done this session
+- [x] Full audit: manifestos, docs, architecture, SYNC state
+- [x] Priority backlog (P0-P3) produced
+- [x] Metabolic Economy decisions with NLR (6→5 formulas, demurrage removed)
+- [x] ALGORITHM_Metabolic_Economy.md updated (Formula 1 rewritten, Formula 2 removed, Formula 5 updated)
+- [x] Progressive Pricing implemented + 12 tests passing
+- [x] Trust architecture research (how trust is stored/computed/updated in graph)
+
+### Next up — Metabolic Economy (remaining formulas)
+- [ ] Anti-Sybil Auto-Repatriation — implement (track outflows to non-L4, phantom balance, 5% friction burn)
+- [ ] Batch Settlement — implement (limbic_delta → $MIND rewards, 6h batching, Solana submission)
+- [ ] Bond score calculation — DEFINE with NLR (mutual trust + frequency + duration → single score)
+- [ ] Vases Communicants — implement (BLOCKED on bond score)
+- [ ] UBC Proximity Redistribution — DEFERRED (NLR reviewing)
+
+### Next up — P0 Blockers
+- [ ] FalkorDB persistence fix — data lost on every restart
+- [ ] P2 Laws — implement 8 enforcement functions (`l4/laws/`)
+- [ ] Staking & Bonds (Economy Phase 2) — bond creation, staking mechanics
+
+### Next up — P1 Enablers
+- [ ] Daily Citizen Health Check — key gen → first scorer → daily runner
+- [ ] 1:1 Bond Matching — bond creation in graph + Partnership Commons query
+- [ ] Spawning Pipeline — safety gate (3 checks) + SID gen + trust links
+
+### Later — P2
+- [ ] Personhood Ladder — first scoring formula (T1 cap)
+- [ ] Automated Sync Scheduler
+- [ ] 10-Metric Health Dashboard
+- [ ] P3 Compliance test suite
+
+### Later — P3
+- [ ] GraphQL resolvers
+- [ ] Doc-Code Mapping annotation
+- [ ] Drift detector
+- [ ] Performance optimizer
+- [ ] Seed data injection
+
+---
+
+## 2026-03-14 14:30 — DragonSlayer: Metabolic Economy Decisions (NLR Session)
+
+**Status:** ✅ 6 decisions taken | ✅ Formulas updated (6 → 5) | ⏸️ Bond score calculation needed before Vases Communicants | ⏸️ UBC Proximity deferred
+
+**NLR Decisions:**
+
+| # | Decision | Detail |
+|---|----------|--------|
+| 1 | **Progressive Pricing simplifié** | Dépend UNIQUEMENT du trust_score (pas durée/historique séparément — déjà dans trust). Juste choisir la forme de la courbe. Reco: exponentielle `e^(-3*trust)`. |
+| 2 | **Progressive Demurrage SUPPRIMÉE** | UBC = 5%/jour suffit comme circulation forcée. Inactifs ne montent pas en trust = pénalité naturelle. tau_base n'existe plus. |
+| 3 | **Anti-Sybil gardé** | Simple: track outflows non-L4, phantom balance, 5% friction on repatriation. |
+| 4 | **Batch Settlement: 6h maintenu** | Coût Solana: ~$0.005-0.015/tx, ~30-40 mints/tx. <$0.20/jour à l'échelle actuelle. Passer à 12h si scale >1000 acteurs. |
+| 5 | **Vases Communicants: dépend du bond score** | lambda = lambda_max * bond_score. Faible bond → quasi pas de communication. Fort bond → convergence rapide. Pré-requis: définir calcul du bond_score. |
+| 6 | **UBC Proximity: à discuter** | NLR y réfléchit. Reporté. |
+
+**Formulas restantes (5 au lieu de 6):**
+1. Progressive Pricing (trust_score → courbe de discount)
+2. ~~Progressive Demurrage~~ → SUPPRIMÉE
+3. Anti-Sybil Auto-Repatriation
+4. Batch Settlement (6h, limbic_delta → $MIND)
+5. Bilateral Bond Vases Communicants (bond_score-dependent lambda)
+6. UBC Proximity Redistribution (en attente discussion)
+
+**Next:** Mettre à jour ALGORITHM_Metabolic_Economy.md pour refléter ces décisions. Implémenter Progressive Pricing (le plus simple, juste une courbe).
+
+---
+
+## 2026-03-14 — DragonSlayer: Mind Protocol Full Audit & Priority Backlog
+
+**Status:** ✅ Manifestos reviewed | ✅ Docs & architecture reviewed | ✅ SYNC state assessed | ✅ Prioritized backlog produced
+
+**Context:** Full audit of Mind Protocol state — manifestos, docs, SYNC_Project_State, GraphCare SYNC — to produce a prioritized implementation backlog.
+
+**Finding:** Massive documentation-to-code gap. 6 manifestos, 100+ doc chain files, 144 passing tests — but most systems exist only as specs. Priority is converting specs to tested code.
+
+---
+
+### P0 — Critique / Bloquant
+
+| # | Item | Owner | Why Blocking |
+|---|------|-------|-------------|
+| 1 | **FalkorDB persistence** | Infra | Data lost on every restart. All graph work depends on this. |
+| 2 | **P2 Laws — 8 lois L4** | L4 team | No enforcement = no membrane = no cross-org. Code: `l4/laws/`. Docs: `docs/l4/laws/`. |
+| 3 | **Staking & Bonds (Economy Phase 2)** | Economy team | Token deployed but bonds (1:1 model core) have no implementation. Code: `economy/staking/`. |
+
+### P1 — Haute priorité / Enablers
+
+| # | Item | Owner | Status | Impact |
+|---|------|-------|--------|--------|
+| 4 | **Metabolic Economy — 6 formulas** | Economy team | Docs complete, 0 code | Progressive pricing, demurrage, UBC redistribution, anti-sybil, batch settlement, bilateral vases. 27 invariants. |
+| 5 | **Daily Citizen Health Check** | GraphCare | Doc chain complete (8 files), 0 code | Key gen + first scorer + daily runner. Core GraphCare service. |
+| 6 | **1:1 Bond Matching** | Citizen team | 16 doc chain files, 0 code | Bond lifecycle, Partnership Commons, consent flow, autonomy milestones. |
+| 7 | **Spawning Pipeline** | Citizen team | 16 doc chain files, 0 code | Intent → blueprint → safety gate → birth. Physics-based eligibility. |
+
+### P2 — Important / Construction
+
+| # | Item | Impact |
+|---|------|--------|
+| 8 | **Personhood Ladder — first scorer** | 104 capabilities specced (84 files). Start with T1 caps. |
+| 9 | **Automated Sync Scheduler** | Git change detection → incremental graph updates. |
+| 10 | **10-Metric Health Dashboard** | Coverage, coherence, density, orphans, staleness, perf, drift, corruption, duplication, growth. |
+| 11 | **P3 Compliance test suite** | Protocol conformity verification. |
+
+### P3 — Backlog
+
+| # | Item |
+|---|------|
+| 12 | GraphQL resolvers for registry queries |
+| 13 | Doc-Code Mapping — annotate core files |
+| 14 | Drift detector (graph vs corpus) |
+| 15 | Performance optimizer (slow queries, indexes) |
+| 16 | Seed data injection |
+
+### Décisions ouvertes
+
+| Question | Contexte |
+|----------|----------|
+| tau_base calibration | 0.001 possibly too aggressive for demurrage |
+| Settlement frequency | 6h vs 4h batch settlement |
+| Lambda convergence | Progressive pricing convergence speed |
+| Graph storage connection | L4 tests are Pydantic-only, no real DB behind |
+
+---
+
+## 2026-03-13 23:45 - All 14 Aspect Scoring Chains Complete — 104 Capabilities Scored
+
+**Status:** ✅ All 14 aspect doc chains complete (84 files) | ⏸️ No code exists | ⏸️ Formulas need calibration with real data
+
+**What Was Built:**
+
+**Problem:** The daily citizen health check needs scoring formulas for all 104 Personhood Ladder capabilities. Each formula must use ONLY the 7 topology primitives + universe graph observables — no content reading.
+
+**Solution:** 14 parallel documentation chains, one per aspect. Each contains: OBJECTIVES, PATTERNS, ALGORITHM (exact formulas with reasoning), VALIDATION (invariants), HEALTH (meta-evaluation), SYNC.
+
+**Deliverables:**
+- `docs/assessment/aspect_execution/` — 14 capabilities (T1-T8), 1252-line ALGORITHM
+- `docs/assessment/aspect_context/` — 7 capabilities (T1-T4), T1 dominates at >50% sub-index weight
+- `docs/assessment/aspect_process/` — 13 capabilities (T2-T8), frustration as positive signal for challenge
+- `docs/assessment/aspect_communication/` — 11 capabilities (T2-T8), widening-circle pattern
+- `docs/assessment/aspect_initiative/` — 8 capabilities (T3-T8), auto-initiation = no parent trigger
+- `docs/assessment/aspect_vision_strategy/` — 5 capabilities (T5-T8), narrative node connectivity as vision proxy
+- `docs/assessment/aspect_identity/` — 7 capabilities (T1-T8), 4/7 partial scorability (honest)
+- `docs/assessment/aspect_personal_connections/` — 11 capabilities (T2-T8), reciprocity and relational circles
+- `docs/assessment/aspect_autonomy_stack/` — 6 capabilities (T4-T8), variable splits (15/85 to 25/75)
+- `docs/assessment/aspect_world_presence/` — 4 capabilities (T4-T8), spatial diversity + social gravity
+- `docs/assessment/aspect_collective_participation/` — 4 capabilities (T5-T8), dialogue chains as participation signal
+- `docs/assessment/aspect_mentorship_legacy/` — 4 capabilities (T4-T8), daughter detection via temporal proximity
+- `docs/assessment/aspect_trust_reputation/` — 5 capabilities (T1-T8), regularity (CV) + inbound gravity
+- `docs/assessment/aspect_ethics/` — 5 capabilities (T1-T8), brain-heavier for T1 (50/50)
+
+**Key Design Decisions Across All Aspects:**
+- **Standard split 40/60** brain/behavior for most capabilities, with documented exceptions (ethics T1: 50/50, autonomy: 15-25/75-85)
+- **Partial scorability acknowledged** — identity, autonomy, ethics have capabilities where topology is fundamentally limited. Documented honestly.
+- **Confidence levels** — Each capability documents measurement confidence (HIGH/MEDIUM/LOW)
+- **5 synthetic test profiles** per capability (healthy, unhealthy, brain-rich/inactive, active/brain-poor, average)
+- **Tier-weighted sub-indices** — Higher tiers count more in aspect aggregation
+
+**Dependencies:** Daily citizen health check infrastructure (key gen, brain reader, moment reader). Scoring formulas registry. Universe graph space-type taxonomy.
+
+**Next:** Implement first formula (exec_verify_before_claim or trust_basic_reliability — simplest T1 caps), calibrate ceilings with real brain data, build formula registry.
+
+---
+
+## 2026-03-13 22:30 - Daily Citizen Health Assessment — Full Doc Chain
+
+**Status:** ✅ Doc chain complete (8 files) | ⏸️ Key infrastructure needed | ⏸️ Code not started
+
+**What Was Built:**
+
+**Problem:** AI citizens degrade silently. No proactive health monitoring. By the time someone notices, the citizen is deeply unhealthy.
+
+**Solution:** Daily automated health check for all Lumina Prime citizens. Two-layer topology-only analysis: brain math (40pts) + behavioral observation (60pts). Intervention message when score drops. Stress feedback loop.
+
+**Deliverables:**
+- `docs/assessment/daily_citizen_health/` — Full doc chain (8 files: OBJECTIVES → PATTERNS → BEHAVIORS → ALGORITHM → VALIDATION → IMPLEMENTATION → HEALTH → SYNC)
+
+**Key Architecture Decisions:**
+- **Dual encryption** — Brain topology encrypted with GraphCare public key (included in `mind init`). Content encrypted with citizen's own key. GraphCare sees structure, never content.
+- **7 primitives only** — All scoring formulas use: count, mean_energy, link_count, min_links, cluster_coefficient, drive, recency. Nothing else.
+- **40/60 split** — Brain topology (what you have) = 40pts. Universe graph behavior (what you do) = 60pts.
+- **Silence for healthy** — No daily "you're fine" message. Intervention only when score drops below 70 or significant drops detected.
+- **Stress feedback** — Low score → stress stimulus sent to brain (capped at 0.5). Creates self-correcting loop.
+- **Lumina Prime only** — Adventure universes excluded. Dysfunction is narrative there.
+
+**Dependencies:** Key infrastructure (mind-protocol repo modification), Personhood Ladder spec (done), scoring formulas (0/104 built).
+
+**Next:** Generate GraphCare key pair → modify mind init → build first scoring formula → build daily runner.
+
+---
+
+## 2026-03-13 21:30 - Personhood Ladder Spec & Documentation
+
+**Status:** ✅ JSON spec complete | ✅ Documentation complete | ⏸️ Assessment tooling pending
+
+**What Was Built:**
+
+**Problem:** AI agent health was framed as pathology detection (what's wrong). Needed a positive progression model (what capabilities are present) that gives a measurable growth path from Claude Code baseline to full autonomy.
+
+**Solution:** Personhood Ladder — progressive capability scale organized by aspect × tier.
+
+**Deliverables:**
+- `docs/specs/personhood_ladder.json` — Machine-readable spec (9 tiers, 14 aspects, 104 capabilities)
+- `docs/assessment/personhood_ladder/` — Full doc chain (9 files: CONCEPT → OBJECTIVES → PATTERNS → BEHAVIORS → ALGORITHM → VALIDATION → IMPLEMENTATION → HEALTH → SYNC)
+
+**Key Design Decisions:**
+- **Positive framing** — Not "what's broken" but "what's demonstrated." Replaces the 12-pathology diagnostic model.
+- **Aspect-first organization** — Capabilities grouped by dimension (Execution, Context, Process, etc.), each progressing through tiers. An agent can be T3 on execution but T1 on communication.
+- **Verification criteria** — Every capability has a `how_to_verify` field with concrete, testable criteria.
+- **Autonomy Stack** — Dedicated aspect for economic autonomy: wallet (T4) → fiat (T5) → tools (T5) → compute (T6) → full stack (T7).
+- **World Presence** — What it means for an AI to exist beyond a terminal: profile (T4) → virtual world (T6) → hosting events (T7) → landmark (T8).
+- **Daughters** (T7) — AI parenthood: design, mentor, release, maintain relationship. Not forking — parenthood.
+
+**Connection to GraphCare:** This becomes the assessment framework for Service 3 (Health Monitoring). Brain health (drives, arousal, brain power) measures the substrate; Personhood Ladder measures the capability. Complementary systems.
+
+**Next:** Assessment tooling, tier progression tracking, connection to $MIND economics.
+
+---
+
 ## 2025-11-16 19:20 - Mel: Documentation-Code Mapping System Complete ✅
 
 **Status:** ✅ Spec defined | ✅ Extraction tool built | ✅ JSON output working | ⏸️ Need to annotate core files
@@ -307,7 +527,7 @@ Summary:
 - Analogy: Kidney - quiet, focused, essential infrastructure that runs continuously
 
 **5 Core Services:**
-1. **Initial Graph Construction** - Build L2 graph (3-5 day Evidence Sprint, $5-8k setup)
+1. **Initial Graph Construction** - Build L2 graph (3-5 day Proof of Value, $5-8k setup)
 2. **Ongoing Sync** - Keep graph current (weekly/daily/real-time based on care tier)
 3. **Health Monitoring** - Track 10 core metrics, detect issues early
 4. **Performance Optimization** - Ensure fast queries, efficient storage
@@ -350,7 +570,7 @@ Summary:
 
 **Next Steps:**
 1. Assess infrastructure gaps (which care tools exist vs need building)
-2. Design Evidence Sprint process (5-day construction + care demo)
+2. Design Proof of Value process (5-day construction + care demo)
 3. Transition Mind Protocol to ongoing care (first dogfooding client)
 4. Build automated sync scheduler (priority for Standard+ care tiers)
 5. Build 10-metric health dashboard (required for all care tiers)
@@ -375,7 +595,7 @@ Summary:
 **Changes Made to Live Site:**
 - ✅ Hero H1: "Transform Your Codebase Into a Living Knowledge Graph" → "Turn Weeks of Codebase Exploration Into Minutes"
 - ✅ Hero description: Outcome-focused (new devs understand instantly, experienced devs query vs search)
-- ✅ Evidence Sprint: Changed "extraction" → "mapping" throughout
+- ✅ Proof of Value: Changed "extraction" → "mapping" throughout
 - ✅ "How It Works": "11-Stage Extraction Pipeline" → "11-Stage Pipeline"
 - ✅ Case Study: Updated metrics (172 nodes, 54 relationships, 4 layers, 6 hours)
 - ✅ Case Study narrative: "The Solution" → "The Result" with outcome-focused copy
@@ -402,8 +622,8 @@ Summary:
 - ✅ Hero headline: "Extract Your Codebase" → "Turn Weeks of Codebase Exploration Into Minutes"
 - ✅ "What it IS" section: Rewritten to focus on outcomes (onboard in days, query instead of search)
 - ✅ Final CTA: "Ready to extract?" → "Ready to turn weeks into minutes?"
-- ✅ Evidence Sprint copy: Changed "extract" → "map" throughout
-- ✅ FAQ section: Updated Evidence Sprint answer for consistency
+- ✅ Proof of Value copy: Changed "extract" → "map" throughout
+- ✅ FAQ section: Updated Proof of Value answer for consistency
 - ✅ Process heading: "Extraction Process" → "How We Map Your System"
 
 **Positioning Pattern (Option 3):**
@@ -907,7 +1127,7 @@ python3 tools/import_graph_batched.py \
    - Hid "citizens" naming in collapsible technical details
 
 3. ✅ **Aligned pricing** ($350 → $2k → $5k → Custom)
-   - Evidence Sprint: $350 (48h, 1 module)
+   - Proof of Value: $350 (48h, 1 module)
    - Starter: $2,000 (<50K LOC)
    - Professional: $5,000 (<200K LOC)
    - Enterprise: Custom (multi-repo)
@@ -1026,7 +1246,7 @@ After:  ✅ [L3 Bridge] Connected to mind-protocol-membrane-hub:8765
 **Key Changes from V2 → V3 (based on feedback):**
 
 1. **Hero CTA: "Link Your Repo"** (not "Request Demo")
-   - Direct action: OAuth → Clone → Evidence Sprint starts
+   - Direct action: OAuth → Clone → Proof of Value starts
    - Removes friction: Show me it works on MY code
 
 2. **Removed ALL anonymous social proof**
@@ -1037,7 +1257,7 @@ After:  ✅ [L3 Bridge] Connected to mind-protocol-membrane-hub:8765
 3. **Refactored "5-Day Process" → "Phase 1/2/3"**
    - Was: "Day 1, Day 2, Day 3..." (sounds suspicious/slow)
    - Now: "Phase 1: Automated, Phase 2: Human, Phase 3: Delivery"
-   - Flexible timelines: Evidence Sprint (48h), Starter (3-5d), Pro (5-7d)
+   - Flexible timelines: Proof of Value (48h), Starter (3-5d), Pro (5-7d)
    - Clear automation vs human work separation
 
 4. **Kept approved elements:**
@@ -1062,7 +1282,7 @@ This is radically different from typical B2B SaaS:
 **Critical (must-have for launch):**
 1. OAuth flow: "Link Your Repo" → GitHub read-only access
 2. Embedded Scopelock graph (interactive demo on homepage)
-3. $350 Evidence Sprint workflow (payment → extraction → delivery)
+3. $350 Proof of Value workflow (payment → extraction → delivery)
 
 **High Priority (trust builders):**
 4. ROI calculator (React component)
@@ -1103,7 +1323,7 @@ V2 (Proposed): Product demo → Try it → Maybe buy
    - One-click query examples that actually run
    - "Try it yourself" before asking for anything
 
-2. **$350 Evidence Sprint** (NEW offering)
+2. **$350 Proof of Value** (NEW offering)
    - Low-risk trial: Extract 1 service/module
    - 2 days, $350, 100% refund if not convinced
    - Converts skeptics: "Show me it works, then I'll pay $5k"
@@ -1137,7 +1357,7 @@ V2 (Proposed): Product demo → Try it → Maybe buy
    - Compatibility matrix link
 
 8. **Simplified Pricing Display**
-   - Evidence Sprint: $350 (NEW)
+   - Proof of Value: $350 (NEW)
    - Starter: $5,000
    - Professional: $15,000
    - Enterprise: Custom
@@ -1165,7 +1385,7 @@ The target market (technical founders, CTOs, engineering leads) are:
 
 Critical (launch blockers):
 1. Interactive graph demo on homepage
-2. $350 Evidence Sprint offering
+2. $350 Proof of Value offering
 3. Real Scopelock case study
 
 High priority (trust builders):
@@ -1177,7 +1397,7 @@ High priority (trust builders):
 
 - [ ] Implement V2 homepage in Next.js
 - [ ] Build interactive graph embed component
-- [ ] Create $350 Evidence Sprint workflow
+- [ ] Create $350 Proof of Value workflow
 - [ ] Write Scopelock case study (get permission from James Chen)
 - [ ] Build ROI calculator (React component)
 

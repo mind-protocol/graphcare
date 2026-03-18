@@ -261,7 +261,7 @@ python3 tools/query_production.py "MATCH (n) RETURN count(n)"
 
 **What:** Build complete L2 graph from client corpus
 
-**Typical Duration:** 3-5 days (Evidence Sprint)
+**Typical Duration:** 3-5 days (Proof of Value)
 
 **Process:**
 1. Connect data sources (codebase, docs, decisions)
@@ -742,7 +742,7 @@ GraphCare operates as an autonomous service org within the Mind Protocol ecosyst
 - ✅ Workflows documented
 - ⏸️ Need practice: Care handoffs, emergency response drills
 
-**Ready for:** Evidence Sprint model (5-day construction + care demo)
+**Ready for:** Proof of Value model (5-day construction + care demo)
 
 ---
 

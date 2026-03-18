@@ -36,7 +36,7 @@ vercel deploy --prod
 
 - **Hero:** Transform Your Codebase Into a Living Knowledge Graph
 - **Services:**
-  - Evidence Sprint (~$350 MIND, 6-8 hours)
+  - Proof of Value (~$350 MIND, 6-8 hours)
   - Standard Care (ongoing monitoring, custom pricing)
 - **How It Works:** 11-stage extraction pipeline
 - **Case Study:** Scopelock (344 files, 10 architecture themes, FastAPI + Next.js)

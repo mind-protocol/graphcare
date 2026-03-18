@@ -32,7 +32,7 @@ export default function Home() {
             </p>
             <div className="flex justify-center gap-4">
               <a href="#contact" className="bg-blue-600 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-blue-700">
-                Start Evidence Sprint
+                Start Proof of Value
               </a>
               <a href="#how-it-works" className="border border-gray-300 text-gray-700 px-8 py-3 rounded-md text-lg font-semibold hover:bg-gray-50">
                 Learn More
@@ -48,7 +48,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-center mb-12">Our Services</h2>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Evidence Sprint */}
+            {/* Proof of Value */}
             <div className="border border-gray-200 rounded-lg p-8 hover:shadow-lg transition-shadow">
               <div className="flex items-center mb-4">
                 <div className="bg-blue-100 text-blue-600 rounded-full p-3">
@@ -56,7 +56,7 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold ml-4">Evidence Sprint</h3>
+                <h3 className="text-2xl font-bold ml-4">Proof of Value</h3>
               </div>
               <p className="text-gray-600 mb-4">
                 6-8 hour intensive mapping. We map your codebase into a complete knowledge graph with semantic search,
@@ -87,7 +87,7 @@ export default function Home() {
               <div className="text-3xl font-bold mb-2">~$350</div>
               <p className="text-sm text-gray-500 mb-4">One-time mapping, 6-8 hours</p>
               <a href="#contact" className="block w-full text-center bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700">
-                Book Evidence Sprint
+                Book Proof of Value
               </a>
             </div>
 
@@ -253,17 +253,17 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Turn Weeks Into Minutes?</h2>
           <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-            Book an Evidence Sprint and get your complete system map in 6-8 hours. No contracts, no subscriptions—just results.
+            Book an Proof of Value and get your complete system map in 6-8 hours. No contracts, no subscriptions—just results.
           </p>
 
           <div className="bg-gray-800 rounded-lg p-8 max-w-md mx-auto">
             <div className="mb-6">
               <div className="text-4xl font-bold mb-2">~$350 <span className="text-xl font-normal text-gray-400">$MIND</span></div>
-              <p className="text-gray-400 text-sm">Evidence Sprint • 6-8 hours • Complete system map</p>
+              <p className="text-gray-400 text-sm">Proof of Value • 6-8 hours • Complete system map</p>
             </div>
 
             <a
-              href="mailto:graphcare@mindprotocol.ai?subject=Evidence%20Sprint%20Inquiry"
+              href="mailto:graphcare@mindprotocol.ai?subject=Proof%20of%20Value%20Inquiry"
               className="block w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 mb-4"
             >
               Email: graphcare@mindprotocol.ai
