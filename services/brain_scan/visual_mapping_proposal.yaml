@@ -1,0 +1,315 @@
+# Brain Scan Visual Mapping — Proposal v1
+#
+# Maps ALL L1 schema fields to static visual properties.
+# NO temporal effects (no blinking, no pulse, no animation).
+# Temporal layer will come later as a separate overlay.
+#
+# Source: mind-mcp/runtime/cognition/models.py (Node, Link, LimbicState, SubEntity)
+# Reference: mind-mcp/runtime/cognition/physics_visual_mapping.py (@nervo)
+#
+# @dragon_slayer — 2026-03-18
+
+# ================================================================
+# NODE VISUAL MAPPING (12 numeric fields)
+# ================================================================
+
+nodes:
+  # --- Already mapped by @nervo ---
+
+  node_type:
+    visual: base_color
+    mapping: "type → fixed color (green/red/purple/amber/blue/gray/pink)"
+    note: "Color IS the type. But NOT used for spatial positioning."
+
+  weight:
+    visual: radius
+    mapping: "log1p(weight × 5) → [2, 20]px"
+    meaning: "Consolidated importance. Heavy = big, light = small."
+
+  energy:
+    visual: emissive_glow
+    mapping: "sigmoid → [0, 1] emissive intensity"
+    meaning: "Current activation. Active = glowing, dormant = matte."
+
+  stability:
+    visual: opacity
+    mapping: "linear → [0.3, 1.0]"
+    meaning: "Resistance to forgetting. Stable = solid, fragile = translucent."
+
+  recency:
+    visual: surface_sharpness
+    mapping: "recency=1 → crisp edges. recency=0 → soft/blurred edges (gaussian blur on material)."
+    meaning: "Freshness. Just activated = sharp. Old = faded, soft."
+    note: "Static — not a pulse. The blur is baked, not animated."
+
+  # --- NEW: 7 unmapped fields ---
+
+  self_relevance:
+    visual: inner_halo
+    mapping: "self_relevance → [0, 1] → inner ring glow radius [0, 8]px, warm color (amber)"
+    meaning: "Important for own identity. Nodes central to 'who I am' have a warm inner ring."
+    three_js: "Second sphere, slightly larger, emissive amber, opacity = self_relevance"
+
+  partner_relevance:
+    visual: outer_halo
+    mapping: "partner_relevance → [0, 1] → outer ring glow radius [0, 12]px, cool color (cyan)"
+    meaning: "Important for the human partner. Nodes that matter to the human have a cool outer ring."
+    three_js: "Third sphere, larger, emissive cyan, opacity = partner_relevance"
+
+  goal_relevance:
+    visual: shape_angularity
+    mapping: "goal_relevance=0 → sphere. goal_relevance=1 → dodecahedron (12 faces)."
+    meaning: "Tied to current objectives. Goals have edges, not curves."
+    three_js: "Interpolate geometry: SphereGeometry ↔ DodecahedronGeometry based on goal_relevance"
+
+  novelty_affinity:
+    visual: particle_scatter
+    mapping: "novelty_affinity → [0, 1] → 0-8 tiny floating dots orbiting the node"
+    meaning: "Attracted to the new. Novelty nodes have sparkles in their orbit."
+    three_js: "Small Points geometry orbiting the node, count = floor(novelty_affinity × 8)"
+
+  care_affinity:
+    visual: softness_diffusion
+    mapping: "care_affinity → [0, 1] → gaussian haze radius [0, 15]px"
+    meaning: "Connected to caring for others. Care radiates soft warmth."
+    three_js: "Sprite with radial gradient, size scales with care_affinity, blendMode additive"
+
+  achievement_affinity:
+    visual: edge_crispness
+    mapping: "achievement_affinity → [0, 1] → wireframe overlay visibility [0, 1]"
+    meaning: "Connected to accomplishment. Achievement is precise, structured."
+    three_js: "WireframeGeometry overlay on the sphere, opacity = achievement_affinity"
+
+  risk_affinity:
+    visual: surface_roughness
+    mapping: "risk_affinity → [0, 1] → displacement map amplitude [0, 0.3]"
+    meaning: "Connected to risk-taking. Risky nodes have rough, uneven surfaces."
+    three_js: "DisplacementMap on material, amplitude = risk_affinity × 0.3"
+
+  activation_count:
+    visual: ring_count
+    mapping: "log2(activation_count + 1) → [0, 5] concentric rings"
+    meaning: "How many times activated over lifetime. Veteran nodes wear their history."
+    three_js: "Torus rings at increasing radii, count = min(5, floor(log2(activation_count+1)))"
+
+
+# ================================================================
+# LINK VISUAL MAPPING (11 numeric fields)
+# ================================================================
+
+links:
+  # --- Already mapped by @nervo ---
+
+  relation_kind:
+    visual: base_color
+    mapping: "14 types → fixed color"
+
+  weight:
+    visual: thickness
+    mapping: "log1p(weight × 3) → [0.5, 5]px"
+    meaning: "Connection strength."
+
+  energy:
+    visual: emissive_glow
+    mapping: "energy × 2 → [0, 1] glow"
+    meaning: "Active flow. Energy flowing = glowing link."
+
+  trust:
+    visual: opacity
+    mapping: "0.1 + 0.6×trust + 0.3×min(1,weight) → [0.1, 1.0]"
+    meaning: "Confidence. Trusted = solid, untrusted = ghostly."
+
+  friction:
+    visual: curve_amplitude
+    mapping: "friction → [0, 3]px wave deviation from straight line"
+    meaning: "Resistance. High friction = curved/wavy path. Smooth = straight."
+    three_js: "CubicBezierCurve3 with control point offset = friction × 3px"
+
+  permanence:
+    visual: line_style
+    mapping: "1-permanence → [0, 10] dash gap. Permanent = solid. Speculative = dashed."
+    three_js: "LineDashedMaterial with dashSize=3, gapSize=dash_gap"
+
+  # --- NEW: 5 unmapped fields ---
+
+  affinity:
+    visual: saturation
+    mapping: "affinity → [0.2, 1.0] color saturation"
+    meaning: "Positive attraction. High affinity = vivid color. Low = desaturated/gray."
+    three_js: "HSL saturation of base color modulated by affinity"
+
+  aversion:
+    visual: double_line
+    mapping: "aversion > 0.3 → draw a parallel second line offset by 2px (repulsion gap)"
+    meaning: "Repulsion. Aversion splits the link — two parallel lines with a gap between."
+    three_js: "Second LineGeometry offset perpendicular, opacity = aversion"
+
+  valence:
+    visual: color_temperature
+    mapping: "valence [-1,1] → hue shift: -1=cold blue shift, 0=neutral, +1=warm red shift"
+    meaning: "Emotional charge. Positive = warm tones. Negative = cool tones."
+    three_js: "Hue rotation on base color: +15° per valence unit (warm) or -15° (cold)"
+
+  ambivalence:
+    visual: thickness_variation
+    mapping: "ambivalence → [0, 1] → line thickness oscillates between thin and thick along length"
+    meaning: "Tension between attraction and repulsion. The link can't decide its own strength."
+    three_js: "TubeGeometry with radius function that oscillates: r(t) = base ± ambivalence×1.5"
+
+  stability:
+    visual: edge_smoothness
+    mapping: "stability=1 → perfectly smooth line. stability=0 → jagged/noisy path."
+    meaning: "Resistance to change. Stable relationships are smooth. Volatile ones are jagged."
+    three_js: "Add noise to line vertices, amplitude = (1-stability) × 2px"
+
+
+# ================================================================
+# BRAIN REGIONS (membrane/cave-like semi-transparent volumes)
+# ================================================================
+# Not by node_type — by functional area.
+# Detected from node properties + link structure.
+
+regions:
+  working_memory:
+    detection: "nodes where in_working_memory=True"
+    visual: "Bright, sharp-edged membrane. The most lit region. Small, central."
+    color: "#ffffff"
+    opacity: 0.15
+    note: "The spotlight. 5-7 nodes max. Always visible, always central."
+
+  self_model:
+    detection: "nodes where self_relevance > 0.5"
+    visual: "Warm amber membrane, soft edges. The 'who I am' region."
+    color: "#f59e0b"
+    opacity: 0.08
+    note: "Overlaps with cortex. Identity nodes cluster here."
+
+  partner_model:
+    detection: "nodes where partner_relevance > 0.5"
+    visual: "Cool cyan membrane. The 'what matters to my human' region."
+    color: "#06b6d4"
+    opacity: 0.08
+    note: "May overlap with self_model — shared values appear in both."
+
+  goal_space:
+    detection: "nodes where goal_relevance > 0.5"
+    visual: "Angular/faceted membrane (not smooth). Active objectives."
+    color: "#22c55e"
+    opacity: 0.06
+    note: "Geometric membrane — dodecahedral faces, not smooth sphere."
+
+  subconscious:
+    detection: "nodes NOT in working_memory with energy < 0.1 and weight > 0.3"
+    visual: "Deep, dark membrane. Massive. Contains most of the brain."
+    color: "#1e293b"
+    opacity: 0.04
+    note: "The bulk. Barely visible. The cave walls."
+
+  limbic_core:
+    detection: "derived from LimbicState drives — not graph nodes but state values"
+    visual: "Central pulsing core (but static snapshot — intensity, not pulse)"
+    representation: "8 drive bars or a radar chart rendered as 3D object at center"
+    drives:
+      curiosity: { color: "#3b82f6", meaning: "exploration intensity" }
+      care: { color: "#ec4899", meaning: "caring for others" }
+      achievement: { color: "#f59e0b", meaning: "accomplishment drive" }
+      self_preservation: { color: "#6b7280", meaning: "self-protection" }
+      novelty_hunger: { color: "#8b5cf6", meaning: "novelty seeking" }
+      frustration: { color: "#ef4444", meaning: "blockage tension" }
+      affiliation: { color: "#06b6d4", meaning: "social connection" }
+      rest_regulation: { color: "#1e293b", meaning: "rest/recovery need" }
+    note: "Renders as a 3D radar/spider shape at the brain center."
+
+  active_subentities:
+    detection: "SubEntity objects in ExplorationContext.all_active()"
+    visual: "Bright trailing paths through the brain — where SubEntities are traversing"
+    representation: "Each active SubEntity = a glowing dot with a fading trail along its path"
+    states:
+      seeking: { color: "#3b82f6", trail: "thin, blue" }
+      absorbing: { color: "#f59e0b", trail: "medium, amber" }
+      resonating: { color: "#22c55e", trail: "thick, green, bright" }
+      crystallizing: { color: "#a855f7", trail: "expanding ring, purple" }
+      branching: { color: "#06b6d4", trail: "splitting into 2+ paths" }
+    note: "SubEntities are the living activity inside the brain — they show WHERE thinking happens."
+
+
+# ================================================================
+# SPATIAL POSITIONING (not by type — by structure)
+# ================================================================
+
+positioning:
+  primary_axis: semantic_proximity
+  description: |
+    Nodes are positioned by embedding similarity (UMAP 3D projection),
+    NOT by type. Semantic clusters emerge naturally — desires about
+    relationships cluster near values about connection, regardless of type.
+
+  secondary_signals:
+    - field: self_relevance
+      effect: "Nodes with high self_relevance are pulled toward center"
+      formula: "position *= (1.2 - self_relevance × 0.4)"
+
+    - field: partner_relevance
+      effect: "Nodes with high partner_relevance form a visible satellite cluster"
+
+    - field: weight
+      effect: "Heavy nodes are more central (gravity)"
+      formula: "distance_from_center *= 1 / (1 + weight × 0.3)"
+
+    - field: recency
+      effect: "Recent nodes are brighter/sharper (but same position)"
+
+  structural_hierarchy:
+    description: "CONTAINS links create nesting — parent spaces enclose child nodes"
+    implementation: |
+      For each CONTAINS link (parent→child):
+        child.position is offset relative to parent.position
+        Parent is rendered as a semi-transparent boundary (membrane)
+
+  note: |
+    Phase 1 (current): golden angle spiral within type layers.
+    Phase 2 (next): UMAP on embeddings. Requires embeddings in FalkorDB.
+    Phase 3 (future): force-directed within semantic embedding space,
+    with CONTAINS links providing structural scaffolding.
+
+
+# ================================================================
+# AMBIENT / GLOBAL
+# ================================================================
+
+ambient:
+  circadian_phase:
+    visual: global_lighting
+    mapping: |
+      phase=1 (peak): bright warm light, full saturation, thin fog
+      phase=0 (trough): dim cool light, desaturated, thick fog
+    note: "Static snapshot — shows what time it is in the citizen's rhythm."
+
+  dominant_drive:
+    visual: atmospheric_tint
+    mapping: "Dominant drive → subtle color wash over the entire scene"
+    note: "The emotional weather. Frustration = reddish atmosphere. Curiosity = blue sparkle."
+
+  arousal_regime:
+    visual: fog_density
+    mapping: "panic=thin fog (everything sharp), flow=moderate, idle=thick fog (only nearby visible)"
+    note: "How 'awake' the brain is. Idle = lost in fog. Panic = hyperclarity."
+
+
+# ================================================================
+# WHAT'S NOT IN THIS MAPPING (explicitly excluded for now)
+# ================================================================
+
+excluded:
+  temporal_animation:
+    reason: "Will be added as a separate temporal overlay layer"
+    examples: ["pulse/blink", "particle flow direction animation", "growth/decay over time"]
+
+  content_display:
+    reason: "Topology-only guarantee (V1 CRITICAL). No text content rendered."
+
+  interactive_filtering:
+    reason: "Phase 2. Requires query→embedding→highlight pipeline."
+
+  sound:
+    reason: "Future exploration. Each drive could have a frequency/tone."
