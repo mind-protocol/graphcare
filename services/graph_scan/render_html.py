@@ -1,5 +1,5 @@
 """
-Brain Scan 3D Renderer v3 — organic, brain-like visualization.
+Graph Scan 3D Renderer v3 — organic, brain-like visualization.
 
 No straight lines. No dashes. No plastic. Curves everywhere.
 Muted organic palette. Glow on links. Smaller nodes.
@@ -14,14 +14,15 @@ def render_html(scan_path: Path, output_path: Path):
     scan = json.loads(scan_path.read_text())
     nodes_json = json.dumps(scan["nodes"])
     links_json = json.dumps(scan["links"])
-    citizen_id = scan["citizen_id"]
+    graph_label = scan.get("citizen_id") or scan.get("graph_name", "unknown")
+    scan_type = scan.get("scan_type", "brain_l1")
     stats = scan["stats"]
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Brain Scan — @{citizen_id}</title>
+<title>Graph Scan — {graph_label}</title>
 <style>
   * {{ margin: 0; padding: 0; box-sizing: border-box; }}
   body {{ background: #06060c; color: #c0c0c8; font-family: 'SF Mono', 'Cascadia Code', monospace; overflow: hidden; }}
@@ -53,7 +54,7 @@ def render_html(scan_path: Path, output_path: Path):
 <body>
 
 <div id="info">
-  <h2>@{citizen_id}</h2>
+  <h2>@{graph_label}</h2>
   <div class="stat">{stats['total_nodes']} nodes — {stats['total_links']} links</div>
   <div class="legend" id="legend"></div>
 </div>
@@ -74,6 +75,7 @@ const links = {links_json};
 // ── Organic color palette ───────────────────────────────────
 // Muted, warm, desaturated — like neural tissue under soft light
 const PALETTE = {{
+  // L1 types
   process:   0x5a8a6a,  // sage green
   desire:    0xc47058,  // terracotta
   narrative: 0x8a6ab0,  // muted lavender
@@ -83,6 +85,11 @@ const PALETTE = {{
   state:     0xb06888,  // dusty rose
   stimulus:  0xc08050,  // burnt sienna
   frequency: 0x508888,  // teal
+  // L3 types
+  actor:     0xc4a040,  // old gold
+  moment:    0xc47058,  // terracotta
+  space:     0x5a8a6a,  // sage
+  thing:     0x5878a0,  // steel blue
 }};
 
 const LINK_PALETTE = {{
@@ -101,7 +108,7 @@ const LINK_PALETTE = {{
 // ── Scene ───────────────────────────────────────────────────
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x06060c);
-scene.fog = new THREE.FogExp2(0x06060c, 0.4);
+scene.fog = new THREE.FogExp2(0x06060c, 0.15);
 
 const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.01, 50);
 camera.position.set(0.3, 0.5, 0.8);
@@ -327,11 +334,14 @@ animate();
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html)
-    print(f"Brain scan v3 → {output_path}")
+    print(f"Graph scan → {output_path}")
 
 
 if __name__ == "__main__":
-    handle = sys.argv[1] if len(sys.argv) > 1 else "dragon_slayer"
-    scan_path = Path(f"data/brain_scans/{handle}_scan.json")
-    output_path = Path(f"data/brain_scans/{handle}_brain.html")
+    name = sys.argv[1] if len(sys.argv) > 1 else "dragon_slayer"
+    # Auto-detect: try brain scan first, then universe scan
+    scan_path = Path(f"data/graph_scans/{name}_scan.json")
+    if not scan_path.exists():
+        scan_path = Path(f"data/graph_scans/{name}_universe_scan.json")
+    output_path = Path(f"data/graph_scans/{name}.html")
     render_html(scan_path, output_path)

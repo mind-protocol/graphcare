@@ -1,13 +1,13 @@
 """
-Brain Scan Data Extractor — extract brain topology for 3D visualization.
+Graph Scan Data Extractor — extract brain topology for 3D visualization.
 
-DOCS: docs/care/brain_scan/PATTERNS_Brain_Scan.md
+DOCS: docs/care/graph_scan/PATTERNS_Graph_Scan.md
 
 Extracts ALL L1 fields from FalkorDB and computes visual properties
 using the canonical physics_visual_mapping formulas.
 
 Two-stage pipeline: this file = Stage 1 (extract + position + compute visuals).
-Stage 2 (render) is render_brain_scan_html.py.
+Stage 2 (render) is render_graph_scan_html.py.
 
 9 visual layers:
   1. Node base (color, radius, glow, opacity, sharpness)
@@ -31,7 +31,7 @@ from typing import Optional
 
 from falkordb import FalkorDB
 
-logger = logging.getLogger("graphcare.brain_scan")
+logger = logging.getLogger("graphcare.graph_scan")
 
 FALKORDB_HOST = "localhost"
 FALKORDB_PORT = 6379
@@ -306,7 +306,7 @@ def _compute_semantic_positions(nodes: list[dict], graph) -> list[tuple]:
         return positions
 
 
-def extract_brain_scan(citizen_handle: str) -> BrainScan:
+def extract_graph_scan(citizen_handle: str) -> BrainScan:
     """Extract full brain data with all visual properties computed."""
     import time as _time
 
@@ -519,7 +519,7 @@ def save_scan(scan: BrainScan, output_path: Path):
 if __name__ == "__main__":
     import sys
     handle = sys.argv[1] if len(sys.argv) > 1 else "dragon_slayer"
-    scan = extract_brain_scan(handle)
-    out = Path(f"data/brain_scans/{handle}_scan.json")
+    scan = extract_graph_scan(handle)
+    out = Path(f"data/graph_scans/{handle}_scan.json")
     save_scan(scan, out)
     print(f"Scan: {scan.stats}")

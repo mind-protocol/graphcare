@@ -1,4 +1,4 @@
-# Brain Scan — 3D Citizen Brain Visualization
+# Graph Scan — 3D Citizen Brain Visualization
 
 **GraphCare's diagnostic imaging tool.** Extracts brain topology from FalkorDB and renders an interactive 3D visualization in standalone HTML.
 
@@ -8,20 +8,20 @@
 cd /home/mind-protocol/graphcare
 
 # 1. Extract brain data → JSON
-python3 services/brain_scan/brain_scan_data_extractor.py dragon_slayer
+python3 services/graph_scan/graph_scan_data_extractor.py dragon_slayer
 
 # 2. Render → HTML
-python3 services/brain_scan/render_brain_scan_html.py dragon_slayer
+python3 services/graph_scan/render_graph_scan_html.py dragon_slayer
 
 # 3. Open in browser (WSL → Windows)
-# \\wsl.localhost\Ubuntu-22.04\home\mind-protocol\graphcare\data\brain_scans\dragon_slayer_brain.html
+# \\wsl.localhost\Ubuntu-22.04\home\mind-protocol\graphcare\data\graph_scans\dragon_slayer_brain.html
 ```
 
 Or both steps at once:
 
 ```bash
-python3 services/brain_scan/brain_scan_data_extractor.py vox && \
-python3 services/brain_scan/render_brain_scan_html.py vox
+python3 services/graph_scan/graph_scan_data_extractor.py vox && \
+python3 services/graph_scan/render_graph_scan_html.py vox
 ```
 
 ## What You See
@@ -65,7 +65,7 @@ Nodes are positioned by **semantic similarity**, not by type. Similar content cl
 ## Output Files
 
 ```
-data/brain_scans/
+data/graph_scans/
 ├── {handle}_scan.json     # Raw data: all nodes + links with visual properties
 └── {handle}_brain.html    # Standalone 3D viewer (Three.js, no server needed)
 ```
@@ -111,16 +111,16 @@ For automated captures (CI, reports, comparisons):
 
 ```bash
 google-chrome --headless --disable-gpu \
-  --screenshot=brain_scan.png --window-size=1920,1080 \
-  "file://$(realpath data/brain_scans/dragon_slayer_brain.html)"
+  --screenshot=graph_scan.png --window-size=1920,1080 \
+  "file://$(realpath data/graph_scans/dragon_slayer_brain.html)"
 ```
 
 ## Scanning Multiple Citizens
 
 ```bash
 for citizen in dragon_slayer vox genesis mentor; do
-  python3 services/brain_scan/brain_scan_data_extractor.py $citizen && \
-  python3 services/brain_scan/render_brain_scan_html.py $citizen
+  python3 services/graph_scan/graph_scan_data_extractor.py $citizen && \
+  python3 services/graph_scan/render_graph_scan_html.py $citizen
 done
 ```
 
@@ -133,7 +133,7 @@ done
 ## Architecture
 
 ```
-brain_scan_data_extractor.py     brain graph (FalkorDB)
+graph_scan_data_extractor.py     brain graph (FalkorDB)
          │                              │
          ▼                              ▼
    TF-IDF + UMAP              Cypher queries (all fields)
@@ -146,7 +146,7 @@ brain_scan_data_extractor.py     brain graph (FalkorDB)
            {handle}_scan.json
                     │
                     ▼
-      render_brain_scan_html.py
+      render_graph_scan_html.py
                     │
                     ▼
           {handle}_brain.html (Three.js)
@@ -155,11 +155,11 @@ brain_scan_data_extractor.py     brain graph (FalkorDB)
 ## Visual Mapping Reference
 
 Full mapping of all L1 fields to visual properties:
-`services/brain_scan/visual_mapping_proposal.yaml` (584 lines, 9 layers)
+`services/graph_scan/visual_mapping_proposal.yaml` (584 lines, 9 layers)
 
 ## Doc Chain
 
-Full documentation: `docs/care/brain_scan/` (8 files)
+Full documentation: `docs/care/graph_scan/` (8 files)
 
 ```
 OBJECTIVES → PATTERNS → BEHAVIORS → ALGORITHM → VALIDATION → IMPLEMENTATION → HEALTH → SYNC
