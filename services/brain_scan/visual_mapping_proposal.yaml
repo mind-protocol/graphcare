@@ -1,10 +1,12 @@
-# Brain Scan Visual Mapping — Proposal v1
+# Brain Scan Visual Mapping — Proposal v2
 #
 # Maps ALL L1 schema fields to static visual properties.
 # NO temporal effects (no blinking, no pulse, no animation).
 # Temporal layer will come later as a separate overlay.
 #
-# Source: mind-mcp/runtime/cognition/models.py (Node, Link, LimbicState, SubEntity)
+# v2: Added 4 missing layers — emotions, modality, metabolism, provenance.
+#
+# Source: mind-mcp/runtime/cognition/models.py (Node, Link, LimbicState, SubEntity, Metabolism)
 # Reference: mind-mcp/runtime/cognition/physics_visual_mapping.py (@nervo)
 #
 # @dragon_slayer — 2026-03-18
@@ -294,6 +296,273 @@ ambient:
     visual: fog_density
     mapping: "panic=thin fog (everything sharp), flow=moderate, idle=thick fog (only nearby visible)"
     note: "How 'awake' the brain is. Idle = lost in fog. Panic = hyperclarity."
+
+
+# ================================================================
+# LAYER 5: MODALITY (node shape by sensory channel)
+# ================================================================
+# Every node has a modality field. The SHAPE of the node tells you
+# what kind of information it is — without revealing content.
+
+modality:
+  TEXT:
+    shape: sphere
+    geometry: "SphereGeometry(r, 16, 16)"
+    texture: smooth
+    meaning: "Abstract thought — round, continuous, no edges."
+
+  VISUAL:
+    shape: octahedron
+    geometry: "OctahedronGeometry(r)"
+    texture: reflective
+    meaning: "Visual perception — faceted like a diamond/eye, catches light."
+    material_override: "MeshPhongMaterial with envMap for reflection"
+
+  AUDIO:
+    shape: torus
+    geometry: "TorusGeometry(r, r*0.3, 12, 24)"
+    texture: undulating
+    meaning: "Sound — a ring, like a wave propagating outward."
+    material_override: "MeshPhongMaterial with bumpMap (sine wave pattern)"
+
+  SPATIAL:
+    shape: box
+    geometry: "BoxGeometry(r*1.4, r*1.4, r*1.4)"
+    texture: wireframe_overlay
+    meaning: "Space/structure — cubic, grid-like, geometric."
+    material_override: "MeshPhongMaterial + WireframeGeometry overlay"
+
+  BIOMETRIC:
+    shape: icosahedron
+    geometry: "IcosahedronGeometry(r, 1)"
+    texture: organic
+    meaning: "Body data — organic, many faces, irregular."
+    material_override: "MeshPhongMaterial with displacementMap (noise)"
+
+  note: |
+    Content (URI, text) is NOT displayed (topology-only guarantee).
+    Embeddings (CLIP, CLAP, ULIP) ARE used for spatial positioning —
+    multimodal nodes cluster near semantically similar content via UMAP.
+
+  # --- Multimodal media field (per @nervo's design) ---
+  # Node.media is a single dict: {modality: {uri, embedding, meta}}
+  # The URI is never displayed. The embedding positions the node.
+  # The modality key determines the shape.
+  media_field:
+    schema: |
+      media:
+        image: { uri: "s3://...", embedding: [CLIP 768D] }
+        voice: { uri: "s3://...", embedding: [CLAP 512D], duration_s: 12.5 }
+        geometry: { uri: "s3://...", embedding: [ULIP] }
+
+    visual_indicators:
+      has_image:
+        detection: "'image' in node.media"
+        visual: "Small camera icon sprite orbiting the node"
+        three_js: "Sprite with camera texture, orbit radius = node_radius × 1.5"
+
+      has_voice:
+        detection: "'voice' in node.media"
+        visual: "Small waveform icon sprite"
+        three_js: "Sprite with waveform texture"
+
+      has_geometry:
+        detection: "'geometry' in node.media"
+        visual: "Small cube wireframe icon sprite"
+        three_js: "Sprite with cube wireframe texture"
+
+      multiple_media:
+        detection: "len(node.media) > 1"
+        visual: "Icons stack vertically around the node"
+        meaning: "Rich multimodal node — multiple senses attached."
+
+    spatial_effect: |
+      Each modal embedding contributes to the node's 3D position via
+      weighted UMAP. CLIP (mature) = weight 0.25. CLAP = 0.10.
+      ULIP = 0.05. The node moves toward its multimodal neighbors.
+      Result: a node with an image of a sunset clusters near other
+      sunset images AND near text about sunsets — cross-modal proximity.
+
+
+# ================================================================
+# LAYER 6: EMOTIONS (6 — atmospheric overlay, distinct from drives)
+# ================================================================
+# Drives are WHAT you want. Emotions are HOW you feel.
+# Drives → limbic core radar. Emotions → atmospheric effects.
+
+emotions:
+  description: |
+    Emotions are rendered as environmental effects that color the
+    entire brain atmosphere. They layer ON TOP of the drive radar.
+    Multiple emotions can be active simultaneously — they blend.
+
+  boredom:
+    visual: desaturation
+    mapping: "boredom [0,1] → global saturation multiplier [1.0, 0.4]"
+    meaning: "Boredom drains color from everything. The brain goes gray."
+    three_js: "Post-processing: reduce scene saturation by boredom × 0.6"
+
+  anger:
+    visual: red_vignette
+    mapping: "anger [0,1] → red tint at scene edges, intensity [0, 0.5]"
+    meaning: "Anger creeps in from the edges. Tunnel vision."
+    three_js: "FullscreenQuad shader: radial red gradient, opacity = anger × 0.5"
+
+  anxiety:
+    visual: grain_noise
+    mapping: "anxiety [0,1] → film grain density [0, 0.15]"
+    meaning: "Anxiety adds static/noise to perception. The image trembles."
+    three_js: "Post-processing: noise overlay, opacity = anxiety × 0.15"
+
+  satisfaction:
+    visual: bloom
+    mapping: "satisfaction [0,1] → bloom intensity [0, 0.8]"
+    meaning: "Satisfaction makes everything glow warmer. Soft bloom."
+    three_js: "UnrealBloomPass, strength = satisfaction × 0.8"
+
+  tenderness:
+    visual: warm_soft_focus
+    mapping: "tenderness [0,1] → depth-of-field blur + warm tint [0, 0.4]"
+    meaning: "Tenderness softens edges and warms tones. Gentle."
+    three_js: "BokehPass (depth of field), aperture scales with tenderness"
+
+  solitude:
+    visual: fog_thickening
+    mapping: "solitude [0,1] → additional fog density [0, 0.1]"
+    meaning: "Solitude isolates. Far nodes disappear into fog."
+    three_js: "scene.fog.density += solitude × 0.1"
+
+  note: |
+    Emotions are ENVIRONMENTAL, not per-node. They affect how you
+    SEE the brain, not what the brain IS. This is intentional:
+    emotions color perception, they don't change structure.
+
+
+# ================================================================
+# LAYER 7: METABOLISM (physiological state overlay)
+# ================================================================
+# The body's current configuration. Static snapshot of adaptive state.
+
+metabolism:
+  circadian_phase:
+    visual: global_lighting
+    already_mapped: true
+    note: "See ambient section. Brightness + warmth + fog."
+
+  peak_hour:
+    visual: sun_indicator
+    mapping: "peak_hour [0,24] → position of a small sun/moon icon on an orbital ring around the brain"
+    meaning: "Where the citizen's natural peak is. A clock without numbers."
+    three_js: |
+      Torus ring around the brain (clock face).
+      Small emissive sphere on the ring at angle = (peak_hour/24) × 2π.
+      Gold if daytime (phase > 0.5), blue if nighttime (phase < 0.5).
+
+  timezone_offset:
+    visual: sun_orbit_tilt
+    mapping: "timezone_offset → tilt angle of the orbital ring"
+    meaning: "Where in the world this citizen's rhythm is anchored."
+
+  active_tonics:
+    visual: frequency_auras
+    mapping: |
+      Each active frequency = a colored transparent shell around the brain.
+      Multiple frequencies = nested shells.
+      Shell color = frequency category color.
+      Shell opacity = remaining duration ratio.
+    colors:
+      focusing: "#3b82f6"    # blue
+      calming: "#22c55e"     # green
+      expansive: "#f59e0b"   # amber
+      structuring: "#a855f7" # purple
+      energizing: "#ef4444"  # red
+    three_js: "SphereGeometry slightly larger than brain bounds, MeshBasicMaterial transparent"
+    meaning: "What frequencies are active right now. Visible from the outside."
+
+  sensitivity:
+    visual: input_channel_filters
+    mapping: |
+      Per-source sensitivity modulates the brightness of nodes
+      originating from that source.
+      sensitivity["code"]=1.0 → code-origin nodes normal brightness.
+      sensitivity["social"]=0.3 → social-origin nodes 30% brightness.
+    detection: "Node.origin_citizen or stimulus source tag"
+    meaning: "Which senses are amplified or dampened. A developer brain dims social, brightens code."
+
+  adaptation_drift:
+    visual: peak_hour_trail
+    mapping: "If peak_hour != default (14.0), draw a faint arc from default to current position on the clock ring"
+    meaning: "How much the brain has adapted from its birth rhythm."
+
+
+# ================================================================
+# LAYER 8: PROVENANCE (who created what)
+# ================================================================
+# Every node has origin_citizen and origin_date.
+# This layer shows the archeology of the brain.
+
+provenance:
+  origin_citizen:
+    visual: border_color
+    mapping: |
+      Each unique origin_citizen gets a distinct border color (hashed from handle).
+      Nodes created by the citizen itself = no border.
+      Nodes from godparents = colored thin border ring.
+      Nodes from GraphCare (frequencies) = cyan border.
+      Nodes from SubEntity crystallization = purple border.
+    meaning: "Who put this here. The brain's geological layers."
+    three_js: "RingGeometry around the node base, color = hash(origin_citizen)"
+
+  origin_date:
+    visual: patina
+    mapping: |
+      age = now - origin_date
+      Old nodes (>30 days) → slight brownish tint (patina).
+      Recent nodes (<24h) → no patina, clean original color.
+      Gradient in between.
+    meaning: "How old this node is. Ancient knowledge has patina. Fresh insight is clean."
+    three_js: "Multiply node color by lerp(#ffffff, #8b7355, age_factor)"
+
+  action_nodes:
+    detection: "Node.action_command is not None"
+    visual: lightning_bolt_icon
+    mapping: "Action nodes get a small lightning bolt sprite attached"
+    meaning: "This node can DO something — it's an executable process."
+    three_js: "Sprite with bolt texture, attached to process nodes with action_command"
+
+  in_working_memory:
+    visual: bright_outline
+    mapping: "Nodes in WM get a bright white pulsing outline (static = thick white ring)"
+    meaning: "Currently in conscious focus. The spotlight."
+    three_js: "Second wireframe sphere, white emissive, slightly larger"
+    note: "Already mapped in regions.working_memory but here as per-node visual too."
+
+
+# ================================================================
+# LAYER 9: CONSCIOUSNESS STATE (global brain mode)
+# ================================================================
+
+consciousness:
+  consciousness_level:
+    full:
+      visual: "Normal rendering. All nodes visible. Bright."
+    minimal:
+      visual: "Reduced visibility. Only WM + high-weight nodes visible. Others fade to 10% opacity."
+    subconscious:
+      visual: "Deep fog. Only highest-energy nodes peek through. Everything else = suggestion."
+
+  arousal_regime:
+    panic:
+      visual: "Sharp clarity. Thin fog. Red edge tint. Everything hyper-visible."
+    flow:
+      visual: "Balanced. Medium fog. Warm tones. Optimal readability."
+    idle:
+      visual: "Thick fog. Cool tones. Only nearby nodes visible. The brain is resting."
+
+  tick_count:
+    visual: age_indicator
+    mapping: "Small counter or notch marks on the brain base — how many ticks this brain has lived."
+    meaning: "Brain age/experience. More ticks = more weathered."
 
 
 # ================================================================
