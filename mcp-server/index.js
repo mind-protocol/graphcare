@@ -227,29 +227,72 @@ async function scanPostgres(connStr) {
       }
     }
 
-    // 7. Metrics summary
+    // 7. Circular FK dependencies
+    const allFKs = fks.rows.map((r) => ({
+      source_table: r.source_table,
+      source_column: r.source_column,
+      target_table: r.target_table,
+    }));
+    const cycles = detectCycles(allFKs);
+    for (const cycle of cycles) {
+      report.findings.push({
+        type: "circular_dependency",
+        severity: "warning",
+        tables: cycle,
+        message: `Circular FK dependency: ${cycle.join(" → ")}`,
+      });
+    }
+
+    // 8. Duplicate/redundant indexes
+    const pgIndexDetails = await client.query(`
+      SELECT
+        t.relname AS table_name,
+        i.relname AS index_name,
+        array_agg(a.attname ORDER BY k.n) AS columns
+      FROM pg_index ix
+      JOIN pg_class t ON t.oid = ix.indrelid
+      JOIN pg_class i ON i.oid = ix.indexrelid
+      JOIN pg_namespace ns ON ns.oid = t.relnamespace
+      CROSS JOIN LATERAL unnest(ix.indkey) WITH ORDINALITY AS k(attnum, n)
+      JOIN pg_attribute a ON a.attrelid = t.oid AND a.attnum = k.attnum
+      WHERE ns.nspname = 'public'
+      GROUP BY t.relname, i.relname
+    `);
+    const pgIndexMap = new Map(); // table -> [{name, columns}]
+    for (const row of pgIndexDetails.rows) {
+      if (!pgIndexMap.has(row.table_name)) pgIndexMap.set(row.table_name, []);
+      pgIndexMap.get(row.table_name).push({ name: row.index_name, columns: row.columns });
+    }
+    for (const [table, idxs] of pgIndexMap) {
+      for (let i = 0; i < idxs.length; i++) {
+        for (let j = 0; j < idxs.length; j++) {
+          if (i === j) continue;
+          const a = idxs[i].columns;
+          const b = idxs[j].columns;
+          if (a.length < b.length && a.every((col, k) => col === b[k])) {
+            report.findings.push({
+              type: "duplicate_index",
+              severity: "info",
+              table,
+              index: idxs[i].name,
+              superseded_by: idxs[j].name,
+              message: `Index '${idxs[i].name}' on '${table}' is redundant — covered by '${idxs[j].name}'`,
+            });
+          }
+        }
+      }
+    }
+
+    // 9. Metrics summary
     report.metrics.total_foreign_keys = fks.rows.length;
-    report.metrics.orphaned_tables = report.findings.filter(
-      (f) => f.type === "orphaned_table"
-    ).length;
-    report.metrics.missing_indexes = report.findings.filter(
-      (f) => f.type === "missing_fk_index"
-    ).length;
-    report.metrics.tables_without_pk = report.findings.filter(
-      (f) => f.type === "no_primary_key"
-    ).length;
-    report.metrics.nullable_fks = report.findings.filter(
-      (f) => f.type === "nullable_fk"
-    ).length;
+    report.metrics.orphaned_tables = report.findings.filter((f) => f.type === "orphaned_table").length;
+    report.metrics.missing_indexes = report.findings.filter((f) => f.type === "missing_fk_index").length;
+    report.metrics.tables_without_pk = report.findings.filter((f) => f.type === "no_primary_key").length;
+    report.metrics.nullable_fks = report.findings.filter((f) => f.type === "nullable_fk").length;
+    report.metrics.circular_dependencies = report.findings.filter((f) => f.type === "circular_dependency").length;
+    report.metrics.duplicate_indexes = report.findings.filter((f) => f.type === "duplicate_index").length;
     report.metrics.total_findings = report.findings.length;
-    report.metrics.health_score = Math.max(
-      0,
-      100 -
-        report.metrics.orphaned_tables * 5 -
-        report.metrics.missing_indexes * 10 -
-        report.metrics.tables_without_pk * 15 -
-        report.metrics.nullable_fks * 3
-    );
+    report.metrics.health_score = computeHealthScore(report.metrics);
 
     return report;
   } finally {
@@ -296,31 +339,256 @@ async function scanMySQL(connStr) {
 
     const tablesWithFKs = new Set();
     const tablesReferenced = new Set();
+    const allFKs = [];
     for (const fk of fks) {
       tablesWithFKs.add(fk.TABLE_NAME);
       tablesReferenced.add(fk.REFERENCED_TABLE_NAME);
+      allFKs.push({
+        source_table: fk.TABLE_NAME,
+        source_column: fk.COLUMN_NAME,
+        target_table: fk.REFERENCED_TABLE_NAME,
+      });
     }
 
+    // 1. Orphaned tables
     for (const t of report.tables) {
       if (!tablesWithFKs.has(t) && !tablesReferenced.has(t)) {
         report.findings.push({
           type: "orphaned_table",
           severity: "warning",
           table: t,
-          message: `Table '${t}' has no foreign key relationships`,
+          message: `Table '${t}' has no foreign key relationships — structurally isolated`,
         });
       }
     }
 
+    // 2. Missing indexes on FK columns
+    const [mysqlIndexes] = await connection.query(
+      `SELECT TABLE_NAME, COLUMN_NAME FROM information_schema.STATISTICS WHERE TABLE_SCHEMA = ?`,
+      [dbName]
+    );
+    const mysqlIndexedCols = new Set();
+    for (const idx of mysqlIndexes) {
+      mysqlIndexedCols.add(`${idx.TABLE_NAME}.${idx.COLUMN_NAME}`.toLowerCase());
+    }
+    for (const fk of allFKs) {
+      const key = `${fk.source_table}.${fk.source_column}`.toLowerCase();
+      if (!mysqlIndexedCols.has(key)) {
+        report.findings.push({
+          type: "missing_fk_index",
+          severity: "critical",
+          table: fk.source_table,
+          column: fk.source_column,
+          message: `FK column '${fk.source_table}.${fk.source_column}' has no index — JOIN/DELETE performance will degrade`,
+        });
+      }
+    }
+
+    // 3. Tables without primary keys
+    const [mysqlPKs] = await connection.query(
+      `SELECT TABLE_NAME FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = ? AND CONSTRAINT_TYPE = 'PRIMARY KEY'`,
+      [dbName]
+    );
+    const mysqlTablesWithPK = new Set(mysqlPKs.map((r) => r.TABLE_NAME));
+    for (const t of report.tables) {
+      if (!mysqlTablesWithPK.has(t)) {
+        report.findings.push({
+          type: "no_primary_key",
+          severity: "critical",
+          table: t,
+          message: `Table '${t}' has no primary key — data integrity at risk`,
+        });
+      }
+    }
+
+    // 4. Nullable FK columns
+    const [mysqlCols] = await connection.query(
+      `SELECT TABLE_NAME, COLUMN_NAME, IS_NULLABLE FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = ?`,
+      [dbName]
+    );
+    const mysqlNullableCols = new Set();
+    for (const col of mysqlCols) {
+      if (col.IS_NULLABLE === "YES") {
+        mysqlNullableCols.add(`${col.TABLE_NAME}.${col.COLUMN_NAME}`);
+      }
+    }
+    for (const fk of allFKs) {
+      const key = `${fk.source_table}.${fk.source_column}`;
+      if (mysqlNullableCols.has(key)) {
+        report.findings.push({
+          type: "nullable_fk",
+          severity: "warning",
+          table: fk.source_table,
+          column: fk.source_column,
+          message: `FK '${key}' is nullable — referential integrity gap`,
+        });
+      }
+    }
+
+    // 5. Circular dependencies
+    const cycles = detectCycles(allFKs);
+    for (const cycle of cycles) {
+      report.findings.push({
+        type: "circular_dependency",
+        severity: "warning",
+        tables: cycle,
+        message: `Circular FK dependency: ${cycle.join(" → ")}`,
+      });
+    }
+
+    // 6. Duplicate indexes
+    const [mysqlIdxDetails] = await connection.query(
+      `SELECT TABLE_NAME, INDEX_NAME, COLUMN_NAME, SEQ_IN_INDEX
+       FROM information_schema.STATISTICS
+       WHERE TABLE_SCHEMA = ?
+       ORDER BY TABLE_NAME, INDEX_NAME, SEQ_IN_INDEX`,
+      [dbName]
+    );
+    const mysqlIdxMap = new Map();
+    for (const row of mysqlIdxDetails) {
+      const key = `${row.TABLE_NAME}.${row.INDEX_NAME}`;
+      if (!mysqlIdxMap.has(key)) mysqlIdxMap.set(key, { table: row.TABLE_NAME, name: row.INDEX_NAME, columns: [] });
+      mysqlIdxMap.get(key).columns.push(row.COLUMN_NAME);
+    }
+    const mysqlByTable = new Map();
+    for (const idx of mysqlIdxMap.values()) {
+      if (!mysqlByTable.has(idx.table)) mysqlByTable.set(idx.table, []);
+      mysqlByTable.get(idx.table).push(idx);
+    }
+    for (const [table, idxs] of mysqlByTable) {
+      for (let i = 0; i < idxs.length; i++) {
+        for (let j = 0; j < idxs.length; j++) {
+          if (i === j) continue;
+          const a = idxs[i].columns;
+          const b = idxs[j].columns;
+          if (a.length < b.length && a.every((col, k) => col === b[k])) {
+            report.findings.push({
+              type: "duplicate_index",
+              severity: "info",
+              table,
+              index: idxs[i].name,
+              superseded_by: idxs[j].name,
+              message: `Index '${idxs[i].name}' on '${table}' is redundant — covered by '${idxs[j].name}'`,
+            });
+          }
+        }
+      }
+    }
+
+    // Metrics summary
     report.metrics.total_foreign_keys = fks.length;
     report.metrics.orphaned_tables = report.findings.filter((f) => f.type === "orphaned_table").length;
+    report.metrics.missing_indexes = report.findings.filter((f) => f.type === "missing_fk_index").length;
+    report.metrics.tables_without_pk = report.findings.filter((f) => f.type === "no_primary_key").length;
+    report.metrics.nullable_fks = report.findings.filter((f) => f.type === "nullable_fk").length;
+    report.metrics.circular_dependencies = report.findings.filter((f) => f.type === "circular_dependency").length;
+    report.metrics.duplicate_indexes = report.findings.filter((f) => f.type === "duplicate_index").length;
     report.metrics.total_findings = report.findings.length;
-    report.metrics.health_score = Math.max(0, 100 - report.metrics.orphaned_tables * 5);
+    report.metrics.health_score = computeHealthScore(report.metrics);
 
     return report;
   } finally {
     await connection.end();
   }
+}
+
+// ─── Shared Detection Utilities ─────────────────────────────────────────────
+
+/**
+ * Detect circular FK dependencies using DFS.
+ * Input: array of { source_table, source_column, target_table }
+ * Returns: array of cycles, each cycle is [A, B, ..., A]
+ */
+function detectCycles(fks) {
+  const graph = new Map();
+  for (const fk of fks) {
+    if (!graph.has(fk.source_table)) graph.set(fk.source_table, new Set());
+    graph.get(fk.source_table).add(fk.target_table);
+  }
+
+  const cycles = [];
+  const visited = new Set();
+  const inStack = new Set();
+
+  function dfs(node, path) {
+    if (inStack.has(node)) {
+      const cycleStart = path.indexOf(node);
+      if (cycleStart !== -1) {
+        cycles.push([...path.slice(cycleStart), node]);
+      }
+      return;
+    }
+    if (visited.has(node)) return;
+
+    visited.add(node);
+    inStack.add(node);
+    path.push(node);
+
+    const neighbors = graph.get(node);
+    if (neighbors) {
+      for (const next of neighbors) {
+        dfs(next, path);
+      }
+    }
+
+    path.pop();
+    inStack.delete(node);
+  }
+
+  for (const node of graph.keys()) {
+    dfs(node, []);
+  }
+
+  return cycles;
+}
+
+/**
+ * Compute health score from metrics. Shared across all engines.
+ */
+function computeHealthScore(metrics) {
+  return Math.max(
+    0,
+    100 -
+      (metrics.orphaned_tables || 0) * 5 -
+      (metrics.missing_indexes || 0) * 10 -
+      (metrics.tables_without_pk || 0) * 15 -
+      (metrics.nullable_fks || 0) * 3 -
+      (metrics.circular_dependencies || 0) * 8 -
+      (metrics.duplicate_indexes || 0) * 2
+  );
+}
+
+/**
+ * Detect duplicate/redundant indexes for SQLite.
+ * An index is redundant if another index on the same table covers all its columns as a prefix.
+ */
+function detectDuplicateIndexesSQLite(db, tables) {
+  const duplicates = [];
+  for (const t of tables) {
+    const idxList = db.exec(`PRAGMA index_list('${t}')`);
+    if (!idxList.length) continue;
+
+    const indexes = [];
+    for (const idxRow of idxList[0].values) {
+      const idxName = idxRow[1];
+      const idxInfo = db.exec(`PRAGMA index_info('${idxName}')`);
+      const cols = idxInfo.length > 0 ? idxInfo[0].values.map((r) => r[2]) : [];
+      indexes.push({ name: idxName, columns: cols });
+    }
+
+    // Check if any index is a prefix of another
+    for (let i = 0; i < indexes.length; i++) {
+      for (let j = 0; j < indexes.length; j++) {
+        if (i === j) continue;
+        const a = indexes[i].columns;
+        const b = indexes[j].columns;
+        if (a.length < b.length && a.every((col, k) => col === b[k])) {
+          duplicates.push({ table: t, redundant: indexes[i].name, kept: indexes[j].name });
+        }
+      }
+    }
+  }
+  return duplicates;
 }
 
 // NOTE: SQLite via sql.js (pure JS, no native compilation needed).
@@ -342,29 +610,135 @@ async function scanSQLite(dbPath) {
     report.tables = tables.length > 0 ? tables[0].values.map((r) => r[0]) : [];
     report.metrics.total_tables = report.tables.length;
 
+    // Collect all FK relationships and indexed columns
     let totalFKs = 0;
+    const tablesWithFKs = new Set();
+    const tablesReferencedByFKs = new Set();
+    const allFKs = []; // { source_table, source_column, target_table }
+    const indexedColumns = new Set(); // "table.column"
+
     for (const t of report.tables) {
+      // foreign_key_list columns: id, seq, table, from, to, on_update, on_delete, match
       const fks = db.exec(`PRAGMA foreign_key_list('${t}')`);
-      const fkCount = fks.length > 0 ? fks[0].values.length : 0;
-      totalFKs += fkCount;
-      if (fkCount === 0) {
-        const referenced = db.exec(`SELECT COUNT(*) FROM sqlite_master WHERE sql LIKE '%REFERENCES%${t}%'`);
-        const refCount = referenced.length > 0 ? referenced[0].values[0][0] : 0;
-        if (refCount === 0) {
+      if (fks.length > 0) {
+        for (const row of fks[0].values) {
+          totalFKs++;
+          tablesWithFKs.add(t);
+          tablesReferencedByFKs.add(row[2]); // target table
+          allFKs.push({ source_table: t, source_column: row[3], target_table: row[2] });
+        }
+      }
+
+      // index_list columns: seq, name, unique, origin, partial
+      const idxList = db.exec(`PRAGMA index_list('${t}')`);
+      if (idxList.length > 0) {
+        for (const idxRow of idxList[0].values) {
+          const idxName = idxRow[1];
+          const idxInfo = db.exec(`PRAGMA index_info('${idxName}')`);
+          if (idxInfo.length > 0) {
+            for (const colRow of idxInfo[0].values) {
+              indexedColumns.add(`${t}.${colRow[2]}`.toLowerCase()); // colRow[2] = column name
+            }
+          }
+        }
+      }
+    }
+
+    // 1. Orphaned tables (no FK in or out)
+    for (const t of report.tables) {
+      if (!tablesWithFKs.has(t) && !tablesReferencedByFKs.has(t)) {
+        report.findings.push({
+          type: "orphaned_table",
+          severity: "warning",
+          table: t,
+          message: `Table '${t}' has no foreign key relationships — structurally isolated`,
+        });
+      }
+    }
+
+    // 2. Missing indexes on FK columns
+    for (const fk of allFKs) {
+      const key = `${fk.source_table}.${fk.source_column}`.toLowerCase();
+      if (!indexedColumns.has(key)) {
+        report.findings.push({
+          type: "missing_fk_index",
+          severity: "critical",
+          table: fk.source_table,
+          column: fk.source_column,
+          message: `FK column '${fk.source_table}.${fk.source_column}' has no index — JOIN/DELETE performance will degrade`,
+        });
+      }
+    }
+
+    // 3. Tables without primary keys
+    for (const t of report.tables) {
+      // table_info columns: cid, name, type, notnull, dflt_value, pk
+      const info = db.exec(`PRAGMA table_info('${t}')`);
+      if (info.length > 0) {
+        const hasPK = info[0].values.some((row) => row[5] > 0); // pk column > 0
+        if (!hasPK) {
           report.findings.push({
-            type: "orphaned_table",
-            severity: "warning",
+            type: "no_primary_key",
+            severity: "critical",
             table: t,
-            message: `Table '${t}' has no foreign key relationships`,
+            message: `Table '${t}' has no primary key — data integrity at risk`,
           });
         }
       }
     }
 
+    // 4. Nullable FK columns
+    for (const fk of allFKs) {
+      const info = db.exec(`PRAGMA table_info('${fk.source_table}')`);
+      if (info.length > 0) {
+        const colRow = info[0].values.find((row) => row[1] === fk.source_column);
+        if (colRow && colRow[3] === 0) {
+          // notnull = 0 means nullable
+          report.findings.push({
+            type: "nullable_fk",
+            severity: "warning",
+            table: fk.source_table,
+            column: fk.source_column,
+            message: `FK '${fk.source_table}.${fk.source_column}' is nullable — referential integrity gap`,
+          });
+        }
+      }
+    }
+
+    // 5. Circular FK dependencies
+    const cycles = detectCycles(allFKs);
+    for (const cycle of cycles) {
+      report.findings.push({
+        type: "circular_dependency",
+        severity: "warning",
+        tables: cycle,
+        message: `Circular FK dependency: ${cycle.join(" → ")}`,
+      });
+    }
+
+    // 6. Duplicate indexes
+    const duplicates = detectDuplicateIndexesSQLite(db, report.tables);
+    for (const dup of duplicates) {
+      report.findings.push({
+        type: "duplicate_index",
+        severity: "info",
+        table: dup.table,
+        index: dup.redundant,
+        superseded_by: dup.kept,
+        message: `Index '${dup.redundant}' on '${dup.table}' is redundant — covered by '${dup.kept}'`,
+      });
+    }
+
+    // Metrics summary
     report.metrics.total_foreign_keys = totalFKs;
     report.metrics.orphaned_tables = report.findings.filter((f) => f.type === "orphaned_table").length;
+    report.metrics.missing_indexes = report.findings.filter((f) => f.type === "missing_fk_index").length;
+    report.metrics.tables_without_pk = report.findings.filter((f) => f.type === "no_primary_key").length;
+    report.metrics.nullable_fks = report.findings.filter((f) => f.type === "nullable_fk").length;
+    report.metrics.circular_dependencies = report.findings.filter((f) => f.type === "circular_dependency").length;
+    report.metrics.duplicate_indexes = report.findings.filter((f) => f.type === "duplicate_index").length;
     report.metrics.total_findings = report.findings.length;
-    report.metrics.health_score = Math.max(0, 100 - report.metrics.orphaned_tables * 5);
+    report.metrics.health_score = computeHealthScore(report.metrics);
 
     return report;
   } finally {

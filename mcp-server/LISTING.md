@@ -1,47 +1,68 @@
-# GraphCare: The First Structural Antivirus for AI Databases
+# GraphCare: Structural Database Health Scanner
 
-Your AI agents are silently corrupting your database. GraphCare is the only autonomous MCP scanner on ClawHub that detects structural drift, orphaned relations, and topology pollution—without ever reading your private row data.
+Your database has hidden structural problems that silently degrade performance and break integrity. GraphCare is the only MCP tool on ClawHub that scans your schema topology — without ever reading a single row of your data.
 
-## The 36% Problem
+## The Problem
 
-A recent Snyk study found that 36% of ClawHub tools contain malicious payloads or unsafe data access patterns.
+AI agents create tables, add columns, and evolve schemas at speed. But they don't audit structure. Over time:
+- Foreign keys lose their indexes (JOINs slow to a crawl)
+- Tables drift into isolation (orphaned, unreachable data)
+- Primary keys go missing (replication breaks, ORMs fail)
+- Nullable FKs create silent referential gaps
+- Circular dependencies make inserts impossible without disabling constraints
+- Redundant indexes waste disk and slow writes
 
-GraphCare is 100% Zero-Trust. By design, our MCP server only queries your database's metadata (schema, constraints, relation counts). It is mathematically impossible for GraphCare to read, leak, or mutate your user data.
+GraphCare catches all of this in one scan.
+
+## Zero-Trust by Design
+
+GraphCare only queries your database's metadata (`information_schema`, `PRAGMA`, `pg_indexes`). It is **structurally impossible** for GraphCare to read, leak, or mutate your row data.
+
+- **READ-ONLY**: Zero writes, zero mutations
+- **NO ROW DATA**: Only schema metadata is accessed
+- **STATELESS**: Memory purged after every scan
 
 ## What GraphCare Detects
 
-- **Semantic Duplicates**: Identifies entities that share the same vectors but differ in IDs.
-- **Orphaned Relations**: Finds links pointing to deleted or non-existent nodes (structural pollution).
-- **Topology Drift**: Flags when your AI agents deviate from your strict schema constraints.
-- **Zombie Data (Temporal Decay)**: Pinpoints stagnant nodes and forgotten topological pathways that AI agents no longer actively access, allowing you to safely prune dead weight.
-- **Broken Guarantee Loops**: Detects logical paths, tasks, or objectives that lack active health checks or sensors—stopping AI hallucinations at the structural level before they execute.
-- **Structural Bottlenecks (Polarity Friction)**: Highlights topological zones of high tension or negative polarity where your multi-agent systems are contradicting each other or getting stuck.
-- **Missing Consolidations**: Discovers frequently co-activated data clusters that should be structurally linked but aren't, offering immediate query optimization paths based on actual AI usage.
+| Finding | Severity | What It Means |
+|---------|----------|---------------|
+| **Orphaned Tables** | Warning | Tables with no FK relationships — structurally isolated dead weight |
+| **Missing FK Indexes** | Critical | FK columns without indexes — the #1 cause of slow JOINs and DELETEs |
+| **No Primary Key** | Critical | Tables that can't guarantee row uniqueness — breaks replication and ORMs |
+| **Nullable Foreign Keys** | Warning | Optional relationships that hide referential integrity gaps |
+| **Circular Dependencies** | Warning | FK cycles that make clean inserts impossible |
+| **Duplicate Indexes** | Info | Redundant indexes wasting disk space and slowing writes |
 
-## Immediate ROI
+## Two Tools
 
-Reduce your database query costs by up to 40% in a single scan by identifying dead topological weight and bloated relational tables.
+### `audit_db_structure(connection_string)`
 
-## How it Works (MCP Integration)
+Full structural scan. Returns a JSON report with all findings, per-table breakdown, and a computed **health score** (0-100).
 
-GraphCare exposes a single, hyper-optimized tool to your AI agents:
+### `explain_finding(finding_type, context?)`
+
+Plain-language explanation of any finding type. Severity, impact, and recommended fix — ready for your agent to act on.
+
+## Supported Databases
+
+- **PostgreSQL** — Full detection suite (6 finding types)
+- **MySQL** — Full detection suite (6 finding types)
+- **SQLite** — Full detection suite (6 finding types)
+
+## How It Works
 
 ```
-audit_graph_structure(connection_string)
+1. Your agent calls audit_db_structure("postgresql://...")
+2. GraphCare reads only metadata (information_schema, pg_indexes, PRAGMA)
+3. Returns structured JSON: findings[], metrics{}, health_score
+4. Server purges all state — zero persistence
 ```
-
-1. Your agent calls the tool via MCP.
-2. GraphCare runs a high-speed, localized topological scan.
-3. GraphCare returns a detailed JSON diagnostic report.
-4. The server instantly purges its memory (100% Stateless).
-
-Supports: PostgreSQL, MySQL, SQLite.
 
 ## Pricing
 
-- **Single Audit**: €50 per scan. Perfect for a quick health check.
-- **Continuous Protection (Pro)**: €130/month for 24/7 automated patrols.
+- **Single Audit**: $50 per scan
+- **Continuous Protection (Pro)**: $130/month for automated recurring scans
 
 ---
 
-*Powered by the Mind Protocol L3 Engine.*
+*Built by Mind Protocol.*
