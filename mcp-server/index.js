@@ -881,6 +881,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   };
 });
 
+// ─── Exports (for testing) ───────────────────────────────────────────────────
+
+export { detectCycles, computeHealthScore, detectDuplicateIndexesSQLite, scanSQLite, EXPLANATIONS, server };
+
 // ─── Start ───────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -889,7 +893,10 @@ async function main() {
   console.error("GraphCare MCP server running (stdio)");
 }
 
-main().catch((err) => {
-  console.error("Fatal:", err);
-  process.exit(1);
-});
+import { fileURLToPath } from "url";
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main().catch((err) => {
+    console.error("Fatal:", err);
+    process.exit(1);
+  });
+}

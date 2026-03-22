@@ -8,7 +8,8 @@
     "graphcare-mcp": "./index.js"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "node --test test.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
@@ -17,5 +18,13 @@
     "sql.js": "^1.10.0"
   },
   "keywords": ["mcp", "database", "health", "audit", "graphcare"],
-  "license": "MIT"
+  "license": "MIT",
+  "author": "Mind Protocol <contact@mindprotocol.ai>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mind-protocol/graphcare"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
